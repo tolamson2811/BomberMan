@@ -2,34 +2,31 @@ package uet.oop.bomberman;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyEvent;
-import javafx.stage.Stage;
-import uet.oop.bomberman.entities.Bomber;
-import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.Grass;
-import uet.oop.bomberman.entities.Wall;
-import uet.oop.bomberman.graphics.Sprite;
 
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import uet.oop.bomberman.entities.*;
+import uet.oop.bomberman.graphics.Sprite;
+import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BombermanGame extends Application {
     
-    public static final int WIDTH = 20;
+    public static final int WIDTH = 30;
     public static final int HEIGHT = 15;
     
     private GraphicsContext gc;
     private Canvas canvas;
     public static Scene scene;
     private List<Entity> entities = new ArrayList<>();
-    private List<Entity> stillObjects = new ArrayList<>();
+    public static List<Entity> stillObjects = new ArrayList<>();
 
-
+    public GameMap map = new GameMap(0,0);
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
     }
@@ -46,40 +43,33 @@ public class BombermanGame extends Application {
 
         // Tao scene
         scene = new Scene(root);
+        map.ReadMap();
 
         //  scene vao stage
         stage.setTitle("BomberMinn");
         stage.setScene(scene);
         stage.show();
+
+        Rectangle rectangle = new Rectangle();
+        //root.getChildren().add(rectangle);
         Bomber bomberman = new Bomber(5, 5, Sprite.player_right.getFxImage());
         entities.add(bomberman);
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
+//                rectangle.setX(bomberman.getX());
+//                rectangle.setY(bomberman.getY());
+//                rectangle.setWidth(32);
+//                rectangle.setHeight(32);
+//                rectangle.setFill(null);
+//                rectangle.setStrokeWidth(1);
+//                rectangle.setStroke(Color.BLUEVIOLET);
                 render();
                 update();
             }
         };
+        map.LoadMap();
         timer.start();
-
-        createMap();
-
-
-    }
-
-    public void createMap() {
-        for (int i = 0; i < WIDTH; i++) {
-            for (int j = 0; j < HEIGHT; j++) {
-                Entity object;
-                if (j == 0 || j == HEIGHT - 1 || i == 0 || i == WIDTH - 1) {
-                    object = new Wall(i, j, Sprite.wall.getFxImage());
-                }
-                else {
-                    object = new Grass(i, j, Sprite.grass.getFxImage());
-                }
-                stillObjects.add(object);
-            }
-        }
     }
 
     public void update() {
