@@ -18,6 +18,23 @@ public class Sprite {
 	public int[] _pixels;
 	protected int _realWidth;
 	protected int _realHeight;
+
+	public int get_realWidth() {
+		return _realWidth;
+	}
+
+	public void set_realWidth(int _realWidth) {
+		this._realWidth = _realWidth;
+	}
+
+	public int get_realHeight() {
+		return _realHeight;
+	}
+
+	public void set_realHeight(int _realHeight) {
+		this._realHeight = _realHeight;
+	}
+
 	private SpriteSheet _sheet;
 
 	/*

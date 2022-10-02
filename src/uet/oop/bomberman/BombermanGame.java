@@ -23,10 +23,11 @@ public class BombermanGame extends Application {
     private GraphicsContext gc;
     private Canvas canvas;
     public static Scene scene;
+    private Bomber bomberman;
     private List<Entity> entities = new ArrayList<>();
     public static List<Entity> stillObjects = new ArrayList<>();
 
-    public GameMap map = new GameMap(0,0);
+    public static GameMap map = new GameMap(0,0);
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
     }
@@ -51,21 +52,23 @@ public class BombermanGame extends Application {
         stage.show();
 
         Rectangle rectangle = new Rectangle();
-        //root.getChildren().add(rectangle);
-        Bomber bomberman = new Bomber(5, 5, Sprite.player_right.getFxImage());
+        root.getChildren().add(rectangle);
+        bomberman = new Bomber(5, 5, Sprite.player_right);
         entities.add(bomberman);
+
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-//                rectangle.setX(bomberman.getX());
-//                rectangle.setY(bomberman.getY());
-//                rectangle.setWidth(32);
-//                rectangle.setHeight(32);
-//                rectangle.setFill(null);
-//                rectangle.setStrokeWidth(1);
-//                rectangle.setStroke(Color.BLUEVIOLET);
+                rectangle.setX(bomberman.getX());
+                rectangle.setY(bomberman.getY());
+                rectangle.setWidth(35);
+                rectangle.setHeight(46);
+                rectangle.setFill(null);
+                rectangle.setStrokeWidth(1);
+                rectangle.setStroke(Color.BLUEVIOLET);
                 render();
                 update();
+
             }
         };
         map.LoadMap();
@@ -74,11 +77,14 @@ public class BombermanGame extends Application {
 
     public void update() {
         entities.forEach(Entity::update);
+
     }
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         stillObjects.forEach(g -> g.render(gc));
+        bomberman.HandleBomb(gc);
         entities.forEach(g -> g.render(gc));
+
     }
 }

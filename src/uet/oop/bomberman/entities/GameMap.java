@@ -6,14 +6,32 @@ import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 public class GameMap {
-    public char[][] TILE_MAP = new char[20][30];
+    public char[][] TILE_MAP = new char[BombermanGame.HEIGHT][BombermanGame.WIDTH];
+
+    public boolean[][] MAP_COLLISION = new boolean[BombermanGame.HEIGHT][BombermanGame.WIDTH];
+
     private int startx;
     private int starty;
+
+    public GameMap() {
+
+    }
     public GameMap(int x, int y) {
         startx =x;
         starty = y;
     }
 
+    public boolean[][] getMAP_COLLISION() {
+        return MAP_COLLISION;
+    }
+
+    public void setMAP_COLLISION(int j, int i, boolean val) {
+        MAP_COLLISION[j][i] = val;
+    }
+
+    public char[][] getTILE_MAP() {
+        return TILE_MAP;
+    }
     public void ReadMap() {
         try {
             File maptxt = new File("D:/Minhnhat/bomberman-starter-starter-2/target/classes/levels/map.txt");
@@ -39,10 +57,13 @@ public class GameMap {
                 Entity object;
                 if(TILE_MAP[j][i] == '#') {
                     object = new Wall(i, j, Sprite.wall.getFxImage());
+                    MAP_COLLISION[j][i] = true;
                 }else if(TILE_MAP[j][i] == '*') {
                     object = new Wall(i, j, Sprite.brick.getFxImage());
+                    MAP_COLLISION[j][i] = true;
                 }else{
                     object = new Grass(i,j,Sprite.grass.getFxImage());
+                    MAP_COLLISION[j][i] = false;
                 }
 
                 BombermanGame.stillObjects.add(object);
