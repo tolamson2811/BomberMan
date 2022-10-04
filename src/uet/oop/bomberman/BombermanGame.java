@@ -55,20 +55,19 @@ public class BombermanGame extends Application {
         root.getChildren().add(rectangle);
         bomberman = new Bomber(5, 5, Sprite.player_right);
         entities.add(bomberman);
-
+        //GAME LOOP
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                rectangle.setX(bomberman.getX());
-                rectangle.setY(bomberman.getY());
-                rectangle.setWidth(35);
-                rectangle.setHeight(46);
-                rectangle.setFill(null);
-                rectangle.setStrokeWidth(1);
-                rectangle.setStroke(Color.BLUEVIOLET);
+//                rectangle.setX(bomberman.getX());
+//                rectangle.setY(bomberman.getY());
+//                rectangle.setWidth(35);
+//                rectangle.setHeight(46);
+//                rectangle.setFill(null);
+//                rectangle.setStrokeWidth(1);
+//                rectangle.setStroke(Color.BLUEVIOLET);
                 render();
                 update();
-
             }
         };
         map.LoadMap();

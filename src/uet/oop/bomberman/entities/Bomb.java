@@ -2,29 +2,33 @@ package uet.oop.bomberman.entities;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.graphics.Sprite;
 
-public class Bomb extends Entity{
+import java.util.ArrayList;
+import java.util.List;
+
+public class Bomb extends Entity {
     private double radius;
     private double time;
     private boolean active;
     private boolean explode;
+    private final List<Flame> explosion = new ArrayList<>();
 
     public double getRadius() {
         return radius;
     }
 
-
-
-    public Bomb(double xUnit, double yUnit, Image img) {
+    public Bomb(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
-        w = img.getWidth();
-        h = img.getHeight();
+        w = (int) img.getWidth();
+        h = (int) img.getHeight();
         active = false;
         explode = false;
-        radius = 1;
-        time =0 ;
+        radius = 2;
+        time = 0;
     }
+
     public void setRadius(double radius) {
         this.radius = radius;
     }
@@ -44,50 +48,78 @@ public class Bomb extends Entity{
     public void setExplode(boolean explode) {
         this.explode = explode;
     }
-    public void placeBomb() {
-        if (time % 30 == 10) {
-            img = Sprite.bomb_1.getFxImage();
-        } else if (time % 30 == 20) {
-            img = Sprite.bomb_2.getFxImage();
-        } else if (time % 30 == 29) {
-            img = Sprite.bomb.getFxImage();
-        }
-        if(time < 70) {
+
+    public void placeBomb(boolean[][] MAP_COLLISIONS) {
+        MAP_COLLISIONS[yblock][xblock] = true;
+        img = Sprite.movingSprite(Sprite.bomb,
+                Sprite.bomb_1, Sprite.bomb_2, time, 30).getFxImage();
+        System.out.println(xblock + " " + yblock);
+        if (time < 70) {
             time += 0.5;
-        }else{
-            time  = 0;
+        } else {
+            time = 0;
             active = false;
-            //Explode();
+            int spread = 1;
+            MAP_COLLISIONS[yblock][xblock] = false;
+            explosion.add(new Flame(xblock, yblock, Flame.TYPE.CENTER));
+            //check left to add explosion
+            while (spread <= radius && !MAP_COLLISIONS[yblock][xblock + spread]) {
+
+                if (spread == radius) {
+                    explosion.add(new Flame(xblock + spread, yblock, Flame.TYPE.RIGHT));
+                } else {
+                    explosion.add(new Flame(xblock + spread, yblock, Flame.TYPE.HORIONTAL));
+                }
+                spread++;
+            }
+            spread = 1;
+            while (spread <= radius &&!MAP_COLLISIONS[yblock][xblock - spread] ) {
+
+                if (spread == radius) {
+                    explosion.add(new Flame(xblock - spread, yblock, Flame.TYPE.LEFT));
+                } else {
+                    explosion.add(new Flame(xblock - spread, yblock, Flame.TYPE.HORIONTAL));
+                }
+                spread++;
+            }
+            spread = 1;
+            while (spread <= radius && !MAP_COLLISIONS[yblock + spread][xblock]  ) {
+
+                if (spread == radius) {
+                    explosion.add(new Flame(xblock, yblock + spread, Flame.TYPE.DOWN));
+                } else {
+                    explosion.add(new Flame(xblock, yblock + spread, Flame.TYPE.VERTICAL));
+                }
+                spread++;
+            }
+            spread = 1;
+            while (spread <= radius && !MAP_COLLISIONS[yblock -spread][xblock]) {
+
+                if (spread == radius) {
+                    explosion.add(new Flame(xblock, yblock - spread, Flame.TYPE.TOP));
+                } else {
+                    explosion.add(new Flame(xblock, yblock - spread, Flame.TYPE.VERTICAL));
+                }
+                spread++;
+            }
+
+
         }
-        //System.out.println("je");
     }
-    public void Explode() {
-        if (time % 30 == 10) {
-            img = Sprite.bomb_1.getFxImage();
-        } else if (time % 30 == 20) {
-            img = Sprite.bomb_2.getFxImage();
-        } else if (time % 30 == 29) {
-            img = Sprite.bomb.getFxImage();
+    public boolean Explode(GraphicsContext gc) {
+        for (Flame flame : explosion) {
+            flame.update();
+            flame.render(gc);
         }
-        if (time % 30 == 10) {
-            img = Sprite.bomb_1.getFxImage();
-        } else if (time % 30 == 20) {
-            img = Sprite.bomb_2.getFxImage();
-        } else if (time % 30 == 29) {
-            img = Sprite.bomb.getFxImage();
+        time++;
+        if (time > 50) {
+            return false;
         }
-        if (time % 30 == 10) {
-            img = Sprite.bomb_1.getFxImage();
-        } else if (time % 30 == 20) {
-            img = Sprite.bomb_2.getFxImage();
-        } else if (time % 30 == 29) {
-            img = Sprite.bomb.getFxImage();
-        }
+        return true;
     }
 
     @Override
     public void update() {
-        placeBomb();
-
+        placeBomb(BombermanGame.map.getMAP_COLLISION());
     }
 }

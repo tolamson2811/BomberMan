@@ -73,6 +73,9 @@ public class Bomber extends Entity {
         this.movevalY = movevalY;
     }
 
+    /**
+     * MOVE BOMBER.
+     */
     public void MoveMent() {
         movevalX = 0;
         movevalY = 0;
@@ -95,6 +98,10 @@ public class Bomber extends Entity {
 
     }
 
+    /**
+     * CHECK COLLISIONS
+     * @param MAP_COLISION
+     */
     public void checkCollisions(boolean[][] MAP_COLISION ) {
         int x1 = 0;
         int x2 = 0;
@@ -106,8 +113,8 @@ public class Bomber extends Entity {
         x1 = (int) (this.x + this.getMovevalX()) / TILE_SIZE;
         x2 = (int) (this.x + this.getMovevalX() + w - 1) / TILE_SIZE;
 
-        y1 = (int) this.y / TILE_SIZE;
-        y2 = (int) (this.y + h - 1) / TILE_SIZE;
+        y1 =  this.y / TILE_SIZE;
+        y2 = (this.y + h - 1) / TILE_SIZE;
 
         if(x1 >= 0 && y1 >= 0) {
             if(this.getMovevalX() > 0) {
@@ -136,15 +143,15 @@ public class Bomber extends Entity {
 
 
         //Check doc
-        x1 = (int) this.x / TILE_SIZE;
-        x2 = (int) (this.x + w) / TILE_SIZE;
+        x1 = this.x / TILE_SIZE;
+        x2 =  (this.x + w) / TILE_SIZE;
 
         y1 = (int) (this.y + this.getMovevalY()) / TILE_SIZE;
         y2 = (int) (this.y + this.getMovevalY() + h - 1) / TILE_SIZE;
 
         if(x1 >= 0 && y1 >= 0) {
             if(this.getMovevalY() > 0) {
-                if(MAP_COLISION[y2][x1] || MAP_COLISION[y2][x2]) {
+                if(MAP_COLISION[y2][x1]  || MAP_COLISION[y2][x2]) {
                     this.y = y2 * TILE_SIZE;
                     this.y -= (h + 1);
                     this.setMovevalY(0);
@@ -167,7 +174,12 @@ public class Bomber extends Entity {
             }
         }
     }
+
+    /**
+     * KIEM TRA INPUT.
+     */
     public void HandlingInput() {
+        //AN NUT
         BombermanGame.scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
@@ -204,6 +216,7 @@ public class Bomber extends Entity {
             }
         });
 
+        //THA NUT
         BombermanGame.scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
@@ -226,76 +239,65 @@ public class Bomber extends Entity {
         });
     }
 
+    /**
+     * DO HOA NHAN VAT.
+     */
     public void Animation() {
         if (user_input.right == 1) {
-            if (time % 9 == 0) {
-                img = Sprite.player_right_1.getFxImage();
-            } else if (time % 9 == 4) {
-                img = Sprite.player_right_2.getFxImage();
-            } else if (time % 9 == 8) {
-                img = Sprite.player_right.getFxImage();
-            }
+            img = Sprite.movingSprite(Sprite.player_right,
+                    Sprite.player_right_1,Sprite.player_right_2,time,9).getFxImage();
             time += 0.5;
         } else if (user_input.left == 1) {
-            if (time % 9 == 0) {
-                img = Sprite.player_left_1.getFxImage();
-            } else if (time % 9 == 4) {
-                img = Sprite.player_left_2.getFxImage();
-            } else if (time % 9 == 8) {
-                img = Sprite.player_left.getFxImage();
-            }
+            img = Sprite.movingSprite(Sprite.player_left,
+                    Sprite.player_left_1,Sprite.player_left_2,time,9).getFxImage();
             time += 0.5;
         }else if (user_input.up == 1) {
-            if (time % 9 == 0) {
-                img = Sprite.player_up_1.getFxImage();
-            } else if (time % 9 == 4) {
-                img = Sprite.player_up_2.getFxImage();
-            } else if (time % 9 == 8) {
-                img = Sprite.player_up.getFxImage();
-            }
+            img = Sprite.movingSprite(Sprite.player_up,
+                    Sprite.player_up_1,Sprite.player_up_2,time,9).getFxImage();
             time += 0.5;
         } else if (user_input.down == 1) {
-            if (time % 9 == 0) {
-                img = Sprite.player_down_1.getFxImage();
-            } else if (time % 9 == 4) {
-                img = Sprite.player_down_2.getFxImage();
-            } else if (time % 9 == 8) {
-                img = Sprite.player_down.getFxImage();
-            }
+            img = Sprite.movingSprite(Sprite.player_down,
+                    Sprite.player_down_1,Sprite.player_down_2,time,9).getFxImage();
             time += 0.5;
-        }else{
-            time = 0;
         }
     }
 
+    /**
+     * XU LY BOM NO.
+     * @param gc
+     */
     public void HandleBomb(GraphicsContext gc) {
 
-        for(int i = 0;i < bomstack.size();i++) {
-            //System.out.println("hello");
+        for (int i = 0; i < bomstack.size(); i++) {
             Bomb nbomb = bomstack.get(i);
-            System.out.println(nbomb.x + " " + nbomb.y);
-            if(!nbomb.isActive()) {
-                bomstack.remove(i);
-            }else{
-
+            if (!nbomb.isActive()) {
+                if(!bomstack.get(i).Explode(gc)) {
+                    bomstack.remove(i);
+                }
+            } else {
                 nbomb.render(gc);
                 nbomb.update();
             }
         }
     }
 
+    /**
+     * KHOI TAO BOM
+     * @return
+     */
     public Bomb makeBomb() {
-        int boxX = (int) x/Sprite.SCALED_SIZE;
-        int boxY = (int) y/Sprite.SCALED_SIZE;
-        if(x%Sprite.SCALED_SIZE >=10) {
-             boxX+=1;
+        xblock = x/Sprite.SCALED_SIZE;
+        yblock = y/Sprite.SCALED_SIZE;
+        if(x%Sprite.SCALED_SIZE >= 32) {
+             xblock+=1;
         }
         if(y%Sprite.SCALED_SIZE >=24) {
-            boxY +=1;
+            yblock +=1;
         }
-        Bomb nBomb = new Bomb(boxX,
-                boxY,Sprite.bomb.getFxImage());
+        Bomb nBomb = new Bomb(xblock,
+                yblock,Sprite.bomb.getFxImage());
         nBomb.setActive(true);
+
         return nBomb;
     }
     @Override

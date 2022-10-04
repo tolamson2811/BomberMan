@@ -159,6 +159,7 @@ public class Sprite {
 	public static Sprite explosion_vertical = new Sprite(DEFAULT_SIZE, 1, 5, SpriteSheet.tiles, 16, 16);
 	public static Sprite explosion_vertical1 = new Sprite(DEFAULT_SIZE, 2, 5, SpriteSheet.tiles, 16, 16);
 	public static Sprite explosion_vertical2 = new Sprite(DEFAULT_SIZE, 3, 5, SpriteSheet.tiles, 16, 16);
+	public static Sprite[] explosion_vertical_li =  {explosion_vertical,explosion_vertical1,explosion_vertical2};
 	
 	public static Sprite explosion_horizontal = new Sprite(DEFAULT_SIZE, 1, 7, SpriteSheet.tiles, 16, 16);
 	public static Sprite explosion_horizontal1 = new Sprite(DEFAULT_SIZE, 1, 8, SpriteSheet.tiles, 16, 16);
@@ -233,11 +234,12 @@ public class Sprite {
 		}
 	}
 	
-	public static Sprite movingSprite(Sprite normal, Sprite x1, Sprite x2, int animate, int time) {
-		int calc = animate % time;
+	public static Sprite movingSprite(Sprite normal, Sprite x1, Sprite x2, double animate, int time) {
+		int calc = (int)animate % time;
 		int diff = time / 3;
 		
 		if(calc < diff) {
+
 			return normal;
 		}
 			

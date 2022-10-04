@@ -64,6 +64,7 @@ public class GameMap {
                 }else{
                     object = new Grass(i,j,Sprite.grass.getFxImage());
                     MAP_COLLISION[j][i] = false;
+                    System.out.println(i + " " + j );
                 }
 
                 BombermanGame.stillObjects.add(object);
