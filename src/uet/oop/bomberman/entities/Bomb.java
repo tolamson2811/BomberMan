@@ -105,7 +105,7 @@ public class Bomb extends Entity {
         }
     }
 
-    public void solve(Entity entity) {
+    public void checkBombCollision(Entity entity) {
         for(int i = 0; i < explosion.size(); i++) {
             if(explosion.get(i) != null) {
                 boolean check = BombermanGame.collision.checkCollision(explosion.get(i), entity);
@@ -132,8 +132,8 @@ public class Bomb extends Entity {
     @Override
     public void update() {
         placeBomb(BombermanGame.map.getTILE_MAP());
-        solve(BombermanGame.bomberman);
-//        solve(Enemy1);
-//        solve(Enemy2);
+        checkBombCollision(BombermanGame.bomberman);
+//       checkBombCollision(Enemy1);
+//        checkBombCollision(Enemy2);
     }
 }
