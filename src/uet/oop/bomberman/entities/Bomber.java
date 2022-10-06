@@ -80,7 +80,6 @@ public class Bomber extends Entity {
      * MOVE BOMBER.
      */
     public void MoveMent() {
-        if(life){
             movevalX = 0;
             movevalY = 0;
 
@@ -99,9 +98,6 @@ public class Bomber extends Entity {
 
             x += movevalX;
             y += movevalY;
-        }
-
-
     }
 
     /**
@@ -371,7 +367,7 @@ public class Bomber extends Entity {
                 yblock,Sprite.bomb.getFxImage());
         nBomb.setActive(true);
 
-        BombermanGame.map.setTILE_MAP(xblock, yblock, 'b');
+        BombermanGame.map.setTILE_MAP(yblock, xblock, 'b');
 
         return nBomb;
     }

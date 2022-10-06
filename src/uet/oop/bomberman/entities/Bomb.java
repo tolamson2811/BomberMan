@@ -63,7 +63,7 @@ public class Bomb extends Entity {
             TILE_MAP[yblock][xblock] = ' ';
             explosion.add(new Flame(xblock, yblock, Flame.TYPE.CENTER));
             //check left to add explosion
-            while (spread <= radius && TILE_MAP[yblock][xblock + spread] != '#') {
+            while (spread <= radius && TILE_MAP[yblock][xblock + spread] != '#' && TILE_MAP[yblock][xblock + spread] != '*') {
 
                 if (spread == radius) {
                     explosion.add(new Flame(xblock + spread, yblock, Flame.TYPE.RIGHT));
@@ -117,7 +117,7 @@ public class Bomb extends Entity {
     }
 
     public boolean Explode(GraphicsContext gc) {
-        BombermanGame.map.setTILE_MAP(xblock, yblock, ' ');
+        BombermanGame.map.setTILE_MAP(yblock, xblock, ' ');
         for (Flame flame : explosion) {
             flame.update();
             flame.render(gc);
