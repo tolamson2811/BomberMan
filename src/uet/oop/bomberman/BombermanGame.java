@@ -23,10 +23,16 @@ public class BombermanGame extends Application {
     private GraphicsContext gc;
     private Canvas canvas;
     public static Scene scene;
+//    private Bomber bomberman;
     private List<Entity> entities = new ArrayList<>();
     public static List<Entity> stillObjects = new ArrayList<>();
 
-    public GameMap map = new GameMap(0,0);
+    public static GameMap map = new GameMap(0,0);
+
+    public static Collision collision = new Collision();
+
+    public static Bomber bomberman = new Bomber(5, 5, Sprite.player_right);
+
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
     }
@@ -46,22 +52,21 @@ public class BombermanGame extends Application {
         map.ReadMap();
 
         //  scene vao stage
-        stage.setTitle("BombearMinn");
+        stage.setTitle("BomberMinn");
         stage.setScene(scene);
         stage.show();
 
         Rectangle rectangle = new Rectangle();
-        //root.getChildren().add(rectangle);
-        Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
+        root.getChildren().add(rectangle);
         entities.add(bomberman);
-        bomberman.init();
+        //GAME LOOP
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
 //                rectangle.setX(bomberman.getX());
 //                rectangle.setY(bomberman.getY());
-//                rectangle.setWidth(32);
-//                rectangle.setHeight(32);
+//                rectangle.setWidth(35);
+//                rectangle.setHeight(46);
 //                rectangle.setFill(null);
 //                rectangle.setStrokeWidth(1);
 //                rectangle.setStroke(Color.BLUEVIOLET);
@@ -75,11 +80,14 @@ public class BombermanGame extends Application {
 
     public void update() {
         entities.forEach(Entity::update);
+
     }
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         stillObjects.forEach(g -> g.render(gc));
+        bomberman.HandleBomb(gc);
         entities.forEach(g -> g.render(gc));
+
     }
 }

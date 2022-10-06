@@ -15,8 +15,8 @@ import java.util.Vector;
 
 public class Bomber extends Entity {
 
-    private double movevalX;
-    private double movevalY;
+//    private double movevalX;
+//    private double movevalY;
     static class Input {
         int left;
         int right;
@@ -25,6 +25,9 @@ public class Bomber extends Entity {
         boolean bomb;
     }
 
+//    public boolean isInBomb = false;
+
+    public int TILE_SIZE = Sprite.SCALED_SIZE;
     public static final int BOMBER_SPEED = 2;
     public static int BOMB_NUMBER = 5;
     private double time = 0;
@@ -57,134 +60,199 @@ public class Bomber extends Entity {
         return y;
     }
 
-    public double getMovevalX() {
-        return movevalX;
-    }
+//    public double getMovevalX() {
+//        return movevalX;
+//    }
+//
+//    public void setMovevalX(int movevalX) {
+//        this.movevalX = movevalX;
+//    }
+//
+//    public double getMovevalY() {
+//        return movevalY;
+//    }
+//
+//    public void setMovevalY(int movevalY) {
+//        this.movevalY = movevalY;
+//    }
 
-    public void setMovevalX(int movevalX) {
-        this.movevalX = movevalX;
-    }
-
-    public double getMovevalY() {
-        return movevalY;
-    }
-
-    public void setMovevalY(int movevalY) {
-        this.movevalY = movevalY;
-    }
-
+    /**
+     * MOVE BOMBER.
+     */
     public void MoveMent() {
-        movevalX = 0;
-        movevalY = 0;
+        if(life){
+            movevalX = 0;
+            movevalY = 0;
 
-        if (user_input.right == 1) {
-            movevalX += BOMBER_SPEED;
-        } else if (user_input.left == 1) {
-            movevalX -= BOMBER_SPEED;
+            if (user_input.right == 1) {
+                movevalX += BOMBER_SPEED;
+            } else if (user_input.left == 1) {
+                movevalX -= BOMBER_SPEED;
+            }
+            if (user_input.up == 1) {
+                movevalY -= BOMBER_SPEED;
+            } else if (user_input.down == 1) {
+                movevalY += BOMBER_SPEED;
+            }
+
+            BombermanGame.map.mapCollision(this);
+
+            x += movevalX;
+            y += movevalY;
         }
-        if (user_input.up == 1) {
-            movevalY -= BOMBER_SPEED;
-        } else if (user_input.down == 1) {
-            movevalY += BOMBER_SPEED;
-        }
 
-        checkCollisions(BombermanGame.map.getMAP_COLLISION());
-
-        x += movevalX;
-        y += movevalY;
 
     }
 
-    public void checkCollisions(boolean[][] MAP_COLISION ) {
-        int x1 = 0;
-        int x2 = 0;
+    /**
+     * CHECK COLLISIONS
+     * @param TILE_MAP
+     */
+//    public void checkCollisions(char[][] TILE_MAP) {
+//        int x1 = 0;
+//        int x2 = 0;
+//
+//        int y1 = 0;
+//        int y2 = 0;
+//
+//
+//        x1 = (int) (this.x + this.getMovevalX()) / TILE_SIZE;
+//        x2 = (int) (this.x + this.getMovevalX() + w - 1) / TILE_SIZE;
+//
+//        y1 =  this.y / TILE_SIZE;
+//        y2 = (this.y + h - 1) / TILE_SIZE;
+//
+//        if(x1 >= 0 && y1 >= 0) {
+//            if(this.getMovevalX() > 0) {
+//
+//                if(TILE_MAP[y1][x2] == '*' || TILE_MAP[y2][x2] == '*'
+//                   || TILE_MAP[y1][x2] == '#' || TILE_MAP[y2][x2] == '#'
+//                   || TILE_MAP[y1][x2] == 'b' || TILE_MAP[y2][x2] == 'b') {
+//                    if(TILE_MAP[y1][x2] == 'b' || TILE_MAP[y2][x2] == 'b') {
+//                        if(!isInBomb){
+//                            this.x = x2 * TILE_SIZE;
+//                            this.x -= w + 1;
+//                            this.setMovevalX(0);
+//                        }
+//                    } else {
+//                        this.x = x2 * TILE_SIZE;
+//                        this.x -= w + 1;
+//                        this.setMovevalX(0);
+//                    }
+//
+//                    if((TILE_MAP[y1][x2] == '*' && TILE_MAP[y2][x2] != '*')
+//                        || (TILE_MAP[y1][x2] == '#' && TILE_MAP[y2][x2] != '#')) {
+//                        if(y1*TILE_SIZE + TILE_SIZE - this.y < 22) {
+//                            this.movevalY++;
+//                        }
+//                    } else if((TILE_MAP[y1][x2] != '*' && TILE_MAP[y2][x2] == '*')
+//                                || (TILE_MAP[y1][x2] != '#' && TILE_MAP[y2][x2] == '#')) {
+//                        if(y2 * TILE_SIZE + TILE_SIZE - (this.y + h) > 40) {
+//                            this.movevalY--;
+//                        }
+//                    }
+//                }
+//            } else if(this.getMovevalX() < 0) {
+//                if((TILE_MAP[y1][x1] == '*' || TILE_MAP[y2][x1] == '*')
+//                    || TILE_MAP[y1][x1] == '#' || TILE_MAP[y2][x1] == '#'
+//                    || TILE_MAP[y1][x1] == 'b' || TILE_MAP[y2][x1] == 'b') {
+//                    if(TILE_MAP[y1][x1] == 'b' || TILE_MAP[y2][x1] == 'b') {
+//                        if(!isInBomb){
+//                            this.x = (x1 + 1) * TILE_SIZE + 1;
+//                            this.setMovevalX(0);
+//                        }
+//                    } else {
+//                        this.x = (x1 + 1) * TILE_SIZE + 1;
+//                        this.setMovevalX(0);
+//                    }
+//
+//                }
+//                if((TILE_MAP[y1][x1] == '*' && TILE_MAP[y2][x1] != '*')
+//                    || (TILE_MAP[y1][x1] == '#' && TILE_MAP[y2][x1] != '#'))  {
+//                    if(y1*TILE_SIZE + TILE_SIZE - this.y < 22) {
+//                        this.movevalY++;
+//                    }
+//                } else if((TILE_MAP[y1][x1] != '*' && TILE_MAP[y2][x1] == '*')
+//                           || (TILE_MAP[y1][x1] != '#' && TILE_MAP[y2][x1] == '#'))  {
+//                    if(y2 * TILE_SIZE + TILE_SIZE - (this.y + h) > 32) {
+//                        this.movevalY--;
+//                    }
+//                }
+//            }
+//        }
+//
+//
+//        //Check doc
+//        x1 = this.x / TILE_SIZE;
+//        x2 =  (this.x + w) / TILE_SIZE;
+//
+//        y1 = (int) (this.y + this.getMovevalY()) / TILE_SIZE;
+//        y2 = (int) (this.y + this.getMovevalY() + h - 1) / TILE_SIZE;
+//
+//        if(x1 >= 0 && y1 >= 0) {
+//            if(this.getMovevalY() > 0) {
+//                if( (TILE_MAP[y2][x1] == '*' || TILE_MAP[y2][x2] == '*')
+//                     || TILE_MAP[y2][x1] == '#' || TILE_MAP[y2][x2] == '#'
+//                     || TILE_MAP[y2][x1] == 'b' || TILE_MAP[y2][x2] == 'b') {
+//                    if(TILE_MAP[y2][x1] == 'b' || TILE_MAP[y2][x2] == 'b') {
+//                        if(!isInBomb){
+//                            this.y = y2 * TILE_SIZE;
+//                            this.y -= (h + 1);
+//                            this.setMovevalY(0);
+//                        }
+//                    } else {
+//                        this.y = y2 * TILE_SIZE;
+//                        this.y -= (h + 1);
+//                        this.setMovevalY(0);
+//                    }
+//
+//                    if((TILE_MAP[y2][x1] == '*' && TILE_MAP[y2][x2] != '*')
+//                        || (TILE_MAP[y2][x1] == '#' && TILE_MAP[y2][x2] != '#')) {
+//                        if(x1 * TILE_SIZE + TILE_SIZE - this.x < 8) {
+//                            this.movevalX++;
+//                        }
+//                    } else if((TILE_MAP[y2][x1] != '*' && TILE_MAP[y2][x2] == '*')
+//                               || (TILE_MAP[y2][x1] != '#' && TILE_MAP[y2][x2] == '#')) {
+//                        if(x2 * TILE_SIZE + TILE_SIZE - (this.x + w) > 40) {
+//                            this.movevalX--;
+//                        }
+//                    }
+//                }
+//            } else if(this.getMovevalY() < 0) {
+//                if((TILE_MAP[y1][x1] == '*' || TILE_MAP[y1][x2] == '*')
+//                    || TILE_MAP[y1][x1] == '#' || TILE_MAP[y1][x2] == '#'
+//                    || TILE_MAP[y1][x1] == 'b' || TILE_MAP[y1][x2] == 'b') {
+//                    if(TILE_MAP[y1][x1] == 'b' || TILE_MAP[y1][x2] == 'b') {
+//                        if(!isInBomb){
+//                            this.y = (y1 + 1) * TILE_SIZE;
+//                            this.setMovevalY(0);
+//                        }
+//                    } else {
+//                        this.y = (y1 + 1) * TILE_SIZE;
+//                        this.setMovevalY(0);
+//                    }
+//
+//                }
+//                if((TILE_MAP[y1][x1] != '*' && TILE_MAP[y1][x2] == '*')
+//                    || (TILE_MAP[y1][x1] != '#' && TILE_MAP[y1][x2] == '#')) {
+//                    if(x2 * TILE_SIZE + TILE_SIZE - (this.x + w) > 40) {
+//                        this.movevalX--;
+//                    }
+//                } else if((TILE_MAP[y1][x1] == '*' && TILE_MAP[y1][x2] != '*')
+//                          || (TILE_MAP[y1][x1] == '#' && TILE_MAP[y1][x2] != '#')) {
+//                    if(x1 * TILE_SIZE + TILE_SIZE - this.x < 8) {
+//                        this.movevalX++;
+//                    }
+//                }
+//            }
+//        }
+//    }
 
-        int y1 = 0;
-        int y2 = 0;
-
-        int TILE_SIZE = Sprite.SCALED_SIZE;
-        x1 = (int) (this.x + this.getMovevalX()) / TILE_SIZE;
-        x2 = (int) (this.x + this.getMovevalX() + w - 1) / TILE_SIZE;
-
-        y1 = (int) this.y / TILE_SIZE;
-        y2 = (int) (this.y + h - 1) / TILE_SIZE;
-
-        if(x1 >= 0 && y1 >= 0) {
-            if(this.getMovevalX() > 0) {
-                if(MAP_COLISION[y1][x2] || MAP_COLISION[y2][x2]) {
-                    this.x = x2 * TILE_SIZE;
-                    this.x -= w + 1;
-                    this.setMovevalX(0);
-
-                    if(MAP_COLISION[y1][x2] && !MAP_COLISION[y2][x2]) {
-                        if(y1*TILE_SIZE + TILE_SIZE - this.y < 22) {
-                            this.movevalY++;
-                        }
-                    } else if(!MAP_COLISION[y1][x2] && MAP_COLISION[y2][x2]) {
-                        if(y2 * TILE_SIZE + TILE_SIZE - (this.y + h) > 40) {
-                            this.movevalY--;
-                        }
-                    }
-                }
-            } else if(this.getMovevalX() < 0) {
-                if(MAP_COLISION[y1][x1] || MAP_COLISION[y2][x1]) {
-                    this.x = (x1 + 1) * TILE_SIZE + 1;
-                    this.setMovevalX(0);
-                }
-                if(MAP_COLISION[y1][x1] && !MAP_COLISION[y2][x1]) {
-                    if(y1*TILE_SIZE + TILE_SIZE - this.y < 22) {
-                        this.movevalY++;
-                    }
-                } else if(!MAP_COLISION[y1][x1] && MAP_COLISION[y2][x1]) {
-                    if(y2 * TILE_SIZE + TILE_SIZE - (this.y + h) > 32) {
-                        this.movevalY--;
-                    }
-                }
-            }
-        }
-
-
-        //Check doc
-        x1 = (int) this.x / TILE_SIZE;
-        x2 = (int) (this.x + w) / TILE_SIZE;
-
-        y1 = (int) (this.y + this.getMovevalY()) / TILE_SIZE;
-        y2 = (int) (this.y + this.getMovevalY() + h - 1) / TILE_SIZE;
-
-        if(x1 >= 0 && y1 >= 0) {
-            if(this.getMovevalY() > 0) {
-                if(MAP_COLISION[y2][x1] || MAP_COLISION[y2][x2]) {
-                    this.y = y2 * TILE_SIZE;
-                    this.y -= (h + 1);
-                    this.setMovevalY(0);
-                    if(MAP_COLISION[y2][x1] && !MAP_COLISION[y2][x2]) {
-                        if(x1 * TILE_SIZE + TILE_SIZE - this.x < 8) {
-                            this.movevalX++;
-                        }
-                    } else if(!MAP_COLISION[y2][x1] && MAP_COLISION[y2][x2]) {
-                        if(x2 * TILE_SIZE + TILE_SIZE - (this.x + w) > 40) {
-                            this.movevalX--;
-                        }
-                    }
-                }
-            } else if(this.getMovevalY() < 0) {
-                if(MAP_COLISION[y1][x1] || MAP_COLISION[y1][x2]) {
-                    this.y = (y1 + 1) * TILE_SIZE;
-                    this.setMovevalY(0);
-                }
-                if(!MAP_COLISION[y1][x1] && MAP_COLISION[y1][x2]) {
-                    if(x2 * TILE_SIZE + TILE_SIZE - (this.x + w) > 40) {
-                        this.movevalX--;
-                    }
-                } else if(MAP_COLISION[y1][x1] && !MAP_COLISION[y1][x2]) {
-                    if(x1 * TILE_SIZE + TILE_SIZE - this.x < 8) {
-                        this.movevalX++;
-                    }
-                }
-            }
-        }
-    }
+    /**
+     * KIEM TRA INPUT.
+     */
     public void HandlingInput() {
+        //AN NUT
         BombermanGame.scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
@@ -214,7 +282,6 @@ public class Bomber extends Entity {
                         if(bomstack.size() < BOMB_NUMBER) {
                             Bomb nbomb = makeBomb();
                             bomstack.add(nbomb);
-                            BombermanGame.map.setMAP_COLLISION((int) nbomb.x / 48, (int) nbomb.y / 48, true);
                         }
 
                 }
@@ -222,25 +289,22 @@ public class Bomber extends Entity {
             }
         });
 
+        //THA NUT
         BombermanGame.scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
                 switch (keyEvent.getCode()) {
                     case A:
                         user_input.left = 0;
-                        img = Sprite.player_left.getFxImage();
                         break;
                     case D:
                         user_input.right = 0;
-                        img = Sprite.player_right.getFxImage();
                         break;
                     case S:
                         user_input.down = 0;
-                        img = Sprite.player_down.getFxImage();
                         break;
                     case W:
                         user_input.up = 0;
-                        img = Sprite.player_up.getFxImage();
                         break;
                 }
 
@@ -248,78 +312,71 @@ public class Bomber extends Entity {
         });
     }
 
+    /**
+     * DO HOA NHAN VAT.
+     */
     public void Animation() {
         if (user_input.right == 1) {
-            if (time % 9 == 0) {
-                img = Sprite.player_right_1.getFxImage();
-            } else if (time % 9 == 4) {
-                img = Sprite.player_right_2.getFxImage();
-            } else if (time % 9 == 8) {
-                img = Sprite.player_right.getFxImage();
-            }
+            img = Sprite.movingSprite(Sprite.player_right,
+                    Sprite.player_right_1,Sprite.player_right_2,time,9).getFxImage();
             time += 0.5;
         } else if (user_input.left == 1) {
-            if (time % 9 == 0) {
-                img = Sprite.player_left_1.getFxImage();
-            } else if (time % 9 == 4) {
-                img = Sprite.player_left_2.getFxImage();
-            } else if (time % 9 == 8) {
-                img = Sprite.player_left.getFxImage();
-            }
+            img = Sprite.movingSprite(Sprite.player_left,
+                    Sprite.player_left_1,Sprite.player_left_2,time,9).getFxImage();
             time += 0.5;
         }else if (user_input.up == 1) {
-            if (time % 9 == 0) {
-                img = Sprite.player_up_1.getFxImage();
-            } else if (time % 9 == 4) {
-                img = Sprite.player_up_2.getFxImage();
-            } else if (time % 9 == 8) {
-                img = Sprite.player_up.getFxImage();
-            }
+            img = Sprite.movingSprite(Sprite.player_up,
+                    Sprite.player_up_1,Sprite.player_up_2,time,9).getFxImage();
             time += 0.5;
         } else if (user_input.down == 1) {
-            if (time % 9 == 0) {
-                img = Sprite.player_down_1.getFxImage();
-            } else if (time % 9 == 4) {
-                img = Sprite.player_down_2.getFxImage();
-            } else if (time % 9 == 8) {
-                img = Sprite.player_down.getFxImage();
-            }
+            img = Sprite.movingSprite(Sprite.player_down,
+                    Sprite.player_down_1,Sprite.player_down_2,time,9).getFxImage();
             time += 0.5;
-        }else{
-            time = 0;
         }
     }
 
+    /**
+     * XU LY BOM NO.
+     * @param gc
+     */
     public void HandleBomb(GraphicsContext gc) {
 
-        for(int i = 0;i < bomstack.size();i++) {
-            //System.out.println("hello");
+        for (int i = 0; i < bomstack.size(); i++) {
             Bomb nbomb = bomstack.get(i);
-            System.out.println(nbomb.x + " " + nbomb.y);
-            if(!nbomb.isActive()) {
-                bomstack.remove(i);
-            }else{
-
+            if (!nbomb.isActive()) {
+                if(!bomstack.get(i).Explode(gc)) {
+                    bomstack.remove(i);
+                }
+            } else {
                 nbomb.render(gc);
                 nbomb.update();
             }
         }
     }
 
+    /**
+     * KHOI TAO BOM
+     * @return
+     */
     public Bomb makeBomb() {
-        int boxX = (int) x/Sprite.SCALED_SIZE;
-        int boxY = (int) y/Sprite.SCALED_SIZE;
-        if(x%Sprite.SCALED_SIZE >=32) {
-            boxX+=1;
+        xblock = x/Sprite.SCALED_SIZE;
+        yblock = y/Sprite.SCALED_SIZE;
+        if(x%Sprite.SCALED_SIZE >= 32) {
+            xblock+=1;
         }
         if(y%Sprite.SCALED_SIZE >=24) {
-            boxY +=1;
+            yblock +=1;
         }
-        Bomb nBomb = new Bomb(boxX,
-                boxY,Sprite.bomb.getFxImage());
+        Bomb nBomb = new Bomb(xblock,
+                yblock,Sprite.bomb.getFxImage());
         nBomb.setActive(true);
+
+        BombermanGame.map.setTILE_MAP(xblock, yblock, 'b');
+
         return nBomb;
     }
+
+
     @Override
     public void update() {
         HandlingInput();
