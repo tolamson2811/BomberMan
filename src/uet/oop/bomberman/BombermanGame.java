@@ -7,11 +7,12 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import uet.oop.bomberman.StillObjects.StillObject;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.graphics.Sprite;
 import javafx.scene.shape.Rectangle;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class BombermanGame extends Application {
     public static Scene scene;
 //    private Bomber bomberman;
     private List<Entity> entities = new ArrayList<>();
-    public static List<Entity> stillObjects = new ArrayList<>();
+    public static List<StillObject> stillObjects = new ArrayList<>();
 
     public static GameMap map = new GameMap(0,0);
 

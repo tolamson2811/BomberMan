@@ -18,9 +18,9 @@ public abstract class Entity {
     protected int w;
     protected int h;
 
-    public int movevalX;
+    protected int movevalX;
 
-    public int movevalY;
+    protected int movevalY;
 
     public boolean isInBomb = false;
 
@@ -31,6 +31,22 @@ public abstract class Entity {
     public boolean life = true;
 
     //Khởi tạo đối tượng, chuyển từ tọa độ đơn vị sang tọa độ trong canvas
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getW() {
+        return w;
+    }
+
+    public int getH() {
+        return h;
+    }
 
     public double getMovevalX() {
         return movevalX;

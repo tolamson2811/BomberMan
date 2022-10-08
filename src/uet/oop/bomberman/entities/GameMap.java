@@ -1,5 +1,8 @@
 package uet.oop.bomberman.entities;
 import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.StillObjects.Grass;
+import uet.oop.bomberman.StillObjects.StillObject;
+import uet.oop.bomberman.StillObjects.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.util.Scanner;
@@ -60,7 +63,7 @@ public class GameMap {
     public void LoadMap() {
         for (int i = 0; i < BombermanGame.WIDTH; i++) {
             for (int j = 0; j < BombermanGame.HEIGHT; j++) {
-                Entity object;
+                StillObject object;
                 if(TILE_MAP[j][i] == '#') {
                     object = new Wall(i, j, Sprite.wall.getFxImage());
                     MAP_COLLISION[j][i] = true;

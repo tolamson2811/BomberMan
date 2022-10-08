@@ -106,10 +106,11 @@ public class Bomb extends Entity {
     }
 
     public void checkBombCollision(Entity entity) {
-        for(int i = 0; i < explosion.size(); i++) {
-            if(explosion.get(i) != null) {
-                boolean check = BombermanGame.collision.checkCollision(explosion.get(i), entity);
-                if(check) {
+        for (Flame flame : explosion) {
+            if (flame != null) {
+                boolean check = BombermanGame.collision.checkCollision(flame, entity);
+                if (check) {
+                    System.out.println("hit");
                     entity.life = false;
                 }
             }
@@ -122,18 +123,13 @@ public class Bomb extends Entity {
             flame.update();
             flame.render(gc);
         }
+        checkBombCollision(BombermanGame.bomberman);
         time++;
-        if (time > 50) {
-            return false;
-        }
-        return true;
+        return !(time > 50);
     }
 
     @Override
     public void update() {
         placeBomb(BombermanGame.map.getTILE_MAP());
-        checkBombCollision(BombermanGame.bomberman);
-//       checkBombCollision(Enemy1);
-//        checkBombCollision(Enemy2);
     }
 }

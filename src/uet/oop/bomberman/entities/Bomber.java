@@ -52,13 +52,13 @@ public class Bomber extends Entity {
         h = 47;
     }
 
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
-    }
+//    public double getX() {
+//        return x;
+//    }
+//
+//    public double getY() {
+//        return y;
+//    }
 
 //    public double getMovevalX() {
 //        return movevalX;

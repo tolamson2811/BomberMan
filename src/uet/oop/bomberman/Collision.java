@@ -1,16 +1,18 @@
-package uet.oop.bomberman.entities;
+package uet.oop.bomberman;
+
+import uet.oop.bomberman.entities.Entity;
 
 public class Collision {
     public boolean checkCollision(Entity entity1, Entity entity2) {
-        int left_a = entity1.x;
-        int right_a = entity1.x + entity1.w;
-        int top_a = entity1.y;
-        int bottom_a = entity1.y + entity1.h;
+        int left_a = entity1.getX();
+        int right_a = entity1.getX() + entity1.getW();
+        int top_a = entity1.getY();
+        int bottom_a = entity1.getY() + entity1.getH();
 
-        int left_b = entity2.x;
-        int right_b = entity2.x + entity2.w;
-        int top_b = entity2.y;
-        int bottom_b = entity2.y + entity2.h;
+        int left_b = entity2.getX();
+        int right_b = entity2.getX() + entity2.getW();
+        int top_b = entity2.getY();
+        int bottom_b = entity2.getY() + entity2.getH();
 
         // Case 1: size object 1 < size object 2
         if (left_a > left_b && left_a < right_b)
