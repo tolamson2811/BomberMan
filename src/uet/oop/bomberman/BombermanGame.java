@@ -9,6 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 import javafx.stage.Stage;
 import uet.oop.bomberman.StillObjects.StillObject;
+import uet.oop.bomberman.StillObjects.Wall;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.graphics.Sprite;
 import javafx.scene.shape.Rectangle;
@@ -28,7 +29,7 @@ public class BombermanGame extends Application {
     private List<Entity> entities = new ArrayList<>();
     public static List<StillObject> stillObjects = new ArrayList<>();
 
-    public static GameMap map = new GameMap(0,0);
+    public static GameMap map = new GameMap();
 
     public static Collision collision = new Collision();
 
@@ -81,7 +82,19 @@ public class BombermanGame extends Application {
 
     public void update() {
         entities.forEach(Entity::update);
-
+        if(bomberman.isPlaceBom()){
+            for(int i = 0;i < stillObjects.size();i++) {
+                StillObject o = stillObjects.get(i);
+                if(o.isTerminate()){
+                    Wall a = (Wall) o;
+                    a.TerminateProcess();
+                    if(!o.isTerminate()) {
+                        stillObjects.remove(i);
+                        i--;
+                    }
+                }
+            }
+        }
     }
 
     public void render() {

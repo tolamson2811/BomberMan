@@ -15,8 +15,6 @@ import java.util.Vector;
 
 public class Bomber extends Entity {
 
-//    private double movevalX;
-//    private double movevalY;
     static class Input {
         int left;
         int right;
@@ -24,7 +22,7 @@ public class Bomber extends Entity {
         int down;
         boolean bomb;
     }
-
+    private boolean PlaceBom;
 //    public boolean isInBomb = false;
 
     public int TILE_SIZE = Sprite.SCALED_SIZE;
@@ -34,6 +32,7 @@ public class Bomber extends Entity {
     protected Input user_input = new Input();
     private WALKTYPE status;
     private final List<Bomb> bomstack = new ArrayList<>();
+
     enum WALKTYPE {
         RIGHT, LEFT, UP, DOWN
     }
@@ -50,200 +49,36 @@ public class Bomber extends Entity {
         img = sprite.getFxImage();
         w = 36;
         h = 47;
+        PlaceBom = false;
     }
 
-//    public double getX() {
-//        return x;
-//    }
-//
-//    public double getY() {
-//        return y;
-//    }
-
-//    public double getMovevalX() {
-//        return movevalX;
-//    }
-//
-//    public void setMovevalX(int movevalX) {
-//        this.movevalX = movevalX;
-//    }
-//
-//    public double getMovevalY() {
-//        return movevalY;
-//    }
-//
-//    public void setMovevalY(int movevalY) {
-//        this.movevalY = movevalY;
-//    }
+    public boolean isPlaceBom() {
+        return PlaceBom;
+    }
 
     /**
      * MOVE BOMBER.
      */
     public void MoveMent() {
-            movevalX = 0;
-            movevalY = 0;
+        movevalX = 0;
+        movevalY = 0;
 
-            if (user_input.right == 1) {
-                movevalX += BOMBER_SPEED;
-            } else if (user_input.left == 1) {
-                movevalX -= BOMBER_SPEED;
-            }
-            if (user_input.up == 1) {
-                movevalY -= BOMBER_SPEED;
-            } else if (user_input.down == 1) {
-                movevalY += BOMBER_SPEED;
-            }
+        if (user_input.right == 1) {
+            movevalX += BOMBER_SPEED;
+        } else if (user_input.left == 1) {
+            movevalX -= BOMBER_SPEED;
+        }
+        if (user_input.up == 1) {
+            movevalY -= BOMBER_SPEED;
+        } else if (user_input.down == 1) {
+            movevalY += BOMBER_SPEED;
+        }
 
-            BombermanGame.map.mapCollision(this);
+        BombermanGame.map.mapCollision(this);
 
-            x += movevalX;
-            y += movevalY;
+        x += movevalX;
+        y += movevalY;
     }
-
-    /**
-     * CHECK COLLISIONS
-     * @param TILE_MAP
-     */
-//    public void checkCollisions(char[][] TILE_MAP) {
-//        int x1 = 0;
-//        int x2 = 0;
-//
-//        int y1 = 0;
-//        int y2 = 0;
-//
-//
-//        x1 = (int) (this.x + this.getMovevalX()) / TILE_SIZE;
-//        x2 = (int) (this.x + this.getMovevalX() + w - 1) / TILE_SIZE;
-//
-//        y1 =  this.y / TILE_SIZE;
-//        y2 = (this.y + h - 1) / TILE_SIZE;
-//
-//        if(x1 >= 0 && y1 >= 0) {
-//            if(this.getMovevalX() > 0) {
-//
-//                if(TILE_MAP[y1][x2] == '*' || TILE_MAP[y2][x2] == '*'
-//                   || TILE_MAP[y1][x2] == '#' || TILE_MAP[y2][x2] == '#'
-//                   || TILE_MAP[y1][x2] == 'b' || TILE_MAP[y2][x2] == 'b') {
-//                    if(TILE_MAP[y1][x2] == 'b' || TILE_MAP[y2][x2] == 'b') {
-//                        if(!isInBomb){
-//                            this.x = x2 * TILE_SIZE;
-//                            this.x -= w + 1;
-//                            this.setMovevalX(0);
-//                        }
-//                    } else {
-//                        this.x = x2 * TILE_SIZE;
-//                        this.x -= w + 1;
-//                        this.setMovevalX(0);
-//                    }
-//
-//                    if((TILE_MAP[y1][x2] == '*' && TILE_MAP[y2][x2] != '*')
-//                        || (TILE_MAP[y1][x2] == '#' && TILE_MAP[y2][x2] != '#')) {
-//                        if(y1*TILE_SIZE + TILE_SIZE - this.y < 22) {
-//                            this.movevalY++;
-//                        }
-//                    } else if((TILE_MAP[y1][x2] != '*' && TILE_MAP[y2][x2] == '*')
-//                                || (TILE_MAP[y1][x2] != '#' && TILE_MAP[y2][x2] == '#')) {
-//                        if(y2 * TILE_SIZE + TILE_SIZE - (this.y + h) > 40) {
-//                            this.movevalY--;
-//                        }
-//                    }
-//                }
-//            } else if(this.getMovevalX() < 0) {
-//                if((TILE_MAP[y1][x1] == '*' || TILE_MAP[y2][x1] == '*')
-//                    || TILE_MAP[y1][x1] == '#' || TILE_MAP[y2][x1] == '#'
-//                    || TILE_MAP[y1][x1] == 'b' || TILE_MAP[y2][x1] == 'b') {
-//                    if(TILE_MAP[y1][x1] == 'b' || TILE_MAP[y2][x1] == 'b') {
-//                        if(!isInBomb){
-//                            this.x = (x1 + 1) * TILE_SIZE + 1;
-//                            this.setMovevalX(0);
-//                        }
-//                    } else {
-//                        this.x = (x1 + 1) * TILE_SIZE + 1;
-//                        this.setMovevalX(0);
-//                    }
-//
-//                }
-//                if((TILE_MAP[y1][x1] == '*' && TILE_MAP[y2][x1] != '*')
-//                    || (TILE_MAP[y1][x1] == '#' && TILE_MAP[y2][x1] != '#'))  {
-//                    if(y1*TILE_SIZE + TILE_SIZE - this.y < 22) {
-//                        this.movevalY++;
-//                    }
-//                } else if((TILE_MAP[y1][x1] != '*' && TILE_MAP[y2][x1] == '*')
-//                           || (TILE_MAP[y1][x1] != '#' && TILE_MAP[y2][x1] == '#'))  {
-//                    if(y2 * TILE_SIZE + TILE_SIZE - (this.y + h) > 32) {
-//                        this.movevalY--;
-//                    }
-//                }
-//            }
-//        }
-//
-//
-//        //Check doc
-//        x1 = this.x / TILE_SIZE;
-//        x2 =  (this.x + w) / TILE_SIZE;
-//
-//        y1 = (int) (this.y + this.getMovevalY()) / TILE_SIZE;
-//        y2 = (int) (this.y + this.getMovevalY() + h - 1) / TILE_SIZE;
-//
-//        if(x1 >= 0 && y1 >= 0) {
-//            if(this.getMovevalY() > 0) {
-//                if( (TILE_MAP[y2][x1] == '*' || TILE_MAP[y2][x2] == '*')
-//                     || TILE_MAP[y2][x1] == '#' || TILE_MAP[y2][x2] == '#'
-//                     || TILE_MAP[y2][x1] == 'b' || TILE_MAP[y2][x2] == 'b') {
-//                    if(TILE_MAP[y2][x1] == 'b' || TILE_MAP[y2][x2] == 'b') {
-//                        if(!isInBomb){
-//                            this.y = y2 * TILE_SIZE;
-//                            this.y -= (h + 1);
-//                            this.setMovevalY(0);
-//                        }
-//                    } else {
-//                        this.y = y2 * TILE_SIZE;
-//                        this.y -= (h + 1);
-//                        this.setMovevalY(0);
-//                    }
-//
-//                    if((TILE_MAP[y2][x1] == '*' && TILE_MAP[y2][x2] != '*')
-//                        || (TILE_MAP[y2][x1] == '#' && TILE_MAP[y2][x2] != '#')) {
-//                        if(x1 * TILE_SIZE + TILE_SIZE - this.x < 8) {
-//                            this.movevalX++;
-//                        }
-//                    } else if((TILE_MAP[y2][x1] != '*' && TILE_MAP[y2][x2] == '*')
-//                               || (TILE_MAP[y2][x1] != '#' && TILE_MAP[y2][x2] == '#')) {
-//                        if(x2 * TILE_SIZE + TILE_SIZE - (this.x + w) > 40) {
-//                            this.movevalX--;
-//                        }
-//                    }
-//                }
-//            } else if(this.getMovevalY() < 0) {
-//                if((TILE_MAP[y1][x1] == '*' || TILE_MAP[y1][x2] == '*')
-//                    || TILE_MAP[y1][x1] == '#' || TILE_MAP[y1][x2] == '#'
-//                    || TILE_MAP[y1][x1] == 'b' || TILE_MAP[y1][x2] == 'b') {
-//                    if(TILE_MAP[y1][x1] == 'b' || TILE_MAP[y1][x2] == 'b') {
-//                        if(!isInBomb){
-//                            this.y = (y1 + 1) * TILE_SIZE;
-//                            this.setMovevalY(0);
-//                        }
-//                    } else {
-//                        this.y = (y1 + 1) * TILE_SIZE;
-//                        this.setMovevalY(0);
-//                    }
-//
-//                }
-//                if((TILE_MAP[y1][x1] != '*' && TILE_MAP[y1][x2] == '*')
-//                    || (TILE_MAP[y1][x1] != '#' && TILE_MAP[y1][x2] == '#')) {
-//                    if(x2 * TILE_SIZE + TILE_SIZE - (this.x + w) > 40) {
-//                        this.movevalX--;
-//                    }
-//                } else if((TILE_MAP[y1][x1] == '*' && TILE_MAP[y1][x2] != '*')
-//                          || (TILE_MAP[y1][x1] == '#' && TILE_MAP[y1][x2] != '#')) {
-//                    if(x1 * TILE_SIZE + TILE_SIZE - this.x < 8) {
-//                        this.movevalX++;
-//                    }
-//                }
-//            }
-//        }
-//    }
-
     /**
      * KIEM TRA INPUT.
      */
@@ -277,6 +112,7 @@ public class Bomber extends Entity {
                     case SPACE:
                         if(bomstack.size() < BOMB_NUMBER) {
                             Bomb nbomb = makeBomb();
+                            PlaceBom = true;
                             bomstack.add(nbomb);
                         }
 
@@ -336,7 +172,9 @@ public class Bomber extends Entity {
      * @param gc
      */
     public void HandleBomb(GraphicsContext gc) {
-
+        if(bomstack.isEmpty()) {
+            PlaceBom = false;
+        }
         for (int i = 0; i < bomstack.size(); i++) {
             Bomb nbomb = bomstack.get(i);
             if (!nbomb.isActive()) {

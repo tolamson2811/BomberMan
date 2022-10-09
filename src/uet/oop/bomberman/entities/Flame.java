@@ -32,48 +32,48 @@ public class Flame extends Entity {
     public void Animation() {
         int i =1;
         if (flametype == TYPE.HORIONTAL) {
-            int diff = time % 30;
-            img = horizontal[diff / 10].getFxImage();
+            int diff = time % 15;
+            img = horizontal[diff / 5].getFxImage();
 
         }
         if (flametype == TYPE.VERTICAL) {
 
-            int diff = time % 30;
-            img = vertical[diff / 10].getFxImage();
+            int diff = time % 15;
+            img = vertical[diff / 5].getFxImage();
 
         }
         if (flametype == TYPE.TOP) {
 
-            int diff = time % 30;
-            img = top[diff / 10].getFxImage();
+            int diff = time % 15;
+            img = top[diff / 5].getFxImage();
 
 
         }
         if (flametype == TYPE.DOWN) {
 
-            int diff = time % 30;
-            img = down[diff / 10].getFxImage();
+            int diff = time % 15;
+            img = down[diff / 5].getFxImage();
 
         }
         if (flametype == TYPE.CENTER) {
 
-            int diff = time % 30;
-            img = center[diff / 10].getFxImage();
+            int diff = time % 15;
+            img = center[diff / 5].getFxImage();
 
         }
         if (flametype == TYPE.LEFT) {
 
-            int diff = time % 30;
-            img = left[diff / 10].getFxImage();
+            int diff = time % 15;
+            img = left[diff / 5].getFxImage();
 
         }
         if (flametype == TYPE.RIGHT) {
 
-            int diff = time % 30;
-            img = right[diff / 10].getFxImage();
+            int diff = time % 15;
+            img = right[diff / 5].getFxImage();
 
         }
-        if(time > 30) {
+        if(time > 15) {
             i = -1;
         }
         time+= i;

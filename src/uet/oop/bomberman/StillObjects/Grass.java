@@ -9,8 +9,4 @@ public class Grass extends StillObject {
         super(x, y, img);
     }
 
-    @Override
-    public void update() {
-
-    }
 }

@@ -1,18 +1,40 @@
 package uet.oop.bomberman;
 
+import uet.oop.bomberman.StillObjects.StillObject;
 import uet.oop.bomberman.entities.Entity;
 
+/**
+ * CHECK VA CHẠM GIỮA VẬT THỂ VÀ CÁC OBJECT KHÁC.
+ */
 public class Collision {
-    public boolean checkCollision(Entity entity1, Entity entity2) {
-        int left_a = entity1.getX();
-        int right_a = entity1.getX() + entity1.getW();
-        int top_a = entity1.getY();
-        int bottom_a = entity1.getY() + entity1.getH();
+    public boolean checkCollision(Entity entity1, Object object) {
+        int left_a,left_b;
+        int right_b,right_a;
+        int bottom_a,bottom_b;
+        int top_a,top_b;
+        if(object instanceof Entity) {
+            Entity entity2 = (Entity) object;
+            left_a = entity1.getX();
+            right_a = entity1.getX() + entity1.getW();
+            top_a = entity1.getY();
+            bottom_a = entity1.getY() + entity1.getH();
 
-        int left_b = entity2.getX();
-        int right_b = entity2.getX() + entity2.getW();
-        int top_b = entity2.getY();
-        int bottom_b = entity2.getY() + entity2.getH();
+            left_b = entity2.getX();
+            right_b = entity2.getX() + entity2.getW();
+            top_b = entity2.getY();
+            bottom_b = entity2.getY() + entity2.getH();
+        }else {
+            StillObject object2 = (StillObject) object;
+            left_a = entity1.getX();
+            right_a = entity1.getX() + entity1.getW();
+            top_a = entity1.getY();
+            bottom_a = entity1.getY() + entity1.getH();
+
+            left_b = object2.getX();
+            right_b = object2.getX() + object2.getW();
+            top_b = object2.getY();
+            bottom_b = object2.getY() + object2.getH();
+        }
 
         // Case 1: size object 1 < size object 2
         if (left_a > left_b && left_a < right_b)

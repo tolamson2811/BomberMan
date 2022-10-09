@@ -3,6 +3,9 @@ package uet.oop.bomberman.entities;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.StillObjects.Grass;
+import uet.oop.bomberman.StillObjects.StillObject;
+import uet.oop.bomberman.StillObjects.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.util.ArrayList;
@@ -12,7 +15,6 @@ public class Bomb extends Entity {
     private double radius;
     private double time;
     private boolean active;
-    private boolean explode;
     private final List<Flame> explosion = new ArrayList<>();
 
     public double getRadius() {
@@ -24,7 +26,6 @@ public class Bomb extends Entity {
         w = (int) img.getWidth();
         h = (int) img.getHeight();
         active = false;
-        explode = false;
         radius = 2;
         time = 0;
     }
@@ -41,15 +42,6 @@ public class Bomb extends Entity {
         this.active = active;
     }
 
-    public boolean isExplode() {
-        return explode;
-    }
-
-    public void setExplode(boolean explode) {
-        this.explode = explode;
-    }
-
-
     public void placeBomb(char[][] TILE_MAP) {
         TILE_MAP[yblock][xblock] = 'b';
         img = Sprite.movingSprite(Sprite.bomb,
@@ -59,49 +51,57 @@ public class Bomb extends Entity {
         } else {
             time = 0;
             active = false;
-            int spread = 1;
             TILE_MAP[yblock][xblock] = ' ';
             explosion.add(new Flame(xblock, yblock, Flame.TYPE.CENTER));
-            //check left to add explosion
-            while (spread <= radius && TILE_MAP[yblock][xblock + spread] != '#' && TILE_MAP[yblock][xblock + spread] != '*') {
-
-                if (spread == radius) {
-                    explosion.add(new Flame(xblock + spread, yblock, Flame.TYPE.RIGHT));
-                } else {
-                    explosion.add(new Flame(xblock + spread, yblock, Flame.TYPE.HORIONTAL));
+            //add bottom
+            addFlame(1,0);
+            //add top
+            addFlame(-1,0);
+            //add left
+            addFlame(0,-1);
+            //add right
+            addFlame(0,1);
+        }
+    }
+    public void addFlame(int vertical,int horizontal) {
+        int spreadX = horizontal;
+        int spreadY = vertical;
+        Flame.TYPE type;
+        char[][] TILE_MAP = BombermanGame.map.getTILE_MAP();
+        int i = (vertical == -1 || horizontal == -1) ? -1:1;
+        while (Math.abs(spreadX) <= radius && Math.abs(spreadY) <= radius &&
+                TILE_MAP[yblock + spreadY][xblock + spreadX] != '#' ) {
+            if(TILE_MAP[yblock + spreadY][xblock+spreadX] == '*') {
+                boolean a = false;
+                for(StillObject o: BombermanGame.stillObjects) {
+                    if(o instanceof Wall && o.getXblock() == xblock+spreadX && o.getYblock() == yblock+spreadY) {
+                        o.setTerminate(true);
+                        a= true;
+                    }
                 }
-                spread++;
-            }
-            spread = 1;
-            while (spread <= radius && TILE_MAP[yblock][xblock - spread] != '*' && TILE_MAP[yblock][xblock - spread] != '#' ) {
-
-                if (spread == radius) {
-                    explosion.add(new Flame(xblock - spread, yblock, Flame.TYPE.LEFT));
-                } else {
-                    explosion.add(new Flame(xblock - spread, yblock, Flame.TYPE.HORIONTAL));
+                if(a){
+                    break;
                 }
-                spread++;
             }
-            spread = 1;
-            while (spread <= radius && TILE_MAP[yblock + spread][xblock] != '*' && TILE_MAP[yblock + spread][xblock] != '#' ) {
-
-                if (spread == radius) {
-                    explosion.add(new Flame(xblock, yblock + spread, Flame.TYPE.DOWN));
+            if(vertical == 0) {
+                if (Math.abs(spreadX) == radius) {
+                    type = (horizontal == 1) ? Flame.TYPE.RIGHT: Flame.TYPE.LEFT;
+                    explosion.add(new Flame(xblock + spreadX, yblock + spreadY, type));
                 } else {
-                    explosion.add(new Flame(xblock, yblock + spread, Flame.TYPE.VERTICAL));
+                    explosion.add(new Flame(xblock+spreadX, yblock + spreadY, Flame.TYPE.HORIONTAL));
                 }
-                spread++;
-            }
-            spread = 1;
-            while (spread <= radius && TILE_MAP[yblock -spread][xblock] != '*'  && TILE_MAP[yblock -spread][xblock] != '#') {
-
-                if (spread == radius) {
-                    explosion.add(new Flame(xblock, yblock - spread, Flame.TYPE.TOP));
+                spreadX+= i;
+            }else {
+                if (Math.abs(spreadY) == radius) {
+                    type = (vertical == 1) ? Flame.TYPE.DOWN: Flame.TYPE.TOP;
+                    explosion.add(new Flame(xblock + spreadX, yblock + spreadY, type));
                 } else {
-                    explosion.add(new Flame(xblock, yblock - spread, Flame.TYPE.VERTICAL));
+                    explosion.add(new Flame(xblock+spreadX, yblock + spreadY, Flame.TYPE.VERTICAL));
                 }
-                spread++;
+                spreadY +=i;
             }
+
+
         }
     }
 
@@ -117,6 +117,9 @@ public class Bomb extends Entity {
         }
     }
 
+    /**
+     * Lửa khi bom phát nổ.
+     */
     public boolean Explode(GraphicsContext gc) {
         BombermanGame.map.setTILE_MAP(yblock, xblock, ' ');
         for (Flame flame : explosion) {
@@ -125,7 +128,7 @@ public class Bomb extends Entity {
         }
         checkBombCollision(BombermanGame.bomberman);
         time++;
-        return !(time > 50);
+        return !(time > 30);
     }
 
     @Override
