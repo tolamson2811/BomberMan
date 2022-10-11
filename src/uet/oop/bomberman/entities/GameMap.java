@@ -57,9 +57,6 @@ public class GameMap {
     }
 
     public void mapCollision(Entity entity) {
-
-
-
         int x1;
         int x2;
         int y1;
@@ -69,36 +66,19 @@ public class GameMap {
         x2 = (int) (entity.x + entity.getMovevalX() + entity.w - 1) / TILE_SIZE;
         y1 = entity.y / TILE_SIZE;
         y2 = (entity.y + entity.h - 1) / TILE_SIZE;
-        entity.isInBomb = BombermanGame.map.getTILE_MAP()[(int) entity.y / TILE_SIZE][(int) entity.x / TILE_SIZE] == 'b'
-                || BombermanGame.map.getTILE_MAP()[(int) entity.y / TILE_SIZE][(int) (entity.x + entity.w) / TILE_SIZE] == 'b'
-                || BombermanGame.map.getTILE_MAP()[(int) (entity.y + entity.h) / TILE_SIZE][(int) entity.x / TILE_SIZE] == 'b'
-                || BombermanGame.map.getTILE_MAP()[(int) (entity.y + entity.h) / TILE_SIZE][(int) (entity.x + entity.w) / TILE_SIZE] == 'b';
-//        entity.isInBomb = BombermanGame.map.getTILE_MAP()[y1][x1] == 'b'
-//                || BombermanGame.map.getTILE_MAP()[y1][x2] == 'b'
-//                || BombermanGame.map.getTILE_MAP()[y2][x1] == 'b'
-//                || BombermanGame.map.getTILE_MAP()[y2][x2] == 'b';
+
         if(entity.getMovevalX() > 0) {
 
             if(TILE_MAP[y1][x2] == '*' || TILE_MAP[y2][x2] == '*'
                     || TILE_MAP[y1][x2] == '#' || TILE_MAP[y2][x2] == '#'
                     || TILE_MAP[y1][x2] == 'b' || TILE_MAP[y2][x2] == 'b') {
                 if((TILE_MAP[y1][x2] == 'b' || TILE_MAP[y2][x2] == 'b')) {
-                    if(!entity.isInBomb){
-                        entity.x = x2 * TILE_SIZE;
-                        entity.x -= entity.w + 1;
-                        entity.setMovevalX(0);
-                    } else if(TILE_MAP[y1][x2] == '*' || TILE_MAP[y2][x2] == '*'
-                            || TILE_MAP[y1][x2] == '#' || TILE_MAP[y2][x2] == '#') {
-                        entity.x = x2 * TILE_SIZE;
-                        entity.x -= entity.w + 1;
+                    if (TILE_MAP[y1][x1 + 1] == 'b' || TILE_MAP[y2][x1 + 1] == 'b') {
                         entity.setMovevalX(0);
                     }
                 } else {
-                    entity.x = x2 * TILE_SIZE;
-                    entity.x -= entity.w + 1;
                     entity.setMovevalX(0);
                 }
-
                 if((TILE_MAP[y1][x2] == '*' && TILE_MAP[y2][x2] != '*' && TILE_MAP[y2][x2] != '#')
                         || (TILE_MAP[y1][x2] == '#' && TILE_MAP[y2][x2] != '#' && TILE_MAP[y2][x2] != '*')) {
                     if(y1*TILE_SIZE + TILE_SIZE - entity.y < 22) {
@@ -116,16 +96,10 @@ public class GameMap {
                     || TILE_MAP[y1][x1] == '#' || TILE_MAP[y2][x1] == '#'
                     || TILE_MAP[y1][x1] == 'b' || TILE_MAP[y2][x1] == 'b') {
                 if(TILE_MAP[y1][x1] == 'b' || TILE_MAP[y2][x1] == 'b') {
-                    if(!entity.isInBomb){
-                        entity.x = (x1 + 1) * TILE_SIZE + 1;
-                        entity.setMovevalX(0);
-                    } else if((TILE_MAP[y1][x1] == '*' || TILE_MAP[y2][x1] == '*')
-                            || TILE_MAP[y1][x1] == '#' || TILE_MAP[y2][x1] == '#') {
-                        entity.x = (x1 + 1) * TILE_SIZE + 1;
+                    if (TILE_MAP[y1][x2 - 1] == 'b' || TILE_MAP[y2][x2 - 1] == 'b') {
                         entity.setMovevalX(0);
                     }
                 } else {
-                    entity.x = (x1 + 1) * TILE_SIZE + 1;
                     entity.setMovevalX(0);
                 }
 
@@ -157,19 +131,10 @@ public class GameMap {
                         || TILE_MAP[y2][x1] == '#' || TILE_MAP[y2][x2] == '#'
                         || TILE_MAP[y2][x1] == 'b' || TILE_MAP[y2][x2] == 'b') {
                     if(TILE_MAP[y2][x1] == 'b' || TILE_MAP[y2][x2] == 'b') {
-                        if(!entity.isInBomb){
-                            entity.y = y2 * TILE_SIZE;
-                            entity.y -= (entity.h + 1);
-                            entity.setMovevalY(0);
-                        } else if((TILE_MAP[y2][x1] == '*' || TILE_MAP[y2][x2] == '*')
-                                || TILE_MAP[y2][x1] == '#' || TILE_MAP[y2][x2] == '#') {
-                            entity.y = y2 * TILE_SIZE;
-                            entity.y -= (entity.h + 1);
+                        if (TILE_MAP[y1 + 1][x1] == 'b' || TILE_MAP[y1 + 1][x2] == 'b') {
                             entity.setMovevalY(0);
                         }
                     } else {
-                        entity.y = y2 * TILE_SIZE;
-                        entity.y -= (entity.h + 1);
                         entity.setMovevalY(0);
                     }
 
@@ -190,16 +155,10 @@ public class GameMap {
                         || TILE_MAP[y1][x1] == '#' || TILE_MAP[y1][x2] == '#'
                         || TILE_MAP[y1][x1] == 'b' || TILE_MAP[y1][x2] == 'b') {
                     if(TILE_MAP[y1][x1] == 'b' || TILE_MAP[y1][x2] == 'b') {
-                        if(!entity.isInBomb){
-                            entity.y = (y1 + 1) * TILE_SIZE;
-                            entity.setMovevalY(0);
-                        } else if((TILE_MAP[y1][x1] == '*' || TILE_MAP[y1][x2] == '*')
-                                || TILE_MAP[y1][x1] == '#' || TILE_MAP[y1][x2] == '#') {
-                            entity.y = (y1 + 1) * TILE_SIZE;
+                        if (TILE_MAP[y2 - 1][x1] == 'b' || TILE_MAP[y2 - 1][x2] == 'b') {
                             entity.setMovevalY(0);
                         }
                     } else {
-                        entity.y = (y1 + 1) * TILE_SIZE;
                         entity.setMovevalY(0);
                     }
 

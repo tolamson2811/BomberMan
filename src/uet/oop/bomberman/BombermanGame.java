@@ -26,7 +26,7 @@ public class BombermanGame extends Application {
     private Canvas canvas;
     public static Scene scene;
 //    private Bomber bomberman;
-    private List<Entity> entities = new ArrayList<>();
+    public static List<Entity> entities = new ArrayList<>();
     public static List<StillObject> stillObjects = new ArrayList<>();
 
     public static GameMap map = new GameMap();
@@ -34,6 +34,11 @@ public class BombermanGame extends Application {
     public static Collision collision = new Collision();
 
     public static Bomber bomberman = new Bomber(5, 5, Sprite.player_right);
+
+    public static Ballom ballom1 = new Ballom(6, 5, Sprite.balloom_right1);
+
+    public static Ballom ballom2 = new Ballom(24, 5, Sprite.balloom_right1);
+    public static Ballom ballom3 = new Ballom(13, 10, Sprite.balloom_right1);
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -61,6 +66,9 @@ public class BombermanGame extends Application {
         Rectangle rectangle = new Rectangle();
         root.getChildren().add(rectangle);
         entities.add(bomberman);
+        entities.add(ballom1);
+        entities.add(ballom2);
+        entities.add(ballom3);
         //GAME LOOP
         AnimationTimer timer = new AnimationTimer() {
             @Override

@@ -127,6 +127,9 @@ public class Bomb extends Entity {
             flame.render(gc);
         }
         checkBombCollision(BombermanGame.bomberman);
+        checkBombCollision(BombermanGame.ballom1);
+        checkBombCollision(BombermanGame.ballom2);
+        checkBombCollision(BombermanGame.ballom3);
         time++;
         return !(time > 30);
     }
