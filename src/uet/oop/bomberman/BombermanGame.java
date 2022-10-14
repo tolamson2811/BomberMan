@@ -25,7 +25,7 @@ public class BombermanGame extends Application {
     private GraphicsContext gc;
     private Canvas canvas;
     public static Scene scene;
-//    private Bomber bomberman;
+    //    private Bomber bomberman;
     public static List<Entity> entities = new ArrayList<>();
     public static List<StillObject> stillObjects = new ArrayList<>();
 

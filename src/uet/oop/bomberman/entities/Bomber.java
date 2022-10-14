@@ -33,6 +33,8 @@ public class Bomber extends Entity {
     private WALKTYPE status;
     private final List<Bomb> bomstack = new ArrayList<>();
 
+    public boolean isPress = false;
+
     enum WALKTYPE {
         RIGHT, LEFT, UP, DOWN
     }
@@ -92,22 +94,25 @@ public class Bomber extends Entity {
                         status = WALKTYPE.LEFT;
                         user_input.left = 1;
                         user_input.right = 0;
+                        isPress = true;
                         break;
                     case D:
                         status = WALKTYPE.RIGHT;
                         user_input.left = 0;
                         user_input.right = 1;
-                        ;
+                        isPress = true;
                         break;
                     case S:
                         status = WALKTYPE.DOWN;
                         user_input.down = 1;
                         user_input.up = 0;
+                        isPress = true;
                         break;
                     case W:
                         status = WALKTYPE.UP;
                         user_input.up = 1;
                         user_input.down = 0;
+                        isPress = true;
                         break;
                     case SPACE:
                         if(bomstack.size() < BOMB_NUMBER) {
@@ -128,15 +133,19 @@ public class Bomber extends Entity {
                 switch (keyEvent.getCode()) {
                     case A:
                         user_input.left = 0;
+                        isPress = false;
                         break;
                     case D:
                         user_input.right = 0;
+                        isPress = false;
                         break;
                     case S:
                         user_input.down = 0;
+                        isPress = false;
                         break;
                     case W:
                         user_input.up = 0;
+                        isPress = false;
                         break;
                 }
 
@@ -184,6 +193,7 @@ public class Bomber extends Entity {
             } else {
                 nbomb.render(gc);
                 nbomb.update();
+                BombermanGame.map.setTILE_MAP(yblock, xblock, 'b');
             }
         }
     }
@@ -205,7 +215,7 @@ public class Bomber extends Entity {
                 yblock,Sprite.bomb.getFxImage());
         nBomb.setActive(true);
 
-        BombermanGame.map.setTILE_MAP(yblock, xblock, 'b');
+//        BombermanGame.map.setTILE_MAP(yblock, xblock, 'b');
 
         return nBomb;
     }

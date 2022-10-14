@@ -103,6 +103,9 @@ public class Ballom extends Entity {
         moveMent();
         animation();
         if(!life) {
+            img = Sprite.movingSprite(Sprite.balloom_dead,
+                    Sprite.balloom_dead,Sprite.balloom_dead,time,9).getFxImage();
+            time += 0.5;
             BombermanGame.entities.remove(this);
         }
     }

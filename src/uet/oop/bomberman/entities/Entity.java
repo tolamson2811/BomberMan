@@ -22,13 +22,14 @@ public abstract class Entity {
 
     protected int movevalY;
 
-    public boolean isInBomb = false;
+    protected boolean isInBomb = false;
 
     protected Image img;
 
     protected Sprite sprite;
 
     public boolean life = true;
+
 
     //Khởi tạo đối tượng, chuyển từ tọa độ đơn vị sang tọa độ trong canvas
 
@@ -63,6 +64,11 @@ public abstract class Entity {
     public void setMovevalY(int movevalY) {
         this.movevalY = movevalY;
     }
+
+    public int currentX1 = (int) (getX() / Sprite.SCALED_SIZE);
+    public int currentX2 = (int) (getX() + getW()) / Sprite.SCALED_SIZE;
+    public int currentY1 = (int) (getY() / Sprite.SCALED_SIZE);
+    public int currentY2 = (int) (getY() + getH()) / Sprite.SCALED_SIZE;
 
 
     public Entity(int xUnit, int yUnit) {

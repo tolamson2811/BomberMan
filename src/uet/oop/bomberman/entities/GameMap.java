@@ -61,24 +61,55 @@ public class GameMap {
         int x2;
         int y1;
         int y2;
-
+        
         x1 = (int) (entity.x + entity.getMovevalX()) / TILE_SIZE;
         x2 = (int) (entity.x + entity.getMovevalX() + entity.w - 1) / TILE_SIZE;
         y1 = entity.y / TILE_SIZE;
         y2 = (entity.y + entity.h - 1) / TILE_SIZE;
 
-        if(entity.getMovevalX() > 0) {
+        if (entity instanceof Bomber) {
 
+            entity.currentX1 = (int) ((entity.x + 1)/ TILE_SIZE);
+            entity.currentX2 = (int) (entity.x + entity.w - 1) / TILE_SIZE;
+            entity.currentY1 = (int) ((entity.y + 1)/ TILE_SIZE);
+            entity.currentY2 = (int) (entity.y + entity.h - 1) / TILE_SIZE;
+
+            entity.isInBomb = BombermanGame.map.getTILE_MAP()[entity.currentY1][entity.currentX1] == 'b'
+                    || BombermanGame.map.getTILE_MAP()[entity.currentY2][entity.currentX1] == 'b'
+                    || BombermanGame.map.getTILE_MAP()[entity.currentY1][entity.currentX2] == 'b'
+                    || BombermanGame.map.getTILE_MAP()[entity.currentY2][entity.currentX2] == 'b';
+
+        }
+
+        if(entity.getMovevalX() > 0) {
             if(TILE_MAP[y1][x2] == '*' || TILE_MAP[y2][x2] == '*'
                     || TILE_MAP[y1][x2] == '#' || TILE_MAP[y2][x2] == '#'
                     || TILE_MAP[y1][x2] == 'b' || TILE_MAP[y2][x2] == 'b') {
-                if((TILE_MAP[y1][x2] == 'b' || TILE_MAP[y2][x2] == 'b')) {
-                    if (TILE_MAP[y1][x1 + 1] == 'b' || TILE_MAP[y2][x1 + 1] == 'b') {
+                    if ((TILE_MAP[y1][x2] == 'b' || TILE_MAP[y2][x2] == 'b')) {
+                        if (entity instanceof Bomber) {
+                            if (!entity.isInBomb) {
+                                entity.setMovevalX(0);
+                            } else {
+                                if (BombermanGame.map.getTILE_MAP()[entity.currentY1][entity.currentX1] == 'b'
+                                        || BombermanGame.map.getTILE_MAP()[entity.currentY2][entity.currentX1] == 'b') {
+                                    if (BombermanGame.map.getTILE_MAP()[entity.currentY1][entity.currentX1 + 1] == 'b'
+                                            || BombermanGame.map.getTILE_MAP()[entity.currentY2][entity.currentX1 + 1] == 'b') {
+                                        entity.setMovevalX(0);
+                                    }
+                                } else if (BombermanGame.map.getTILE_MAP()[entity.currentY1][entity.currentX2] == 'b'
+                                        || BombermanGame.map.getTILE_MAP()[entity.currentY2][entity.currentX2] == 'b') {
+                                    if (BombermanGame.map.getTILE_MAP()[entity.currentY1][entity.currentX2 + 1] == 'b'
+                                            || BombermanGame.map.getTILE_MAP()[entity.currentY2][entity.currentX2 + 1] == 'b') {
+                                        entity.setMovevalX(0);
+                                    }
+                                }
+                            }
+                        } else {
+                            entity.setMovevalX(0);
+                        }
+                    } else {
                         entity.setMovevalX(0);
                     }
-                } else {
-                    entity.setMovevalX(0);
-                }
                 if((TILE_MAP[y1][x2] == '*' && TILE_MAP[y2][x2] != '*' && TILE_MAP[y2][x2] != '#')
                         || (TILE_MAP[y1][x2] == '#' && TILE_MAP[y2][x2] != '#' && TILE_MAP[y2][x2] != '*')) {
                     if(y1*TILE_SIZE + TILE_SIZE - entity.y < 22) {
@@ -95,14 +126,31 @@ public class GameMap {
             if((TILE_MAP[y1][x1] == '*' || TILE_MAP[y2][x1] == '*')
                     || TILE_MAP[y1][x1] == '#' || TILE_MAP[y2][x1] == '#'
                     || TILE_MAP[y1][x1] == 'b' || TILE_MAP[y2][x1] == 'b') {
-                if(TILE_MAP[y1][x1] == 'b' || TILE_MAP[y2][x1] == 'b') {
-                    if (TILE_MAP[y1][x2 - 1] == 'b' || TILE_MAP[y2][x2 - 1] == 'b') {
+                if (TILE_MAP[y1][x1] == 'b' || TILE_MAP[y2][x1] == 'b') {
+                    if (entity instanceof Bomber) {
+                        if (!entity.isInBomb) {
+                            entity.setMovevalX(0);
+                        } else {
+                            if (BombermanGame.map.getTILE_MAP()[entity.currentY1][entity.currentX1] == 'b'
+                                    || BombermanGame.map.getTILE_MAP()[entity.currentY2][entity.currentX1] == 'b') {
+                                if (BombermanGame.map.getTILE_MAP()[entity.currentY1][entity.currentX1 - 1] == 'b'
+                                        || BombermanGame.map.getTILE_MAP()[entity.currentY2][entity.currentX1 - 1] == 'b') {
+                                    entity.setMovevalX(0);
+                                }
+                            } else if (BombermanGame.map.getTILE_MAP()[entity.currentY1][entity.currentX2] == 'b'
+                                    || BombermanGame.map.getTILE_MAP()[entity.currentY2][entity.currentX2] == 'b') {
+                                if (BombermanGame.map.getTILE_MAP()[entity.currentY1][entity.currentX2 - 1] == 'b'
+                                        || BombermanGame.map.getTILE_MAP()[entity.currentY2][entity.currentX2 - 1] == 'b') {
+                                    entity.setMovevalX(0);
+                                }
+                            }
+                        }
+                    } else {
                         entity.setMovevalX(0);
                     }
-                } else {
+                    } else {
                     entity.setMovevalX(0);
                 }
-
             }
             if((TILE_MAP[y1][x1] == '*' && TILE_MAP[y2][x1] != '*' && TILE_MAP[y2][x1] != '#')
                     || (TILE_MAP[y1][x1] == '#' && TILE_MAP[y2][x1] != '#' && TILE_MAP[y2][x1] != '*'))  {
@@ -131,7 +179,25 @@ public class GameMap {
                         || TILE_MAP[y2][x1] == '#' || TILE_MAP[y2][x2] == '#'
                         || TILE_MAP[y2][x1] == 'b' || TILE_MAP[y2][x2] == 'b') {
                     if(TILE_MAP[y2][x1] == 'b' || TILE_MAP[y2][x2] == 'b') {
-                        if (TILE_MAP[y1 + 1][x1] == 'b' || TILE_MAP[y1 + 1][x2] == 'b') {
+                        if (entity instanceof Bomber) {
+                            if (!entity.isInBomb) {
+                                entity.setMovevalY(0);
+                            } else {
+                                if (BombermanGame.map.getTILE_MAP()[entity.currentY2][entity.currentX1] == 'b'
+                                        || BombermanGame.map.getTILE_MAP()[entity.currentY2][entity.currentX2] == 'b') {
+                                    if (BombermanGame.map.getTILE_MAP()[entity.currentY2 + 1][entity.currentX1] == 'b'
+                                            || BombermanGame.map.getTILE_MAP()[entity.currentY2 + 1][entity.currentX2] == 'b') {
+                                        entity.setMovevalY(0);
+                                    }
+                                } else if (BombermanGame.map.getTILE_MAP()[entity.currentY1][entity.currentX1] == 'b'
+                                        || BombermanGame.map.getTILE_MAP()[entity.currentY1][entity.currentX2] == 'b') {
+                                    if (BombermanGame.map.getTILE_MAP()[entity.currentY1 + 1][entity.currentX1] == 'b'
+                                            || BombermanGame.map.getTILE_MAP()[entity.currentY1 + 1][entity.currentX1] == 'b') {
+                                        entity.setMovevalY(0);
+                                    }
+                                }
+                            }
+                        } else {
                             entity.setMovevalY(0);
                         }
                     } else {
@@ -155,7 +221,25 @@ public class GameMap {
                         || TILE_MAP[y1][x1] == '#' || TILE_MAP[y1][x2] == '#'
                         || TILE_MAP[y1][x1] == 'b' || TILE_MAP[y1][x2] == 'b') {
                     if(TILE_MAP[y1][x1] == 'b' || TILE_MAP[y1][x2] == 'b') {
-                        if (TILE_MAP[y2 - 1][x1] == 'b' || TILE_MAP[y2 - 1][x2] == 'b') {
+                        if (entity instanceof Bomber) {
+                            if (!entity.isInBomb) {
+                                entity.setMovevalY(0);
+                            } else {
+                                if (BombermanGame.map.getTILE_MAP()[entity.currentY1][entity.currentX1] == 'b'
+                                        || BombermanGame.map.getTILE_MAP()[entity.currentY1][entity.currentX2] == 'b') {
+                                    if (BombermanGame.map.getTILE_MAP()[entity.currentY1 - 1][entity.currentX1] == 'b'
+                                            || BombermanGame.map.getTILE_MAP()[entity.currentY1 - 1][entity.currentX2] == 'b') {
+                                        entity.setMovevalY(0);
+                                    }
+                                } else if (BombermanGame.map.getTILE_MAP()[entity.currentY2][entity.currentX1] == 'b'
+                                        || BombermanGame.map.getTILE_MAP()[entity.currentY2][entity.currentX2] == 'b') {
+                                    if (BombermanGame.map.getTILE_MAP()[entity.currentY2 - 1][entity.currentX1] == 'b'
+                                            || BombermanGame.map.getTILE_MAP()[entity.currentY2 - 1][entity.currentX2] == 'b') {
+                                        entity.setMovevalY(0);
+                                    }
+                                }
+                            }
+                        } else {
                             entity.setMovevalY(0);
                         }
                     } else {
