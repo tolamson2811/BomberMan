@@ -1,19 +1,15 @@
 package uet.oop.bomberman.entities;
 
 import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.Utils.Collision;
+import uet.oop.bomberman.Utils.ConstVar;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Ballom extends Entity {
 
     private WALK_TYPE status;
-
-    private static final int SPEED = 1;
-
+    
     private int time = 0;
-
-    enum WALK_TYPE {
-        LEFT, RIGHT, UP, DOWN, DIE
-    }
 
     public Ballom(int x, int y, Sprite sprite) {
         super(x, y, sprite);
@@ -26,7 +22,7 @@ public class Ballom extends Entity {
     }
 
     public void moveMent() {
-        if (this.x % 48 <= 1 && this.y % 48 <= 1) {
+        if (this.x % ConstVar.TILE_SIZE <= 1 && this.y % ConstVar.TILE_SIZE <= 1) {
             double randomDirection = Math.random();
             if (randomDirection < 0.25) {
                 moveLeft();
@@ -43,39 +39,35 @@ public class Ballom extends Entity {
         x += movevalX;
         y += movevalY;
 
-        boolean check = BombermanGame.collision.checkCollision(this, BombermanGame.bomberman);
+        boolean check = Collision.checkCollision(this, BombermanGame.bomberman);
 
         if(check) {
-            BombermanGame.bomberman.life = false;
+            BombermanGame.bomberman.setAlive(false);
         }
     }
 
     public void moveLeft() {
         status = WALK_TYPE.LEFT;
-        movevalX = SPEED;
+        movevalX = ConstVar.BALLOM_SPEED;
         movevalY = 0;
     }
 
     public void moveRight() {
         status = WALK_TYPE.RIGHT;
-        movevalX = -SPEED;
+        movevalX = -ConstVar.BALLOM_SPEED;
         movevalY = 0;
     }
 
     public void moveUp() {
         status = WALK_TYPE.UP;
-        movevalY = -SPEED;
+        movevalY = -ConstVar.BALLOM_SPEED;
         movevalX = 0;
     }
 
     public void moveDown() {
         status = WALK_TYPE.DOWN;
-        movevalY = SPEED;
+        movevalY = ConstVar.BALLOM_SPEED;
         movevalX = 0;
-    }
-
-    public void setDie() {
-        status = WALK_TYPE.DIE;
     }
 
     public void animation() {
@@ -102,11 +94,5 @@ public class Ballom extends Entity {
     public void update() {
         moveMent();
         animation();
-        if(!life) {
-            img = Sprite.movingSprite(Sprite.balloom_dead,
-                    Sprite.balloom_dead,Sprite.balloom_dead,time,9).getFxImage();
-            time += 0.5;
-            BombermanGame.entities.remove(this);
-        }
     }
 }

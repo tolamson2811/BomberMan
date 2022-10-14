@@ -5,6 +5,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import uet.oop.bomberman.Utils.ConstVar;
+import uet.oop.bomberman.Utils.StopWatch;
 import uet.oop.bomberman.graphics.Sprite;
 
 public abstract class Entity {
@@ -24,14 +26,102 @@ public abstract class Entity {
 
     protected boolean isInBomb = false;
 
+//    protected int currentX1 = (int) (getX() / ConstVar.TILE_SIZE);
+//    protected int currentX2 ;
+//    protected int currentY1 ;
+//    protected int currentY2 ;
+
+
+    enum WALK_TYPE {
+        RIGHT, LEFT, UP, DOWN
+    }
     protected Image img;
 
     protected Sprite sprite;
 
-    public boolean life = true;
+    protected boolean alive = true;
 
+    protected StopWatch stopWatch = new StopWatch();
+
+    protected boolean wall_pass;
+    protected boolean flame_pass;
+    protected boolean bom_pass;
+
+    protected boolean boosted;
 
     //Khởi tạo đối tượng, chuyển từ tọa độ đơn vị sang tọa độ trong canvas
+
+
+    public boolean isWall_pass() {
+        return wall_pass;
+    }
+
+    public void setWall_pass(boolean wall_pass) {
+        this.wall_pass = wall_pass;
+    }
+
+    public boolean isFlame_pass() {
+        return flame_pass;
+    }
+
+    public boolean isBoosted() {
+        return boosted;
+    }
+
+    public void setBoosted(boolean boosted) {
+        this.boosted = boosted;
+    }
+    public void setFlame_pass(boolean flame_pass) {
+        this.flame_pass = flame_pass;
+    }
+
+    public boolean isBom_pass() {
+        return bom_pass;
+    }
+
+    public void setBom_pass(boolean bom_pass) {
+        this.bom_pass = bom_pass;
+    }
+
+    public boolean isInBomb() {
+        return isInBomb;
+    }
+
+    public void setInBomb(boolean inBomb) {
+        isInBomb = inBomb;
+    }
+
+    public int getXblock() {
+        return xblock;
+    }
+
+    public void setXblock(int xblock) {
+        this.xblock = xblock;
+    }
+
+    public int getYblock() {
+        return yblock;
+    }
+
+    public void setYblock(int yblock) {
+        this.yblock = yblock;
+    }
+
+    public int getCurrentX1() {
+        return getX()/ ConstVar.TILE_SIZE;
+    }
+
+    public int getCurrentX2() {
+        return (getX() + getW()) / ConstVar.DEFAULT_SIZE;
+    }
+
+    public int getCurrentY1() {
+        return (getY() / ConstVar.DEFAULT_SIZE);
+    }
+
+    public int getCurrentY2() {
+        return (int) (getY() + getH()) / ConstVar.DEFAULT_SIZE;
+    }
 
     public int getX() {
         return x;
@@ -57,6 +147,22 @@ public abstract class Entity {
         this.movevalX = movevalX;
     }
 
+    public void plusMoveValX() {
+        this.movevalX++;
+    }
+
+    public void plusMoveValY() {
+        this.movevalY++;
+    }
+
+    public void minusMoveValX() {
+        this.movevalX--;
+    }
+
+    public void minusMoveValY() {
+        this.movevalY--;
+    }
+
     public double getMovevalY() {
         return movevalY;
     }
@@ -65,34 +171,41 @@ public abstract class Entity {
         this.movevalY = movevalY;
     }
 
-    public int currentX1 = (int) (getX() / Sprite.SCALED_SIZE);
-    public int currentX2 = (int) (getX() + getW()) / Sprite.SCALED_SIZE;
-    public int currentY1 = (int) (getY() / Sprite.SCALED_SIZE);
-    public int currentY2 = (int) (getY() + getH()) / Sprite.SCALED_SIZE;
+    public boolean isAlive() {
+        return alive;
+    }
 
+    public void setAlive(boolean life) {
+        this.alive = life;
+    }
+
+    public StopWatch getStopWatch() {
+        return stopWatch;
+    }
 
     public Entity(int xUnit, int yUnit) {
-        this.x = xUnit * Sprite.SCALED_SIZE;
-        this.y = yUnit * Sprite.SCALED_SIZE;
+        this.x = xUnit * ConstVar.TILE_SIZE;
+        this.y = yUnit * ConstVar.TILE_SIZE;
         this.xblock = xUnit;
         this.yblock = yUnit;
     }
+
     public Entity(int xUnit, int yUnit, Image img) {
-        this.x = xUnit * Sprite.SCALED_SIZE;
-        this.y = yUnit * Sprite.SCALED_SIZE;
+        this.x = xUnit * ConstVar.TILE_SIZE;
+        this.y = yUnit * ConstVar.TILE_SIZE;
         this.xblock = xUnit;
         this.yblock = yUnit;
         this.img = img;
     }
+
     public Entity (int xUnit, int yUnit, Sprite sprite) {
-        this.x = xUnit * Sprite.SCALED_SIZE;
-        this.y = yUnit * Sprite.SCALED_SIZE;
+        this.x = xUnit * ConstVar.TILE_SIZE;
+        this.y = yUnit * ConstVar.TILE_SIZE;
         this.sprite = sprite;
     }
 
-//    public boolean isKill() {
-//
-//    }
+
+
 
     public void render(GraphicsContext gc) {
         gc.drawImage(img, x, y);
