@@ -3,6 +3,7 @@ package uet.oop.bomberman.entities;
 import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.Utils.Collision;
 import uet.oop.bomberman.Utils.ConstVar;
+import uet.oop.bomberman.Utils.StopWatch;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Ballom extends Entity {
@@ -10,6 +11,9 @@ public class Ballom extends Entity {
     private WALK_TYPE status;
     
     private int time = 0;
+    private boolean isStuck = false;
+
+    private int timeMoveTile = 8;
 
     public Ballom(int x, int y, Sprite sprite) {
         super(x, y, sprite);
@@ -22,22 +26,50 @@ public class Ballom extends Entity {
     }
 
     public void moveMent() {
+        double randomDirection = Math.random();
         if (this.x % ConstVar.TILE_SIZE <= 1 && this.y % ConstVar.TILE_SIZE <= 1) {
-            double randomDirection = Math.random();
-            if (randomDirection < 0.25) {
-                moveLeft();
-            } else if (randomDirection > 0.25 && randomDirection < 0.5) {
-                moveRight();
-            } else if (randomDirection > 0.5 && randomDirection < 0.75) {
-                moveUp();
-            } else if (randomDirection > 0.75) {
-                moveDown();
+            randomDirection = Math.random();
+
+            if (timeMoveTile >= 8) {
+                randomDirection = Math.random();
+                if (randomDirection < 0.25) {
+                    moveLeft();
+                } else if (randomDirection < 0.5) {
+                    moveRight();
+                } else if (randomDirection < 0.75) {
+                    moveUp();
+                } else {
+                    moveDown();
+                }
+                timeMoveTile = 0;
+            } else {
+                timeMoveTile++;
             }
+
+            if (isStuck) {
+                if (randomDirection < 0.25) {
+                    moveLeft();
+                } else if (randomDirection < 0.5) {
+                    moveRight();
+                } else if (randomDirection < 0.75) {
+                    moveUp();
+                } else {
+                    moveDown();
+                }
+                isStuck = false;
+            }
+
         }
+
         BombermanGame.map.mapCollision(this);
+
+        if (movevalX == 0 && movevalY == 0) {
+            isStuck = true;
+        }
 
         x += movevalX;
         y += movevalY;
+
 
         boolean check = Collision.checkCollision(this, BombermanGame.bomberman);
 

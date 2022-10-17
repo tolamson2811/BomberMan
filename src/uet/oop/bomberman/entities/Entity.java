@@ -46,8 +46,8 @@ public abstract class Entity {
     protected boolean wall_pass;
     protected boolean flame_pass;
     protected boolean bom_pass;
-
     protected boolean boosted;
+
 
     //Khởi tạo đối tượng, chuyển từ tọa độ đơn vị sang tọa độ trong canvas
 

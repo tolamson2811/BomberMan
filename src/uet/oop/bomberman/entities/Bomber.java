@@ -46,7 +46,7 @@ public class Bomber extends Entity {
         user_input.up = 0;
         img = sprite.getFxImage();
         w = 36;
-        h = 47;
+        h = 42;
         PlaceBom = false;
         B_radius = 2;
         boosted = false;

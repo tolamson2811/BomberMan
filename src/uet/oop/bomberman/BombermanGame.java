@@ -39,6 +39,8 @@ public class BombermanGame extends Application {
 
     public static Bomber bomberman = new Bomber(5, 5, Sprite.player_right);
 
+    public static Oneal oneal1 = new Oneal(7, 5, Sprite.oneal_right1);
+
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -65,6 +67,7 @@ public class BombermanGame extends Application {
         Rectangle rectangle = new Rectangle();
         root.getChildren().add(rectangle);
         entities.add(bomberman);
+        entities.add(oneal1);
         //GAME LOOP
         AnimationTimer timer = new AnimationTimer() {
             @Override
@@ -76,6 +79,7 @@ public class BombermanGame extends Application {
         };
         map.LoadMap();
         timer.start();
+
     }
 
     public void update() {
