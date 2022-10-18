@@ -61,6 +61,15 @@ public abstract class StillObject {
         return null;
     }
 
+    public static StillObject getBrickAt(int xblock,int yblock) {
+        for(StillObject a: BombermanGame.stillObjects) {
+            if(a.getYblock() ==  yblock && a.getXblock() == xblock && a instanceof Wall) {
+                return a;
+            }
+        }
+        return null;
+    }
+
     public void Remove() {
         BombermanGame.stillObjects.remove(this);
     }

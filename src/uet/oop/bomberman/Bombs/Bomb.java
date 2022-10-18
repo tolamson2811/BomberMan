@@ -3,11 +3,8 @@ package uet.oop.bomberman.Bombs;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
-import uet.oop.bomberman.StillObjects.Items;
 import uet.oop.bomberman.StillObjects.StillObject;
-import uet.oop.bomberman.StillObjects.Wall;
 import uet.oop.bomberman.Utils.Collision;
-import uet.oop.bomberman.entities.Ballom;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Sprite;
 
@@ -15,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bomb extends Entity {
-    private static double radius;
+
+    private int radius;
     private double time;
     private boolean active;
     private final List<Flame> explosion = new ArrayList<>();
@@ -28,7 +26,7 @@ public class Bomb extends Entity {
         time = 0;
     }
 
-    public void setRadius(double radius) {
+    public void setRadius(int radius) {
         this.radius = radius;
     }
 
@@ -49,8 +47,10 @@ public class Bomb extends Entity {
         } else {
             time = 0;
             active = false;
-            stopWatch.start();
             TILE_MAP[yblock][xblock] = ' ';
+            if(StillObject.getBrickAt(xblock, yblock) != null) {
+                StillObject.getBrickAt(xblock, yblock).setTerminate(true);
+            }
             explosion.add(new Flame(xblock, yblock, Flame.TYPE.CENTER));
             //add bottom
             addFlame(1,0);
@@ -71,17 +71,8 @@ public class Bomb extends Entity {
         while (Math.abs(spreadX) <= radius && Math.abs(spreadY) <= radius &&
                 TILE_MAP[yblock + spreadY][xblock + spreadX] != '#' ) {
             if(TILE_MAP[yblock + spreadY][xblock+spreadX] == '*' || TILE_MAP[yblock + spreadY][xblock+spreadX] == 'I') {
-                boolean a = false;
-                for(StillObject o: BombermanGame.stillObjects) {
-                    if(o instanceof Wall && o.getXblock() == xblock+spreadX && o.getYblock() == yblock+spreadY) {
-
-                        o.setTerminate(true);
-                        a= true;
-                    }
-                }
-                if(a){
-                    break;
-                }
+                StillObject.getBrickAt(xblock+spreadX,yblock + spreadY).setTerminate(true);
+                break;
             }
             if(vertical == 0) {
                 if (Math.abs(spreadX) == radius) {
@@ -122,7 +113,8 @@ public class Bomb extends Entity {
                 boolean check = Collision.checkCollision(flame,e);
                 if (check && !e.isFlame_pass()) {
                     System.out.println("hit");
-//                    entity.setAlive(false);
+                    e.setAlive(false);
+                    e.getStopWatch().start();
                 }
             }
         }

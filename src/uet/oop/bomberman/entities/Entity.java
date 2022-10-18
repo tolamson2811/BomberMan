@@ -26,13 +26,15 @@ public abstract class Entity {
 
     protected boolean isInBomb = false;
 
+    protected WALK_TYPE status;
+
 //    protected int currentX1 = (int) (getX() / ConstVar.TILE_SIZE);
 //    protected int currentX2 ;
 //    protected int currentY1 ;
 //    protected int currentY2 ;
 
 
-    enum WALK_TYPE {
+    public enum WALK_TYPE {
         RIGHT, LEFT, UP, DOWN
     }
     protected Image img;
@@ -46,8 +48,8 @@ public abstract class Entity {
     protected boolean wall_pass;
     protected boolean flame_pass;
     protected boolean bom_pass;
-    protected boolean boosted;
 
+    protected boolean boosted;
 
     //Khởi tạo đối tượng, chuyển từ tọa độ đơn vị sang tọa độ trong canvas
 
@@ -92,15 +94,12 @@ public abstract class Entity {
     }
 
     public int getXblock() {
-        return xblock;
+        return (x%ConstVar.TILE_SIZE >= 32) ?(x/ConstVar.TILE_SIZE+1):(x/ConstVar.TILE_SIZE) ;
     }
 
-    public void setXblock(int xblock) {
-        this.xblock = xblock;
-    }
 
     public int getYblock() {
-        return yblock;
+        return (y%ConstVar.TILE_SIZE >= 24) ?(y/ConstVar.TILE_SIZE+1):(y/ConstVar.TILE_SIZE);
     }
 
     public void setYblock(int yblock) {
@@ -183,6 +182,7 @@ public abstract class Entity {
         return stopWatch;
     }
 
+
     public Entity(int xUnit, int yUnit) {
         this.x = xUnit * ConstVar.TILE_SIZE;
         this.y = yUnit * ConstVar.TILE_SIZE;
@@ -201,7 +201,10 @@ public abstract class Entity {
     public Entity (int xUnit, int yUnit, Sprite sprite) {
         this.x = xUnit * ConstVar.TILE_SIZE;
         this.y = yUnit * ConstVar.TILE_SIZE;
+        this.xblock = xUnit;
+        this.yblock = yUnit;
         this.sprite = sprite;
+        this.img = sprite.getFxImage();
     }
 
 

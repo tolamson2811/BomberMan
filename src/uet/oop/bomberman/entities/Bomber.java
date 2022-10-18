@@ -27,13 +27,9 @@ public class Bomber extends Entity {
     private int BOMB_NUMBER = 1;
     private double time = 0;
     private Input user_input = new Input();
-    private WALK_TYPE status;
     private final List<Bomb> bomstack = new ArrayList<>();
 
     private int B_radius;
-
-
-
 
     public Bomber(int x, int y, Sprite sprite) {
         super(x, y, sprite);
@@ -46,9 +42,9 @@ public class Bomber extends Entity {
         user_input.up = 0;
         img = sprite.getFxImage();
         w = 36;
-        h = 42;
+        h = 47;
         PlaceBom = false;
-        B_radius = 2;
+        B_radius = 1;
         boosted = false;
         flame_pass = false;
         bom_pass = false;
@@ -84,23 +80,26 @@ public class Bomber extends Entity {
      * MOVE BOMBER.
      */
     public void MoveMent() {
-        movevalX = 0;
-        movevalY = 0;
+        if(alive) {
+            movevalX = 0;
+            movevalY = 0;
 
-        if (user_input.right == 1) {
-            movevalX += BOMBER_SPEED;
-        } else if (user_input.left == 1) {
-            movevalX -= BOMBER_SPEED;
-        }
-        if (user_input.up == 1) {
-            movevalY -= BOMBER_SPEED;
-        } else if (user_input.down == 1) {
-            movevalY += BOMBER_SPEED;
+            if (user_input.right == 1) {
+                movevalX += BOMBER_SPEED;
+            } else if (user_input.left == 1) {
+                movevalX -= BOMBER_SPEED;
+            }
+            if (user_input.up == 1) {
+                movevalY -= BOMBER_SPEED;
+            } else if (user_input.down == 1) {
+                movevalY += BOMBER_SPEED;
+            }
+
+            BombermanGame.map.mapCollision(this);
+            x += movevalX;
+            y += movevalY;
         }
 
-        BombermanGame.map.mapCollision(this);
-        x += movevalX;
-        y += movevalY;
     }
     /**
      * KIEM TRA INPUT.
@@ -171,23 +170,35 @@ public class Bomber extends Entity {
      * DO HOA NHAN VAT.
      */
     public void Animation() {
-        if (user_input.right == 1) {
-            img = Sprite.movingSprite(Sprite.player_right,
-                    Sprite.player_right_1,Sprite.player_right_2,time,9).getFxImage();
-            time += 0.5;
-        } else if (user_input.left == 1) {
-            img = Sprite.movingSprite(Sprite.player_left,
-                    Sprite.player_left_1,Sprite.player_left_2,time,9).getFxImage();
-            time += 0.5;
-        }else if (user_input.up == 1) {
-            img = Sprite.movingSprite(Sprite.player_up,
-                    Sprite.player_up_1,Sprite.player_up_2,time,9).getFxImage();
-            time += 0.5;
-        } else if (user_input.down == 1) {
-            img = Sprite.movingSprite(Sprite.player_down,
-                    Sprite.player_down_1,Sprite.player_down_2,time,9).getFxImage();
-            time += 0.5;
+        if(alive) {
+            if (user_input.right == 1) {
+                img = Sprite.movingSprite(Sprite.player_right,
+                        Sprite.player_right_1,Sprite.player_right_2,time,9).getFxImage();
+                time += 0.5;
+            } else if (user_input.left == 1) {
+                img = Sprite.movingSprite(Sprite.player_left,
+                        Sprite.player_left_1,Sprite.player_left_2,time,9).getFxImage();
+                time += 0.5;
+            }else if (user_input.up == 1) {
+                img = Sprite.movingSprite(Sprite.player_up,
+                        Sprite.player_up_1,Sprite.player_up_2,time,9).getFxImage();
+                time += 0.5;
+            } else if (user_input.down == 1) {
+                img = Sprite.movingSprite(Sprite.player_down,
+                        Sprite.player_down_1,Sprite.player_down_2,time,9).getFxImage();
+                time += 0.5;
+            }
+        }else{
+            System.out.println("hi");
+            img = Sprite.movingSprite(Sprite.player_dead1,
+                    Sprite.player_dead2,Sprite.player_dead3,time,90).getFxImage();
+            if(time % 90 <89) {
+                time+=1;
+            }else{
+                img = null;
+            }
         }
+
     }
 
     /**
@@ -217,19 +228,11 @@ public class Bomber extends Entity {
      * @return
      */
     public Bomb makeBomb(int b_radius) {
-        xblock = x/ConstVar.TILE_SIZE;
-        yblock = y/ ConstVar.TILE_SIZE;
-        if(x%ConstVar.TILE_SIZE >= 32) {
-            xblock+=1;
-        }
-        if(y%ConstVar.TILE_SIZE >=24) {
-            yblock +=1;
-        }
-        Bomb nBomb = new Bomb(xblock,
-                yblock,Sprite.bomb.getFxImage());
+        Bomb nBomb = new Bomb(this.getXblock(),
+                this.getYblock(),Sprite.bomb.getFxImage());
         nBomb.setActive(true);
         nBomb.setRadius(b_radius);
-        BombermanGame.map.setTILE_MAP(yblock, xblock, 'b');
+        BombermanGame.map.setTILE_MAP(this.getYblock(), this.getXblock(), 'b');
 
         return nBomb;
     }
@@ -237,7 +240,7 @@ public class Bomber extends Entity {
 
     public void ResetTMPBOOST() {
 
-        if(stopWatch.getElapsedTime() > 8000) {
+        if(stopWatch.getElapsedTime() > 10000) {
             BOMBER_SPEED = 2;
             bom_pass = false;
             flame_pass = false;

@@ -22,24 +22,17 @@ import java.util.List;
 
 public class BombermanGame extends Application {
 
-    public static final int WIDTH = 30;
-    public static final int HEIGHT = 15;
 
     private GraphicsContext gc;
     private Canvas canvas;
     public static Scene scene;
-//    private Bomber bomberman;
     public static List<Entity> entities = new ArrayList<>();
     public static List<StillObject> stillObjects = new ArrayList<>();
 
 
     public static GameMap map = new GameMap();
 
-    public static Collision collision = new Collision();
-
     public static Bomber bomberman = new Bomber(5, 5, Sprite.player_right);
-
-    public static Oneal oneal1 = new Oneal(7, 5, Sprite.oneal_right1);
 
 
     public static void main(String[] args) {
@@ -49,7 +42,7 @@ public class BombermanGame extends Application {
     @Override
     public void start(Stage stage) {
         // Tao Canvas
-        canvas = new Canvas(ConstVar.TILE_SIZE * WIDTH, ConstVar.TILE_SIZE * HEIGHT);
+        canvas = new Canvas(ConstVar.TILE_SIZE * ConstVar.WIDTH, ConstVar.TILE_SIZE * ConstVar.HEIGHT);
         gc = canvas.getGraphicsContext2D();
 
         // Tao root container
@@ -67,7 +60,6 @@ public class BombermanGame extends Application {
         Rectangle rectangle = new Rectangle();
         root.getChildren().add(rectangle);
         entities.add(bomberman);
-        entities.add(oneal1);
         //GAME LOOP
         AnimationTimer timer = new AnimationTimer() {
             @Override
@@ -79,12 +71,11 @@ public class BombermanGame extends Application {
         };
         map.LoadMap();
         timer.start();
-
     }
 
     public void update() {
         for(int i = 0;i < entities.size();i++) {
-            if(!entities.get(i).isAlive()) {
+            if(!entities.get(i).isAlive() && entities.get(i).getStopWatch().getElapsedTime() >1500) {
                 entities.remove(i);
                 i--;
             }else{
