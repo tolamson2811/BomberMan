@@ -20,6 +20,7 @@ public class Doll extends Enemy {
         speed = ConstVar.DOLL_SPEED;
         w = 47;
         h = 47;
+        life = 1;
     }
 
     @Override
@@ -28,7 +29,7 @@ public class Doll extends Enemy {
         if (this.x % ConstVar.TILE_SIZE <= 1 && this.y % ConstVar.TILE_SIZE <= 1) {
             randomDirection = Math.random();
 
-            if (timeMoveTile >= 8) {
+            if (timeMoveTile >= 3) {
                 randomDirection = Math.random();
                 if (randomDirection < 0.25) {
                     moveLeft();
@@ -78,10 +79,17 @@ public class Doll extends Enemy {
         y += movevalY;
 
 
+        if(life <= 0) {
+            alive = false;
+            stopWatch.start();
+        }
         boolean check = Collision.checkCollision(this, BombermanGame.bomberman);
 
-        if(check) {
-            BombermanGame.bomberman.setAlive(false);
+        if(check && !BombermanGame.bomberman.isHit()) {
+            BombermanGame.bomberman.setHit(true);
+            BombermanGame.bomberman.setLife(BombermanGame.bomberman.getLife()-1);
+            BombermanGame.bomberman.getStopWatch().start();
+
         }
     }
 
@@ -89,20 +97,20 @@ public class Doll extends Enemy {
     public void Animation() {
         if (status == WALK_TYPE.RIGHT) {
             img = Sprite.movingSprite(Sprite.doll_right1,
-                    Sprite.doll_right2, Sprite.doll_right3 ,time,9).getFxImage();
-            time += 0.5;
+                    Sprite.doll_right2, Sprite.doll_right3 ,time,60).getFxImage();
+            time += speed;
         } else if (status == WALK_TYPE.LEFT) {
             img = Sprite.movingSprite(Sprite.doll_left1,
-                    Sprite.doll_left2,Sprite.doll_left3,time,9).getFxImage();
-            time += 0.5;
+                    Sprite.doll_left2,Sprite.doll_left3,time,60).getFxImage();
+            time += speed;
         }else if (status == WALK_TYPE.UP) {
             img = Sprite.movingSprite(Sprite.doll_right1,
-                    Sprite.doll_right2,Sprite.doll_right3,time,9).getFxImage();
-            time += 0.5;
+                    Sprite.doll_right2,Sprite.doll_right3,time,60).getFxImage();
+            time += speed;
         } else if (status == WALK_TYPE.DOWN) {
             img = Sprite.movingSprite(Sprite.doll_right1,
-                    Sprite.doll_right2,Sprite.doll_right3,time,9).getFxImage();
-            time += 0.5;
+                    Sprite.doll_right2,Sprite.doll_right3,time,60).getFxImage();
+            time += speed;
         }
         if(!alive) {
             img = Sprite.doll_dead.getFxImage();;

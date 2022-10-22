@@ -1,5 +1,6 @@
 package uet.oop.bomberman.entities;
 
+import javafx.scene.image.Image;
 import uet.oop.bomberman.StillObjects.Items;
 import javafx.event.EventHandler;
 import javafx.scene.canvas.GraphicsContext;
@@ -28,7 +29,6 @@ public class Bomber extends Entity {
     private double time = 0;
     private Input user_input = new Input();
     private final List<Bomb> bomstack = new ArrayList<>();
-
     private int B_radius;
 
     public Bomber(int x, int y, Sprite sprite) {
@@ -41,6 +41,7 @@ public class Bomber extends Entity {
         user_input.down = 0;
         user_input.up = 0;
         img = sprite.getFxImage();
+        life = 5;
         w = 36;
         h = 47;
         PlaceBom = false;
@@ -50,7 +51,6 @@ public class Bomber extends Entity {
         bom_pass = false;
         wall_pass = false;
     }
-
 
 
     public boolean isPlaceBom() {
@@ -95,6 +95,10 @@ public class Bomber extends Entity {
                 movevalY += BOMBER_SPEED;
             }
 
+            if(life <= 0) {
+                alive = false;
+                stopWatch.start();
+            }
             BombermanGame.map.mapCollision(this);
             x += movevalX;
             y += movevalY;
@@ -170,29 +174,50 @@ public class Bomber extends Entity {
      * DO HOA NHAN VAT.
      */
     public void Animation() {
+
         if(alive) {
-            if (user_input.right == 1) {
-                img = Sprite.movingSprite(Sprite.player_right,
-                        Sprite.player_right_1,Sprite.player_right_2,time,9).getFxImage();
-                time += 0.5;
-            } else if (user_input.left == 1) {
-                img = Sprite.movingSprite(Sprite.player_left,
-                        Sprite.player_left_1,Sprite.player_left_2,time,9).getFxImage();
-                time += 0.5;
-            }else if (user_input.up == 1) {
-                img = Sprite.movingSprite(Sprite.player_up,
-                        Sprite.player_up_1,Sprite.player_up_2,time,9).getFxImage();
-                time += 0.5;
-            } else if (user_input.down == 1) {
-                img = Sprite.movingSprite(Sprite.player_down,
-                        Sprite.player_down_1,Sprite.player_down_2,time,9).getFxImage();
-                time += 0.5;
+            if(hit) {
+                if(stopWatch.getElapsedTime() >=2000) {
+                    hit = false;
+                    stopWatch.stop();
+                }
+            }
+            if(!hit || stopWatch.getElapsedTime() %200 >=100 ) {
+                if (user_input.right == 1) {
+                    img = Sprite.movingSprite(Sprite.player_right,
+                            Sprite.player_right_1, Sprite.player_right_2, time, 9).getFxImage();
+                    time += 0.5;
+                } else if (user_input.left == 1) {
+                    img = Sprite.movingSprite(Sprite.player_left,
+                            Sprite.player_left_1, Sprite.player_left_2, time, 9).getFxImage();
+                    time += 0.5;
+                } else if (user_input.up == 1) {
+                    img = Sprite.movingSprite(Sprite.player_up,
+                            Sprite.player_up_1, Sprite.player_up_2, time, 9).getFxImage();
+                    time += 0.5;
+                } else if (user_input.down == 1) {
+                    img = Sprite.movingSprite(Sprite.player_down,
+                            Sprite.player_down_1, Sprite.player_down_2, time, 9).getFxImage();
+                    time += 0.5;
+                }else{
+                    if(status == WALK_TYPE.RIGHT) {
+                        img = Sprite.player_right.getFxImage();
+                    }else if(status == WALK_TYPE.LEFT) {
+                        img = Sprite.player_left.getFxImage();
+                    } else if (status == WALK_TYPE.DOWN) {
+                        img = Sprite.player_down.getFxImage();
+                    }else{
+                        img = Sprite.player_up.getFxImage();
+                    }
+
+                }
+            }else{
+                img = null;
             }
         }else{
-            System.out.println("hi");
             img = Sprite.movingSprite(Sprite.player_dead1,
-                    Sprite.player_dead2,Sprite.player_dead3,time,90).getFxImage();
-            if(time % 90 <89) {
+                    Sprite.player_dead2,Sprite.player_dead3,time,120).getFxImage();
+            if(time %120 <119) {
                 time+=1;
             }else{
                 img = null;
@@ -232,7 +257,6 @@ public class Bomber extends Entity {
                 this.getYblock(),Sprite.bomb.getFxImage());
         nBomb.setActive(true);
         nBomb.setRadius(b_radius);
-        BombermanGame.map.setTILE_MAP(this.getYblock(), this.getXblock(), 'b');
 
         return nBomb;
     }

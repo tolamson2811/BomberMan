@@ -18,6 +18,7 @@ public class Wall extends StillObject {
         time += 1;
         if(time >= 24){
             if(BombermanGame.map.getTILE_MAP()[yblock][xblock] == 'I') {
+                System.out.println("hello");
                 BombermanGame.map.setTILE_MAP(yblock,xblock,'i');
             }else {
                 BombermanGame.map.setTILE_MAP(yblock,xblock,' ');

@@ -4,9 +4,8 @@ import uet.oop.bomberman.StillObjects.Items;
 import uet.oop.bomberman.StillObjects.StillObject;
 import uet.oop.bomberman.StillObjects.Wall;
 import uet.oop.bomberman.Utils.ConstVar;
-import uet.oop.bomberman.entities.Enemy.Ballom;
+import uet.oop.bomberman.entities.Enemy.*;
 import uet.oop.bomberman.entities.Bomber;
-import uet.oop.bomberman.entities.Enemy.Oneal;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Sprite;
 
@@ -53,21 +52,21 @@ public class GameMap {
                     object = new Wall(i, j, Sprite.wall.getFxImage());
                 } else if (TILE_MAP[j][i] == 'I') {
                     BombermanGame.stillObjects.add(new Grass(i, j, Sprite.grass.getFxImage()));
-                    if (a <= 0.2) {
+                    if (a <= 0.3) {
                         BombermanGame.stillObjects.add(new Items(i, j, Items.TYPE.SPEED));
                     } else if (a <= 0.4) {
                         BombermanGame.stillObjects.add(new Items(i, j, Items.TYPE.BOMB));
-                    } else if(a<= 0.6){
+                    } else if(a<= 0.7){
                         BombermanGame.stillObjects.add(new Items(i, j, Items.TYPE.FLAME));
-                    } else if (a<= 0.7) {
+                    } else if (a<= 0.9) {
                         BombermanGame.stillObjects.add(new Items(i, j, Items.TYPE.WALLPASS));
-                    }else if (a<= 0.9) {
+                    }else if (a<= 0.95) {
                         BombermanGame.stillObjects.add(new Items(i, j, Items.TYPE.BOMBPASS));
                     }else{
                         BombermanGame.stillObjects.add(new Items(i, j, Items.TYPE.FLAMEPASS));
                     }
                     object = new Wall(i, j, Sprite.brick.getFxImage());
-                } else if (TILE_MAP[j][i] == '1') {
+                } else if (TILE_MAP[j][i] == 'B') {
                     BombermanGame.entities.add(new Ballom(i, j, Sprite.balloom_right1));
                     object = new Grass(i, j, Sprite.grass.getFxImage());
                 } else if (TILE_MAP[j][i] == '*') {
@@ -76,7 +75,19 @@ public class GameMap {
                 } else if(TILE_MAP[j][i] == 'O'){
                     BombermanGame.entities.add(new Oneal(i,j,Sprite.oneal_right1));
                     object = new Grass(i, j, Sprite.grass.getFxImage());
-                }else{
+                }else if(TILE_MAP[j][i] == 'D'){
+                    BombermanGame.entities.add(new Doll(i,j,Sprite.doll_right1));
+                    object = new Grass(i, j, Sprite.grass.getFxImage());
+                } else if (TILE_MAP[j][i] == 'K') {
+                    BombermanGame.entities.add(new Kondoria(i,j,Sprite.kondoria_right1));
+                    object = new Grass(i, j, Sprite.grass.getFxImage());
+                } else if (TILE_MAP[j][i] == 'V') {
+                    BombermanGame.entities.add(new Ovapi(i,j,Sprite.ovapi_right1));
+                    object = new Grass(i, j, Sprite.grass.getFxImage());
+                } else if (TILE_MAP[j][i] == 'M') {
+                    BombermanGame.entities.add(new Minvo(i,j,Sprite.minvo_right1));
+                    object = new Grass(i, j, Sprite.grass.getFxImage());
+                } else{
                     object = new Grass(i, j, Sprite.grass.getFxImage());
                 }
                 BombermanGame.stillObjects.add(object);
@@ -153,10 +164,13 @@ public class GameMap {
                             }
                         }
                     } else {
-                        entity.setMovevalX(0);
+                        if(!entity.isBom_pass()) {
+                            entity.setMovevalX(0);
+                        }
                     }
                 } else {
-                        entity.setMovevalX(0);
+
+                    entity.setMovevalX(0);
                 }
 
             }
@@ -222,7 +236,9 @@ public class GameMap {
                             }
                         }
                     } else {
-                        entity.setMovevalX(0);
+                        if(!entity.isBom_pass()) {
+                            entity.setMovevalX(0);
+                        }
                     }
                 } else {
                     entity.setMovevalX(0);
@@ -298,7 +314,9 @@ public class GameMap {
                                 }
                             }
                         } else {
+                            if(!entity.isBom_pass()) {
                                 entity.setMovevalY(0);
+                            }
                         }
                     } else {
                             entity.setMovevalY(0);
@@ -364,7 +382,9 @@ public class GameMap {
                                 }
                             }
                         } else {
+                            if(!entity.isBom_pass()) {
                                 entity.setMovevalY(0);
+                            }
 
                         }
                     } else {

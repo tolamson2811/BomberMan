@@ -42,7 +42,7 @@ public abstract class Entity {
     protected Sprite sprite;
 
     protected boolean alive = true;
-
+    protected int life;
     protected StopWatch stopWatch = new StopWatch();
 
     protected boolean wall_pass;
@@ -53,6 +53,23 @@ public abstract class Entity {
 
     //Khởi tạo đối tượng, chuyển từ tọa độ đơn vị sang tọa độ trong canvas
 
+    protected boolean hit = false;
+
+    public boolean isHit() {
+        return hit;
+    }
+
+    public void setHit(boolean hit) {
+        this.hit = hit;
+    }
+
+    public int getLife() {
+        return life;
+    }
+
+    public void setLife(int life) {
+        this.life = life;
+    }
 
     public boolean isWall_pass() {
         return wall_pass;

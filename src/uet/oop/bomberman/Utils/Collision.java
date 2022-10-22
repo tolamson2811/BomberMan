@@ -12,6 +12,7 @@ public class Collision {
         int right_b,right_a;
         int bottom_a,bottom_b;
         int top_a,top_b;
+
         if(object instanceof Entity) {
             Entity entity2 = (Entity) object;
             left_a = entity1.getX();
@@ -103,7 +104,7 @@ public class Collision {
         }
 
         // Case 3: size object 1 = size object 2
-        return top_a == top_b && right_a == right_b && bottom_a == bottom_b;
+        return top_a == top_b && (left_a == left_b || right_b == right_a ) && bottom_a == bottom_b;
     }
 }
 

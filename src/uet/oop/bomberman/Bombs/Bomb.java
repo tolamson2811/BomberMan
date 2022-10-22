@@ -18,10 +18,13 @@ public class Bomb extends Entity {
     private boolean active;
     private final List<Flame> explosion = new ArrayList<>();
 
+    private char preBlock;
+    private boolean setPreBlock;
     public Bomb(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
         w = (int) img.getWidth();
         h = (int) img.getHeight();
+        setPreBlock = false;
         active = false;
         time = 0;
     }
@@ -39,7 +42,11 @@ public class Bomb extends Entity {
     }
 
     public void placeBomb(char[][] TILE_MAP) {
-        TILE_MAP[yblock][xblock] = 'b';
+        if(!setPreBlock) {
+            preBlock = TILE_MAP[yblock][xblock];
+            TILE_MAP[yblock][xblock] = 'b';
+            setPreBlock = true;
+        }
         img = Sprite.movingSprite(Sprite.bomb,
                 Sprite.bomb_1, Sprite.bomb_2, time, 30).getFxImage();
         if (time < 70) {
@@ -47,7 +54,7 @@ public class Bomb extends Entity {
         } else {
             time = 0;
             active = false;
-            TILE_MAP[yblock][xblock] = ' ';
+            BombermanGame.map.setTILE_MAP(yblock,xblock,preBlock);
             if(StillObject.getBrickAt(xblock, yblock) != null) {
                 StillObject.getBrickAt(xblock, yblock).setTerminate(true);
             }
@@ -99,11 +106,11 @@ public class Bomb extends Entity {
      * Lửa khi bom phát nổ.
      */
     public boolean Explode(GraphicsContext gc) {
-        BombermanGame.map.setTILE_MAP(yblock, xblock, ' ');
-        for (Flame flame : explosion) {
+        for (int i  = 0 ;i < explosion.size();i++) {
+            Flame flame = explosion.get(i);
             flame.update();
             flame.render(gc);
-            if(BombermanGame.map.getTILE_MAP()[flame.getYblock()][flame.getXblock()] == 'i'){
+            if(BombermanGame.map.getTILE_MAP()[flame.getYblock()][flame.getXblock()] == 'i' && i != 0){
                 StillObject a = StillObject.getItemAt(flame.getXblock(), flame.getYblock());
                 if(a != null) {
                     BombermanGame.stillObjects.remove(a);
@@ -111,13 +118,16 @@ public class Bomb extends Entity {
             }
             for(Entity e: BombermanGame.entities) {
                 boolean check = Collision.checkCollision(flame,e);
-                if (check && !e.isFlame_pass()) {
-                    System.out.println("hit");
-                    e.setAlive(false);
+
+                if (check && !e.isFlame_pass() && !e.isHit() ) {
+                    System.out.println("helo");
+                    e.setHit(true);
                     e.getStopWatch().start();
+                    e.setLife(e.getLife()-1);
                 }
             }
         }
+
         time++;
         return !(time > 24);
     }

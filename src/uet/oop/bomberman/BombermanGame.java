@@ -21,15 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BombermanGame extends Application {
-
-
     private GraphicsContext gc;
     private Canvas canvas;
     public static Scene scene;
     public static List<Entity> entities = new ArrayList<>();
     public static List<StillObject> stillObjects = new ArrayList<>();
-
-
     public static GameMap map = new GameMap();
 
     public static Bomber bomberman = new Bomber(5, 5, Sprite.player_right);
@@ -48,7 +44,6 @@ public class BombermanGame extends Application {
         // Tao root container
         Group root = new Group();
         root.getChildren().add(canvas);
-
         // Tao scene
         scene = new Scene(root);
         map.ReadMap();
@@ -56,9 +51,6 @@ public class BombermanGame extends Application {
         stage.setTitle("BomberMinn");
         stage.setScene(scene);
         stage.show();
-
-        Rectangle rectangle = new Rectangle();
-        root.getChildren().add(rectangle);
         entities.add(bomberman);
         //GAME LOOP
         AnimationTimer timer = new AnimationTimer() {
