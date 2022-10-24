@@ -1,6 +1,8 @@
 package uet.oop.bomberman.entities;
 
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import uet.oop.bomberman.StillObjects.Items;
 import javafx.event.EventHandler;
 import javafx.scene.canvas.GraphicsContext;
@@ -8,6 +10,7 @@ import javafx.scene.input.KeyEvent;
 import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.Bombs.Bomb;
 import uet.oop.bomberman.Utils.ConstVar;
+import uet.oop.bomberman.Utils.Sound;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.util.ArrayList;
@@ -76,6 +79,10 @@ public class Bomber extends Entity {
     public void plusB_radius() {
         this.B_radius++;
     }
+
+    public int getB_radius() {
+        return B_radius;
+    }
     /**
      * MOVE BOMBER.
      */
@@ -138,6 +145,11 @@ public class Bomber extends Entity {
                     case SPACE:
                         if(bomstack.size() < BOMB_NUMBER) {
                             Bomb nbomb = makeBomb(B_radius);
+
+                            Media media = Sound.soundPlaceBomb;
+                            BombermanGame.placeBomb = new MediaPlayer(media);
+                            BombermanGame.placeBomb.play();
+
                             PlaceBom = true;
                             bomstack.add(nbomb);
                         }
@@ -239,6 +251,10 @@ public class Bomber extends Entity {
             if (!nbomb.isActive()) {
 
                 if(!bomstack.get(i).Explode(gc)) {
+                    Media media = Sound.soundExplode;
+                    BombermanGame.bombExplode = new MediaPlayer(media);
+                    BombermanGame.bombExplode.play();
+
                     bomstack.remove(i);
                 }
             } else {
