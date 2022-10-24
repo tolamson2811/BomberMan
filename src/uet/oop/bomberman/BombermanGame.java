@@ -31,13 +31,11 @@ public class BombermanGame extends Application {
     public static List<Entity> entities = new ArrayList<>();
     public static List<StillObject> stillObjects = new ArrayList<>();
 
-
     public static GameMap map = new GameMap();
 
     public static Bomber bomberman = new Bomber(5, 5, Sprite.player_right);
     public static boolean running = false;
     public static int countLevel = 1;
-
     public static int scoreNumber = 0;
     public static Group root = new Group();
 
@@ -54,9 +52,7 @@ public class BombermanGame extends Application {
     public static MediaPlayer titleScreen = null;
     public static MediaPlayer stageTheme = null;
     public static MediaPlayer placeBomb = null;
-
     public static MediaPlayer bombExplode = null;
-
     public static ArrayList<TextInGame> textArray = new ArrayList<>();
 
     public static void main(String[] args) {

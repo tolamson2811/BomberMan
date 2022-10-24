@@ -120,7 +120,7 @@ public class BombermanMenu {
 
             FileInputStream is;
             try {
-                is = new FileInputStream(Paths.get("target\\classes\\textures\\CONTROL.png").toFile());
+                is = new FileInputStream(Paths.get("res\\textures\\CONTROL.png").toFile());
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -167,7 +167,7 @@ public class BombermanMenu {
 
                 FileInputStream is;
                 try {
-                    is = new FileInputStream(Paths.get("target\\classes\\textures\\backgroundGameMenu.png").toFile());
+                    is = new FileInputStream(Paths.get("res\\textures\\backgroundGameMenu.png").toFile());
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
                 }
