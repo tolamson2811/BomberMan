@@ -133,6 +133,7 @@ public class BombermanGame extends Application {
                 Portal p = (Portal) stillObjects.get(i);
                 if(Collision.checkCollision(bomberman,p) && entities.size() == 1){
                     countLevel++;
+                    System.out.println("hello");
                     bomberman.setX(240);
                     bomberman.setY(240);
                 }
