@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static uet.oop.bomberman.menus.BombermanMenu.*;
+
 public class Bomber extends Entity {
 
 
@@ -167,9 +169,11 @@ public class Bomber extends Entity {
                         break;
                     case SPACE:
                         if(bomstack.size() < BOMB_NUMBER) {
-                            Media media = Sound.soundPlaceBomb;
-                            BombermanGame.placeBomb = new MediaPlayer(media);
-                            BombermanGame.placeBomb.play();
+                            if (isRunning) {
+                                Media media = Sound.soundPlaceBomb;
+                                BombermanGame.placeBomb = new MediaPlayer(media);
+                                BombermanGame.placeBomb.play();
+                            }
                             Bomb nbomb = makeBomb(B_radius);
                             PlaceBom = true;
                             bomstack.add(nbomb);
@@ -577,9 +581,11 @@ public class Bomber extends Entity {
                     bomstack.remove(i);
                 }else{
                     if(!nbomb.isPlaySound()) {
-                        Media media = Sound.soundExplode;
-                        BombermanGame.bombExplode = new MediaPlayer(media);
-                        BombermanGame.bombExplode.play();
+                        if (isRunning) {
+                            Media media = Sound.soundExplode;
+                            BombermanGame.bombExplode = new MediaPlayer(media);
+                            BombermanGame.bombExplode.play();
+                        }
                         nbomb.setPlaySound(true);
                     }
                 }

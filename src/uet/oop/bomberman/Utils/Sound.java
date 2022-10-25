@@ -18,5 +18,9 @@ public class Sound {
     public static final Media soundDied = new Media(new File(diedFile).toURI().toString());
     public static final String soundLevelFile = "res\\sound\\levelStart.mp3";
     public static final Media soundLevel = new Media(new File(soundLevelFile).toURI().toString());
+    public static final String soundWinFile = "res\\sound\\winSound.mp3";
+    public static final Media soundWin = new Media(new File(soundWinFile).toURI().toString());
+    public static final String soundPowerFile = "res\\sound\\power.wav";
+    public static final Media soundPower = new Media(new File(soundPowerFile).toURI().toString());
 
 }

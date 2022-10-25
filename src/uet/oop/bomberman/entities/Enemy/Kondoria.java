@@ -95,6 +95,8 @@ public class Kondoria extends Enemy{
         if(life <= 0) {
             alive = false;
             stopWatch.start();
+            BombermanGame.scoreNumber += 600;
+            BombermanGame.enemyNumber--;
         }
         boolean check = Collision.checkCollision(this, BombermanGame.bomberman);
 
@@ -102,7 +104,7 @@ public class Kondoria extends Enemy{
             BombermanGame.bomberman.setHit(true);
             BombermanGame.bomberman.setLife(BombermanGame.bomberman.getLife()-1);
             BombermanGame.bomberman.getStopWatch().start();
-
+            BombermanGame.scoreNumber -= 200;
         }
     }
 

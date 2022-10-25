@@ -6,6 +6,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -16,6 +17,7 @@ import uet.oop.bomberman.StillObjects.StillObject;
 import uet.oop.bomberman.StillObjects.Wall;
 import uet.oop.bomberman.Utils.Collision;
 import uet.oop.bomberman.Utils.ConstVar;
+import uet.oop.bomberman.Utils.Sound;
 import uet.oop.bomberman.Utils.StopWatch;
 import uet.oop.bomberman.entities.Bomber;
 import uet.oop.bomberman.entities.Entity;
@@ -69,12 +71,10 @@ public class BombermanGame extends Application {
     public static MediaPlayer bombExplode = null;
     public static MediaPlayer soundDied = null;
     public static MediaPlayer soundLevelStart = null;
-
+    public static MediaPlayer soundWinGame = null;
+    public static MediaPlayer soundPower = null;
     public static boolean inPortal = false;
-
-    public static int enemyNumber = 6;
-
-    public static ArrayList<TextInGame> textArray = new ArrayList<>();
+    public static int enemyNumber = entities.size() - 1;
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -111,10 +111,9 @@ public class BombermanGame extends Application {
                 if (running || timeLevelPass.getElapsedTime() > 3000 || timeGameOver.getElapsedTime() > 3000 || timeWinGame.getElapsedTime() > 3000) {
                     if (timeLevelPass.getElapsedTime() > 3000) {
                         timeLevelPass = new StopWatch();
-                        bomberman.setXY(49, 49);
                         menu.nextLevel();
                     }
-                    if (timeGameOver.getElapsedTime() > 3000 || timeWinGame.getElapsedTime() > 3000) {
+                    if (timeGameOver.getElapsedTime() > 3000 || timeWinGame.getElapsedTime() > 12000) {
                         timeGameOver = new StopWatch();
                         timeWinGame = new StopWatch();
                         menu.generate();
@@ -164,7 +163,9 @@ public class BombermanGame extends Application {
                 if(Collision.checkCollision(bomberman,p) && entities.size() == 1){
                     inPortal = true;
                     countLevel++;
-                    System.out.println("hello");
+                    if (countLevel > 3) {
+                        win = true;
+                    }
                     bomberman.setX(240);
                     bomberman.setY(240);
                 }
@@ -172,6 +173,11 @@ public class BombermanGame extends Application {
             if(stillObjects.get(i) instanceof Items) {
                 Items a = (Items) stillObjects.get(i);
                 if(Collision.checkCollision(bomberman,a) && map.getTILE_MAP()[a.getYblock()][a.getXblock()] == 'i') {
+                    if (BombermanMenu.isRunning) {
+                        Media media = Sound.soundPower;
+                        soundPower = new MediaPlayer(media);
+                        soundPower.play();
+                    }
                     a.takeEffect(bomberman);
                     stillObjects.remove(i);
                     map.setTILE_MAP(a.getYblock(),a.getXblock(),' ');

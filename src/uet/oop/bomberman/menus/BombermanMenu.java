@@ -8,6 +8,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.Bombs.Bomb;
 import uet.oop.bomberman.Utils.Sound;
 import uet.oop.bomberman.Utils.ConstVar;
 import javafx.scene.text.Font;
@@ -39,10 +40,10 @@ public class BombermanMenu {
 
     private final ButtonInGame titleGame = new ButtonInGame("B O M B E R M A N", 0, 50, 1440, 100, font1, Color.ORANGE);
 
-    private final ButtonInGame startButton = new ButtonInGame("NEW GAME", (double) (ConstVar.WIDTH * ConstVar.TILE_SIZE / 2) - 250, 300, 500, 80, font2, "-fx-background-color: #000;");
-    private final ButtonInGame controlButton = new ButtonInGame("CONTROL",(double) (ConstVar.WIDTH * ConstVar.TILE_SIZE / 2) - 250, 400,500, 80, font2, "-fx-background-color: #000;" );
-    private final ButtonInGame exitButton = new ButtonInGame("EXIT", (double) (ConstVar.WIDTH * ConstVar.TILE_SIZE / 2) - 250, 500, 500, 80, font2, "-fx-background-color: #000;");
-    private final ButtonInGame continueButton = new ButtonInGame("CONTINUE", (double) (ConstVar.WIDTH * ConstVar.TILE_SIZE / 2) - 250, 300, 500, 80, font2, "-fx-background-color: #000;");
+    private final ButtonInGame startButton = new ButtonInGame("NEW GAME", (double) (ConstVar.WIDTH * ConstVar.TILE_SIZE / 2) - 250, 350, 500, 80, font2, "-fx-background-color: #000;");
+    private final ButtonInGame controlButton = new ButtonInGame("CONTROL",(double) (ConstVar.WIDTH * ConstVar.TILE_SIZE / 2) - 250, 450,500, 80, font2, "-fx-background-color: #000;" );
+    private final ButtonInGame exitButton = new ButtonInGame("EXIT", (double) (ConstVar.WIDTH * ConstVar.TILE_SIZE / 2) - 250, 550, 500, 80, font2, "-fx-background-color: #000;");
+    private final ButtonInGame continueButton = new ButtonInGame("CONTINUE", (double) (ConstVar.WIDTH * ConstVar.TILE_SIZE / 2) - 250, 250, 500, 80, font2, "-fx-background-color: #000;");
 
     private static final ButtonInGame exitControlButton = new ButtonInGame();
 
@@ -57,7 +58,7 @@ public class BombermanMenu {
     private final ButtonInGame mainMenuButton = new ButtonInGame("MAIN MENU",(double) (ConstVar.WIDTH * ConstVar.TILE_SIZE / 2) - 250,  175, 500, 50, font3, "-fx-background-color: #585858;");
     private boolean isShowned = false;
 
-    private boolean isRunning = true;
+    public static boolean isRunning = true;
 
     public BombermanMenu() throws IOException {
 
@@ -82,35 +83,26 @@ public class BombermanMenu {
 
     public void reset() {
         timeGameOver = new StopWatch();
+        timeWinGame = new StopWatch();
+
+        countLevel = 1;
         root.getChildren().clear();
         root.getChildren().add(BombermanGame.getCanvas());
         entities.clear();
         stillObjects.clear();
-        bomberman = new Bomber(5, 5, Sprite.player_right);
         bomberman.getBomstack().clear();
-        map.ReadMap();
+        bomberman = new Bomber(5, 5, Sprite.player_right);
         entities.add(bomberman);
+        map.ReadMap();
         map.LoadMap();
-        countLevel = 3;
         scoreNumber = 0;
-        enemyNumber = 6;
+        enemyNumber = entities.size() - 1;
     }
 
     public void handleStart() {
         startButton.setOnMouseClicked(event -> {
 
             reset();
-
-            timeGameOver = new StopWatch();
-            root.getChildren().clear();
-            root.getChildren().add(BombermanGame.getCanvas());
-            entities.clear();
-            stillObjects.clear();
-            bomberman = new Bomber(5, 5, Sprite.player_right);
-            bomberman.getBomstack().clear();
-            map.ReadMap();
-            entities.add(bomberman);
-            map.LoadMap();
 
             root.getChildren().remove(blackBackground);
 
@@ -319,6 +311,7 @@ public class BombermanMenu {
             clearInGame();
             root.getChildren().add(blackBackground);
             root.getChildren().add(titleGame);
+            root.getChildren().add(startButton);
             root.getChildren().add(continueButton);
             root.getChildren().add(controlButton);
             root.getChildren().add(exitButton);
@@ -366,20 +359,22 @@ public class BombermanMenu {
     }
 
     public void levelPass() {
-        if (inPortal) {
-            timeLevelPass.start();
-            inPortal = false;
-            Media media = Sound.soundLevel;
-            soundLevelStart = new MediaPlayer(media);
-            soundLevelStart.play();
-            clearInGame();
-            root.getChildren().add(blackBackground);
-            if (countLevel == 2) {
-                stage2 = new TextInGame("STAGE 2", ConstVar.TILE_SIZE * ConstVar.WIDTH / 2 - 65, ConstVar.TILE_SIZE * ConstVar.HEIGHT / 2 + 25);
-                root.getChildren().add(stage2);
-            } else if (countLevel == 3) {
-                stage3 = new TextInGame("STAGE 3", ConstVar.TILE_SIZE * ConstVar.WIDTH / 2 - 65, ConstVar.TILE_SIZE * ConstVar.HEIGHT / 2 + 25);
-                root.getChildren().add(stage3);
+        if (countLevel <= 3) {
+            if (inPortal) {
+                timeLevelPass.start();
+                inPortal = false;
+                Media media = Sound.soundLevel;
+                soundLevelStart = new MediaPlayer(media);
+                soundLevelStart.play();
+                clearInGame();
+                root.getChildren().add(blackBackground);
+                if (countLevel == 2) {
+                    stage2 = new TextInGame("STAGE 2", ConstVar.TILE_SIZE * ConstVar.WIDTH / 2 - 70, ConstVar.TILE_SIZE * ConstVar.HEIGHT / 2 + 25);
+                    root.getChildren().add(stage2);
+                } else if (countLevel == 3) {
+                    stage3 = new TextInGame("STAGE 3", ConstVar.TILE_SIZE * ConstVar.WIDTH / 2 - 70, ConstVar.TILE_SIZE * ConstVar.HEIGHT / 2 + 25);
+                    root.getChildren().add(stage3);
+                }
             }
         }
     }
@@ -387,16 +382,18 @@ public class BombermanMenu {
     public void nextLevel() {
         root.getChildren().remove(stage2);
         root.getChildren().remove(stage3);
-
         root.getChildren().remove(blackBackground);
-
         titleScreen.stop();
-
         Media media = Sound.soundStageTheme;
         stageTheme = new MediaPlayer(media);
         stageTheme.play();
-
         scene.setFill(Color.GRAY);
+
+        stillObjects.clear();
+        map.ReadMap();
+        map.LoadMap();
+
+        enemyNumber = entities.size() - 1;
 
         level = new TextInGame("Level: ", 10);
 
@@ -450,12 +447,19 @@ public class BombermanMenu {
     public void winGame() {
         if (win) {
             clearInGame();
+            timeWinGame.start();
             blackBackground.setFitHeight(1540);
             blackBackground.setFitHeight(720);
             root.getChildren().add(blackBackground);
-            winGame = new TextInGame("WIN GAME!", ConstVar.TILE_SIZE * ConstVar.WIDTH / 2 - 80, ConstVar.TILE_SIZE * ConstVar.HEIGHT / 2 + 40);
+            winGame = new TextInGame("WIN GAME!", ConstVar.TILE_SIZE * ConstVar.WIDTH / 2 - 85, ConstVar.TILE_SIZE * ConstVar.HEIGHT / 2 + 40);
             root.getChildren().add(winGame);
-            timeWinGame.start();
+            Media media = Sound.soundWin;
+            soundWinGame = new MediaPlayer(media);
+            soundWinGame.play();
+            win = false;
+            countLevel = 1;
+            entities.clear();
+            stillObjects.clear();
         }
     }
 

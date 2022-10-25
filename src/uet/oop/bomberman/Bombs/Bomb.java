@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.StillObjects.StillObject;
 import uet.oop.bomberman.Utils.Collision;
+import uet.oop.bomberman.entities.Bomber;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Sprite;
 
@@ -133,6 +134,9 @@ public class Bomb extends Entity {
                     e.setHit(true);
                     e.getStopWatch().start();
                     e.setLife(e.getLife()-1);
+                    if (e instanceof Bomber) {
+                        BombermanGame.scoreNumber -= 500;
+                    }
                 }
             }
         }
