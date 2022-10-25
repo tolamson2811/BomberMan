@@ -1,8 +1,5 @@
 package uet.oop.bomberman;
-import uet.oop.bomberman.StillObjects.Grass;
-import uet.oop.bomberman.StillObjects.Items;
-import uet.oop.bomberman.StillObjects.StillObject;
-import uet.oop.bomberman.StillObjects.Wall;
+import uet.oop.bomberman.StillObjects.*;
 import uet.oop.bomberman.Utils.ConstVar;
 import uet.oop.bomberman.entities.Enemy.*;
 import uet.oop.bomberman.entities.Bomber;
@@ -87,7 +84,12 @@ public class GameMap {
                 } else if (TILE_MAP[j][i] == 'M') {
                     BombermanGame.entities.add(new Minvo(i,j,Sprite.minvo_right1));
                     object = new Grass(i, j, Sprite.grass.getFxImage());
-                } else{
+                } else if(TILE_MAP[j][i] == 'X'){
+                    BombermanGame.stillObjects.add(new Grass(i, j, Sprite.grass.getFxImage()));
+
+                    BombermanGame.stillObjects.add(new Portal(i,j,Sprite.portal.getFxImage()));
+                    object = new Wall(i,j,Sprite.brick.getFxImage());
+                }else{
                     object = new Grass(i, j, Sprite.grass.getFxImage());
                 }
                 BombermanGame.stillObjects.add(object);

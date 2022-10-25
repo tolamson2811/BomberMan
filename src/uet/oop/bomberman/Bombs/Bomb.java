@@ -87,7 +87,7 @@ public class Bomb extends Entity {
         int i = (vertical == -1 || horizontal == -1) ? -1:1;
         while (Math.abs(spreadX) <= radius && Math.abs(spreadY) <= radius &&
                 TILE_MAP[yblock + spreadY][xblock + spreadX] != '#' ) {
-            if(TILE_MAP[yblock + spreadY][xblock+spreadX] == '*' || TILE_MAP[yblock + spreadY][xblock+spreadX] == 'I') {
+            if(TILE_MAP[yblock + spreadY][xblock+spreadX] == '*' || TILE_MAP[yblock + spreadY][xblock+spreadX] == 'I' || TILE_MAP[yblock + spreadY][xblock+spreadX] == 'X' ) {
                 StillObject.getBrickAt(xblock+spreadX,yblock + spreadY).setTerminate(true);
                 break;
             }
