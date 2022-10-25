@@ -2,6 +2,7 @@ package uet.oop.bomberman.Utils;
 
 import javafx.scene.media.Media;
 
+
 import java.io.File;
 
 public class Sound {
@@ -13,5 +14,9 @@ public class Sound {
     public static final Media soundPlaceBomb = new Media(new File(placeBombFile).toURI().toString());
     public static final String bombExplodeFile = "res\\sound\\bomb_explode.wav";
     public static final Media soundExplode = new Media(new File(bombExplodeFile).toURI().toString());
+    public static final String diedFile = "res\\sound\\died.mp3";
+    public static final Media soundDied = new Media(new File(diedFile).toURI().toString());
+    public static final String soundLevelFile = "res\\sound\\levelStart.mp3";
+    public static final Media soundLevel = new Media(new File(soundLevelFile).toURI().toString());
 
 }

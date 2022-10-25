@@ -16,6 +16,7 @@ import uet.oop.bomberman.StillObjects.StillObject;
 import uet.oop.bomberman.StillObjects.Wall;
 import uet.oop.bomberman.Utils.Collision;
 import uet.oop.bomberman.Utils.ConstVar;
+import uet.oop.bomberman.Utils.StopWatch;
 import uet.oop.bomberman.entities.Bomber;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Sprite;
@@ -26,6 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BombermanGame extends Application {
+
+    public static Canvas getCanvas() {
+        return canvas;
+    }
     private GraphicsContext gc;
     private static Canvas canvas;
     public static Scene scene;
@@ -34,10 +39,18 @@ public class BombermanGame extends Application {
 
     public static GameMap map = new GameMap();
 
-    public static Bomber bomberman = new Bomber(5, 5, Sprite.player_right);
+    public static Bomber bomberman = new Bomber(1, 1, Sprite.player_right);
     public static boolean running = false;
     public static int countLevel = 1;
     public static int scoreNumber = 0;
+
+    public static StopWatch timeLevelPass = new StopWatch();
+    public static StopWatch timeGameOver = new StopWatch();
+    public static StopWatch timeWinGame = new StopWatch();
+    public static StopWatch hasDied = new StopWatch();
+
+    public static boolean win = false;
+
     public static Group root = new Group();
 
     public static BombermanMenu menu;
@@ -49,11 +62,18 @@ public class BombermanGame extends Application {
             throw new RuntimeException(e);
         }
     }
-    public static TextInGame level, bomb, wallPass, score, life, flame, speed;
+    public static TextInGame level, bomb, enemy, score, life, flame, speed, stage1, stage2, stage3, gameOver, winGame;
     public static MediaPlayer titleScreen = null;
     public static MediaPlayer stageTheme = null;
     public static MediaPlayer placeBomb = null;
     public static MediaPlayer bombExplode = null;
+    public static MediaPlayer soundDied = null;
+    public static MediaPlayer soundLevelStart = null;
+
+    public static boolean inPortal = false;
+
+    public static int enemyNumber = 6;
+
     public static ArrayList<TextInGame> textArray = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -72,6 +92,7 @@ public class BombermanGame extends Application {
         scene = new Scene(root);
         scene.setFill(Color.BLACK);
         map.ReadMap();
+        map.LoadMap();
         //  scene vao stage
         stage.setTitle("Bomberman");
         stage.setScene(scene);
@@ -87,15 +108,24 @@ public class BombermanGame extends Application {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                if (running) {
+                if (running || timeLevelPass.getElapsedTime() > 3000 || timeGameOver.getElapsedTime() > 3000 || timeWinGame.getElapsedTime() > 3000) {
+                    if (timeLevelPass.getElapsedTime() > 3000) {
+                        timeLevelPass = new StopWatch();
+                        bomberman.setXY(49, 49);
+                        menu.nextLevel();
+                    }
+                    if (timeGameOver.getElapsedTime() > 3000 || timeWinGame.getElapsedTime() > 3000) {
+                        timeGameOver = new StopWatch();
+                        timeWinGame = new StopWatch();
+                        menu.generate();
+                    }
                     render();
                     update();
                     menu.handleInGame();
                 }
             }
-
         };
-        map.LoadMap();
+//        map.LoadMap();
         timer.start();
 
     }
@@ -132,6 +162,7 @@ public class BombermanGame extends Application {
             if(stillObjects.get(i) instanceof Portal) {
                 Portal p = (Portal) stillObjects.get(i);
                 if(Collision.checkCollision(bomberman,p) && entities.size() == 1){
+                    inPortal = true;
                     countLevel++;
                     System.out.println("hello");
                     bomberman.setX(240);

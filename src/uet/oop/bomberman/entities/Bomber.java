@@ -12,6 +12,7 @@ import uet.oop.bomberman.Utils.ConstVar;
 import uet.oop.bomberman.Utils.Sound;
 import uet.oop.bomberman.graphics.Sprite;
 
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +20,10 @@ import java.util.List;
 public class Bomber extends Entity {
 
 
+    public void setXY(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
     static class Input {
         int left;
@@ -32,6 +37,11 @@ public class Bomber extends Entity {
     private int BOMB_NUMBER = 1;
     private double time = 0;
     private Input user_input = new Input();
+
+    public List<Bomb> getBomstack() {
+        return bomstack;
+    }
+
     private final List<Bomb> bomstack = new ArrayList<>();
     private int B_radius;
     private boolean autopilot;
@@ -336,7 +346,10 @@ public class Bomber extends Entity {
 
             if(life <= 0) {
                 alive = false;
-                stopWatch.start();
+                BombermanGame.hasDied.start();
+                Media media = Sound.soundDied;
+                BombermanGame.soundDied = new MediaPlayer(media);
+                BombermanGame.soundDied.play();
             }
             BombermanGame.map.mapCollision(this);
             x += movevalX;
