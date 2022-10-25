@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.shape.Rectangle;
 import uet.oop.bomberman.StillObjects.Items;
+import uet.oop.bomberman.StillObjects.Portal;
 import uet.oop.bomberman.StillObjects.StillObject;
 import uet.oop.bomberman.StillObjects.Wall;
 import uet.oop.bomberman.Utils.Collision;
@@ -102,6 +103,7 @@ public class BombermanGame extends Application {
     public void update() {
         for(int i = 0;i < entities.size();i++) {
             if(!entities.get(i).isAlive() && entities.get(i).getStopWatch().getElapsedTime() >1500) {
+
                 entities.remove(i);
                 i--;
             }else{
@@ -127,16 +129,26 @@ public class BombermanGame extends Application {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for(int i = 0;i < stillObjects.size();i++) {
             stillObjects.get(i).render(gc);
+            if(stillObjects.get(i) instanceof Portal) {
+                Portal p = (Portal) stillObjects.get(i);
+                if(Collision.checkCollision(bomberman,p) && entities.size() == 1){
+                    countLevel++;
+                    bomberman.setX(240);
+                    bomberman.setY(240);
+                }
+            }
             if(stillObjects.get(i) instanceof Items) {
                 Items a = (Items) stillObjects.get(i);
                 if(Collision.checkCollision(bomberman,a) && map.getTILE_MAP()[a.getYblock()][a.getXblock()] == 'i') {
                     a.takeEffect(bomberman);
                     stillObjects.remove(i);
+                    map.setTILE_MAP(a.getYblock(),a.getXblock(),' ');
                     i--;
                 }
             }
         }
         bomberman.HandleBomb(gc);
         entities.forEach(g -> g.render(gc));
+
     }
 }

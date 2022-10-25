@@ -26,7 +26,7 @@ public class GameMap {
 
     public void ReadMap() {
         try {
-            File maptxt = new File("res/levels/map.txt");
+            File maptxt = new File("res/levels/" + BombermanGame.countLevel + ".txt");
             Scanner myReader = new Scanner(maptxt);
             int j = 0;
             while (myReader.hasNextLine()) {

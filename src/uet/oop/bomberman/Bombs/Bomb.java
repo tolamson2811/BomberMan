@@ -18,6 +18,7 @@ public class Bomb extends Entity {
     private boolean active;
     private final List<Flame> explosion = new ArrayList<>();
 
+    private boolean playSound;
     private char preBlock;
     private boolean setPreBlock;
     public Bomb(int xUnit, int yUnit, Image img) {
@@ -27,6 +28,15 @@ public class Bomb extends Entity {
         setPreBlock = false;
         active = false;
         time = 0;
+        playSound = false;
+    }
+
+    public boolean isPlaySound() {
+        return playSound;
+    }
+
+    public void setPlaySound(boolean playSound) {
+        this.playSound = playSound;
     }
 
     public void setRadius(int radius) {
@@ -118,7 +128,6 @@ public class Bomb extends Entity {
             }
             for(Entity e: BombermanGame.entities) {
                 boolean check = Collision.checkCollision(flame,e);
-
                 if (check && !e.isFlame_pass() && !e.isHit() ) {
                     System.out.println("helo");
                     e.setHit(true);

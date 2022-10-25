@@ -47,64 +47,66 @@ public class Oneal extends Enemy {
     }
 
     public void moveMent() {
-        char dir = ' ';
-        if(track) {
-            if (this.x % ConstVar.TILE_SIZE == 0 && this.y % ConstVar.TILE_SIZE == 0){
-                xblock = this.getXblock();
-                yblock = this.getYblock();
-                CalculateDisMap();
+        if(alive) {
+            char dir = ' ';
+            track = Math.sqrt(Math.pow(BombermanGame.bomberman.getX() - x, 2) + Math.pow(BombermanGame.bomberman.getY() - y, 2)) < 300;
+            if (track) {
+                if (this.x % ConstVar.TILE_SIZE == 0 && this.y % ConstVar.TILE_SIZE == 0) {
+                    BombermanGame.map.setTILE_MAP(yblock, xblock, ' ');
+                    xblock = this.getXblock();
+                    yblock = this.getYblock();
+                    BombermanGame.map.setTILE_MAP(yblock, xblock, 'O');
+                    CalculateDisMap();
+                }
+                if (dis[yblock][xblock] - 1 == dis[yblock - 1][xblock]) {
+                    dir = 'U';
+                } else if (dis[yblock][xblock] - 1 == dis[yblock + 1][xblock]) {
+                    dir = 'D';
+                } else if (dis[yblock][xblock] - 1 == dis[yblock][xblock - 1]) {
+                    dir = 'L';
+                } else if (dis[yblock][xblock] - 1 == dis[yblock][xblock + 1]) {
+                    dir = 'R';
+                }
+            } else {
+                if (movevalX == 0 || Math.abs(this.getXblock() - xblock) >= 4) {
+                    changeDir = !changeDir;
+                }
+                dir = (changeDir) ? 'L' : 'R';
+
             }
-            if(dis[yblock][xblock]-1  == dis[yblock-1][xblock] ){
-                dir = 'U';
-            }else if(dis[yblock][xblock]-1 == dis[yblock+1][xblock] ){
-                dir = 'D';
-            }else if(dis[yblock][xblock]-1 == dis[yblock][xblock-1] ){
-                dir = 'L';
-            }else if(dis[yblock][xblock]-1 == dis[yblock][xblock+1]){
-                dir = 'R';
+
+            switch (dir) {
+                case 'U':
+                    moveUp();
+                    break;
+                case 'D':
+                    moveDown();
+                    break;
+                case 'R':
+                    moveRight();
+                    break;
+                case 'L':
+                    moveLeft();
+                    break;
+
             }
-        }else{
-            if (movevalX == 0 || Math.abs(this.getXblock() - xblock) >= 4) {
-                changeDir = !changeDir;
+            BombermanGame.map.mapCollision(this);
+
+            x += movevalX;
+            y += movevalY;
+
+            if (life <= 0) {
+                alive = false;
+                stopWatch.start();
             }
-            dir = (changeDir) ? 'L' : 'R';
-            if(Math.sqrt(Math.pow(BombermanGame.bomberman.getX() - x,2) + Math.pow(BombermanGame.bomberman.getY()-y,2)) < 300){
-                track = true;
-                dir = ' ';
+            boolean check = Collision.checkCollision(this, BombermanGame.bomberman);
+
+            if (check && !BombermanGame.bomberman.isHit()) {
+                BombermanGame.bomberman.setHit(true);
+                BombermanGame.bomberman.setLife(BombermanGame.bomberman.getLife() - 1);
+                BombermanGame.bomberman.getStopWatch().start();
+
             }
-        }
-
-        switch (dir) {
-            case 'U':
-                moveUp();
-                break;
-            case 'D':
-                moveDown();
-                break;
-            case 'R':
-                moveRight();
-                break;
-            case 'L':
-                moveLeft();
-                break;
-
-        }
-        BombermanGame.map.mapCollision(this);
-
-        x += movevalX;
-        y += movevalY;
-
-        if(life <= 0) {
-            alive = false;
-            stopWatch.start();
-        }
-        boolean check = Collision.checkCollision(this, BombermanGame.bomberman);
-
-        if(check && !BombermanGame.bomberman.isHit()) {
-            BombermanGame.bomberman.setHit(true);
-            BombermanGame.bomberman.setLife(BombermanGame.bomberman.getLife()-1);
-            BombermanGame.bomberman.getStopWatch().start();
-
         }
     }
 
@@ -173,14 +175,13 @@ public class Oneal extends Enemy {
 
         if(!alive) {
             img = Sprite.oneal_dead.getFxImage();
+            BombermanGame.map.setTILE_MAP(getYblock(),getXblock(),' ');
         }
     }
 
     @Override
     public void update() {
-        if(alive){
-            moveMent();
-        }
+        moveMent();
         Animation();
 
     }
