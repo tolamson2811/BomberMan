@@ -2,6 +2,7 @@ package uet.oop.bomberman;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -50,7 +51,6 @@ public class BombermanGame extends Application {
     public static StopWatch timeGameOver = new StopWatch();
     public static StopWatch timeWinGame = new StopWatch();
     public static StopWatch hasDied = new StopWatch();
-
     public static boolean win = false;
 
     public static Group root = new Group();
@@ -109,15 +109,22 @@ public class BombermanGame extends Application {
             @Override
             public void handle(long l) {
                 if (running || timeLevelPass.getElapsedTime() > 3000 || timeGameOver.getElapsedTime() > 3000 || timeWinGame.getElapsedTime() > 3000) {
-                    if (timeLevelPass.getElapsedTime() > 3000) {
+                    if (timeLevelPass.getElapsedTime() > 3000 && !win) {
                         timeLevelPass = new StopWatch();
-                        menu.nextLevel();
+                        if (countLevel <= 3) {
+                            menu.nextLevel();
+                            System.out.println("check");
+                        }
                     }
-                    if (timeGameOver.getElapsedTime() > 3000 || timeWinGame.getElapsedTime() > 12000) {
-                        timeGameOver = new StopWatch();
-                        timeWinGame = new StopWatch();
+
+                    if (timeGameOver.getElapsedTime() > 3000) {
                         menu.generate();
                     }
+
+                    if (timeWinGame.getElapsedTime() > 12000) {
+                        Platform.exit();
+                    }
+
                     render();
                     update();
                     menu.handleInGame();

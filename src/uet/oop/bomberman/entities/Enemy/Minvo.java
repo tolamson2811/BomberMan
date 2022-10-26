@@ -23,7 +23,7 @@ public class Minvo extends Enemy {
         speed = ConstVar.MINVO_SPEED;
         w = 47;
         h = 47;
-        life = 2;
+        life = 1;
     }
 
     @Override
@@ -157,7 +157,7 @@ public class Minvo extends Enemy {
 
     @Override
     public void update() {
-        if(alive){
+        if(alive) {
             moveMent();
         }
         Animation();
