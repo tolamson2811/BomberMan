@@ -118,6 +118,7 @@ public class BombermanGame extends Application {
                     }
 
                     if (timeGameOver.getElapsedTime() > 3000) {
+                        timeGameOver = new StopWatch();
                         menu.generate();
                     }
 
