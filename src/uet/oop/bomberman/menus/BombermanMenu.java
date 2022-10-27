@@ -1,8 +1,11 @@
 package uet.oop.bomberman.menus;
 
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -41,7 +44,7 @@ public class BombermanMenu {
     private final ButtonInGame titleGame = new ButtonInGame("B O M B E R M A N", 0, 50, 1440, 100, font1, Color.ORANGE);
 
     private final ButtonInGame startButton = new ButtonInGame("NEW GAME", (double) (ConstVar.WIDTH * ConstVar.TILE_SIZE / 2) - 250, 350, 500, 80, font2, "-fx-background-color: #000;");
-    private final ButtonInGame controlButton = new ButtonInGame("CONTROL",(double) (ConstVar.WIDTH * ConstVar.TILE_SIZE / 2) - 250, 450,500, 80, font2, "-fx-background-color: #000;" );
+    private final ButtonInGame controlButton = new ButtonInGame("CONTROL", (double) (ConstVar.WIDTH * ConstVar.TILE_SIZE / 2) - 250, 450, 500, 80, font2, "-fx-background-color: #000;");
     private final ButtonInGame exitButton = new ButtonInGame("EXIT", (double) (ConstVar.WIDTH * ConstVar.TILE_SIZE / 2) - 250, 550, 500, 80, font2, "-fx-background-color: #000;");
     private final ButtonInGame continueButton = new ButtonInGame("CONTINUE", (double) (ConstVar.WIDTH * ConstVar.TILE_SIZE / 2) - 250, 250, 500, 80, font2, "-fx-background-color: #000;");
 
@@ -52,10 +55,10 @@ public class BombermanMenu {
     private static ImageView imageControlView = new ImageView();
 
     private static ImageView imageGameMenuView = new ImageView();
-    private final ButtonInGame soundButton = new ButtonInGame("SOUND",(double) (ConstVar.WIDTH * ConstVar.TILE_SIZE / 2) - 140, 375, 280, 50, font3, "-fx-background-color: #585858;");
+    private final ButtonInGame soundButton = new ButtonInGame("SOUND", (double) (ConstVar.WIDTH * ConstVar.TILE_SIZE / 2) - 140, 375, 280, 50, font3, "-fx-background-color: #585858;");
     private final ButtonInGame resumeButton = new ButtonInGame("RESUME", (double) (ConstVar.WIDTH * ConstVar.TILE_SIZE / 2) - 150, 275, 300, 50, font3, "-fx-background-color: #585858;");
-    private final ButtonInGame exitGameButton = new ButtonInGame("EXIT",(double) (ConstVar.WIDTH * ConstVar.TILE_SIZE / 2) - 125, 475, 250, 50, font3,  "-fx-background-color: #585858;");
-    private final ButtonInGame mainMenuButton = new ButtonInGame("MAIN MENU",(double) (ConstVar.WIDTH * ConstVar.TILE_SIZE / 2) - 250,  175, 500, 50, font3, "-fx-background-color: #585858;");
+    private final ButtonInGame exitGameButton = new ButtonInGame("EXIT", (double) (ConstVar.WIDTH * ConstVar.TILE_SIZE / 2) - 125, 475, 250, 50, font3, "-fx-background-color: #585858;");
+    private final ButtonInGame mainMenuButton = new ButtonInGame("MAIN MENU", (double) (ConstVar.WIDTH * ConstVar.TILE_SIZE / 2) - 250, 175, 500, 50, font3, "-fx-background-color: #585858;");
     private boolean isShowned = false;
 
     public static boolean isRunning = true;
@@ -64,7 +67,7 @@ public class BombermanMenu {
 
     }
 
-    public void generate()  {
+    public void generate() {
 
         Media media = Sound.soundTitleScrene;
         titleScreen = new MediaPlayer(media);
@@ -246,39 +249,43 @@ public class BombermanMenu {
 
     public void handleMenuInGame() {
         menuInGame.setOnMouseClicked(event -> {
-            if (!isShowned) {
-                isShowned = true;
-
-                FileInputStream is;
-                try {
-                    is = new FileInputStream(Paths.get("res\\textures\\backgroundGameMenu.png").toFile());
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-
-                Image image = new Image(is);
-                imageGameMenuView = new ImageView(image);
-                imageGameMenuView.setFitWidth(800);
-                imageGameMenuView.setFitHeight(500);
-                imageGameMenuView.setTranslateX((double) ConstVar.WIDTH * ConstVar.TILE_SIZE / 2 - 400);
-                imageGameMenuView.setTranslateY((double) ConstVar.HEIGHT * ConstVar.TILE_SIZE / 2 - 250);
-
-                root.getChildren().add(imageGameMenuView);
-                root.getChildren().add(soundButton);
-                root.getChildren().add(resumeButton);
-                root.getChildren().add(exitGameButton);
-                root.getChildren().add(mainMenuButton);
-                running = false;
-            } else {
-                root.getChildren().remove(soundButton);
-                root.getChildren().remove(resumeButton);
-                root.getChildren().remove(exitGameButton);
-                root.getChildren().remove(imageGameMenuView);
-                root.getChildren().remove(mainMenuButton);
-                isShowned = false;
-                running = true;
-            }
+            handleShow();
         });
+    }
+
+    public void handleShow() {
+        if (!isShowned) {
+            isShowned = true;
+
+            FileInputStream is;
+            try {
+                is = new FileInputStream(Paths.get("res\\textures\\backgroundGameMenu.png").toFile());
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
+            Image image = new Image(is);
+            imageGameMenuView = new ImageView(image);
+            imageGameMenuView.setFitWidth(800);
+            imageGameMenuView.setFitHeight(500);
+            imageGameMenuView.setTranslateX((double) ConstVar.WIDTH * ConstVar.TILE_SIZE / 2 - 400);
+            imageGameMenuView.setTranslateY((double) ConstVar.HEIGHT * ConstVar.TILE_SIZE / 2 - 250);
+
+            root.getChildren().add(imageGameMenuView);
+            root.getChildren().add(soundButton);
+            root.getChildren().add(resumeButton);
+            root.getChildren().add(exitGameButton);
+            root.getChildren().add(mainMenuButton);
+            running = false;
+        } else {
+            root.getChildren().remove(soundButton);
+            root.getChildren().remove(resumeButton);
+            root.getChildren().remove(exitGameButton);
+            root.getChildren().remove(imageGameMenuView);
+            root.getChildren().remove(mainMenuButton);
+            isShowned = false;
+            running = true;
+        }
     }
 
     public void clearInGame() {
@@ -304,7 +311,7 @@ public class BombermanMenu {
 
         blackBackground.setFitWidth(1540);
         blackBackground.setFitHeight(720);
-        blackBackground.setTranslateX((double) ConstVar.WIDTH * ConstVar.TILE_SIZE / 2 - (1540/ 2));
+        blackBackground.setTranslateX((double) ConstVar.WIDTH * ConstVar.TILE_SIZE / 2 - (1540 / 2));
         blackBackground.setTranslateY((double) ConstVar.HEIGHT * ConstVar.TILE_SIZE / 2 - (720 / 2));
     }
 
@@ -384,60 +391,60 @@ public class BombermanMenu {
     }
 
     public void nextLevel() {
-            root.getChildren().remove(stage2);
-            root.getChildren().remove(stage3);
-            root.getChildren().remove(blackBackground);
-            titleScreen.stop();
-            Media media = Sound.soundStageTheme;
-            stageTheme = new MediaPlayer(media);
-            stageTheme.play();
-            scene.setFill(Color.GRAY);
+        root.getChildren().remove(stage2);
+        root.getChildren().remove(stage3);
+        root.getChildren().remove(blackBackground);
+        titleScreen.stop();
+        Media media = Sound.soundStageTheme;
+        stageTheme = new MediaPlayer(media);
+        stageTheme.play();
+        scene.setFill(Color.GRAY);
 
-            bomberman.getBomstack().clear();
-            stillObjects.clear();
-            map.ReadMap();
-            map.LoadMap();
+        bomberman.getBomstack().clear();
+        stillObjects.clear();
+        map.ReadMap();
+        map.LoadMap();
 
-            enemyNumber = entities.size() - 1;
+        enemyNumber = entities.size() - 1;
 
-            level = new TextInGame("Level: ", 10);
+        level = new TextInGame("Level: ", 10);
 
-            bomb = new TextInGame("Bombs: ", 210);
+        bomb = new TextInGame("Bombs: ", 210);
 
-            enemy = new TextInGame("Enemy: ", 380);
+        enemy = new TextInGame("Enemy: ", 380);
 
-            score = new TextInGame("Score: ", 620);
+        score = new TextInGame("Score: ", 620);
 
-            life = new TextInGame("Life: ", 820);
+        life = new TextInGame("Life: ", 820);
 
-            flame = new TextInGame("Flame: ", 1020);
+        flame = new TextInGame("Flame: ", 1020);
 
-            speed = new TextInGame("Speed: ", 1220);
+        speed = new TextInGame("Speed: ", 1220);
 
-            menuInGame = new TextInGame("MENU", 1380);
+        menuInGame = new TextInGame("MENU", 1380);
 
-            menuInGame.setOnMouseEntered(event1 -> menuInGame.setFill(Color.RED));
-            menuInGame.setOnMouseExited(event1 -> menuInGame.setFill(Color.ORANGE));
+        menuInGame.setOnMouseEntered(event1 -> menuInGame.setFill(Color.RED));
+        menuInGame.setOnMouseExited(event1 -> menuInGame.setFill(Color.ORANGE));
 
-            root.getChildren().add(level);
-            root.getChildren().add(bomb);
-            root.getChildren().add(enemy);
-            root.getChildren().add(score);
-            root.getChildren().add(life);
-            root.getChildren().add(flame);
-            root.getChildren().add(speed);
-            root.getChildren().add(menuInGame);
+        root.getChildren().add(level);
+        root.getChildren().add(bomb);
+        root.getChildren().add(enemy);
+        root.getChildren().add(score);
+        root.getChildren().add(life);
+        root.getChildren().add(flame);
+        root.getChildren().add(speed);
+        root.getChildren().add(menuInGame);
 
-            BombermanGame.running = true;
-            root.getChildren().remove(titleGame);
-            root.getChildren().remove(startButton);
-            root.getChildren().remove(controlButton);
-            root.getChildren().remove(exitButton);
-            root.getChildren().remove(continueButton);
+        BombermanGame.running = true;
+        root.getChildren().remove(titleGame);
+        root.getChildren().remove(startButton);
+        root.getChildren().remove(controlButton);
+        root.getChildren().remove(exitButton);
+        root.getChildren().remove(continueButton);
     }
 
     public void gameOver() {
-        if (hasDied.getElapsedTime() > 3000){
+        if (hasDied.getElapsedTime() > 3000) {
             hasDied = new StopWatch();
             clearInGame();
             timeGameOver.start();

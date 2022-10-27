@@ -33,6 +33,7 @@ public class Bomber extends Entity {
         int up;
         int down;
     }
+
     private boolean PlaceBom;
 
     private int BOMBER_SPEED = 2;
@@ -52,8 +53,9 @@ public class Bomber extends Entity {
     private int aimX;
     private int aimY;
     private char targetDir;
-    private Pair<Integer,Integer> Target;
-    private Pair<Integer,Integer> tmpPos;
+    private Pair<Integer, Integer> Target;
+    private Pair<Integer, Integer> tmpPos;
+
     public Bomber(int x, int y, Sprite sprite) {
         super(x, y, sprite);
         movevalX = 0;
@@ -112,24 +114,24 @@ public class Bomber extends Entity {
 
     @Override
     public int getYblock() {
-        if(this.y /ConstVar.TILE_SIZE > yblock || ((yblock+1)*ConstVar.TILE_SIZE - this.y <= 2
-                && (yblock+1)*ConstVar.TILE_SIZE - this.y >= 0)) {
-            return yblock+1;
-        } else if ((this.y + this.h) /ConstVar.TILE_SIZE < yblock ||( (this.y + this.h) - (yblock-1)*ConstVar.TILE_SIZE <=2
-                && (this.y + this.h) - (yblock-1)*ConstVar.TILE_SIZE >= 0)) {
-            return  yblock-1;
+        if (this.y / ConstVar.TILE_SIZE > yblock || ((yblock + 1) * ConstVar.TILE_SIZE - this.y <= 2
+                && (yblock + 1) * ConstVar.TILE_SIZE - this.y >= 0)) {
+            return yblock + 1;
+        } else if ((this.y + this.h) / ConstVar.TILE_SIZE < yblock || ((this.y + this.h) - (yblock - 1) * ConstVar.TILE_SIZE <= 2
+                && (this.y + this.h) - (yblock - 1) * ConstVar.TILE_SIZE >= 0)) {
+            return yblock - 1;
         }
         return yblock;
     }
 
     @Override
     public int getXblock() {
-        if(this.x /ConstVar.TILE_SIZE > xblock || ((xblock+1)*ConstVar.TILE_SIZE - this.x <= 2
-                && (xblock+1)*ConstVar.TILE_SIZE - this.x >= 0)  ) {
-            return xblock+1;
-        } else if ((this.x + this.w) /ConstVar.TILE_SIZE < xblock ||( (this.x + this.w) - (xblock-1)*ConstVar.TILE_SIZE <=2
-                && (this.x + this.w) - (xblock-1)*ConstVar.TILE_SIZE >= 0)) {
-            return  xblock-1;
+        if (this.x / ConstVar.TILE_SIZE > xblock || ((xblock + 1) * ConstVar.TILE_SIZE - this.x <= 2
+                && (xblock + 1) * ConstVar.TILE_SIZE - this.x >= 0)) {
+            return xblock + 1;
+        } else if ((this.x + this.w) / ConstVar.TILE_SIZE < xblock || ((this.x + this.w) - (xblock - 1) * ConstVar.TILE_SIZE <= 2
+                && (this.x + this.w) - (xblock - 1) * ConstVar.TILE_SIZE >= 0)) {
+            return xblock - 1;
         }
         return xblock;
     }
@@ -168,7 +170,7 @@ public class Bomber extends Entity {
                         user_input.down = 0;
                         break;
                     case SPACE:
-                        if(bomstack.size() < BOMB_NUMBER) {
+                        if (bomstack.size() < BOMB_NUMBER) {
                             if (isRunning) {
                                 Media media = Sound.soundPlaceBomb;
                                 BombermanGame.placeBomb = new MediaPlayer(media);
@@ -180,11 +182,11 @@ public class Bomber extends Entity {
                         }
                         break;
                     case K:
-                        if(!autopilot) {
+                        if (!autopilot) {
                             autopilot = true;
                             aimX = x;
                             aimY = y;
-                        }else{
+                        } else {
                             autopilot = false;
                             user_input.left = 0;
                             user_input.right = 0;
@@ -200,7 +202,9 @@ public class Bomber extends Entity {
                         }
                         System.out.println(' ');
                         break;
-
+                    case ESCAPE:
+                        BombermanGame.menu.handleShow();
+                        break;
                 }
 
             }
@@ -230,31 +234,31 @@ public class Bomber extends Entity {
     }
 
     public void MoveMent() {
-        if(alive) {
+        if (alive) {
             movevalX = 0;
             movevalY = 0;
             xblock = this.getXblock();
             yblock = this.getYblock();
-            if(autopilot) {
-                if(Math.abs(aimX - x)  <= 1 && Math.abs(aimY - y) <= 1) {
-                    if(!PlaceBom) {
+            if (autopilot) {
+                if (Math.abs(aimX - x) <= 1 && Math.abs(aimY - y) <= 1) {
+                    if (!PlaceBom) {
                         Pair<Integer, Integer> a = GetNearest();
-                        PathFinding(a.getKey(),a.getValue());
+                        PathFinding(a.getKey(), a.getValue());
                         Target = a;
                     }
-                    if(BombermanGame.map.getTILE_MAP()[Target.getValue()][Target.getKey()] == 'I') {
-                        if((Math.abs(Target.getKey() - xblock) <2 && Math.abs(Target.getValue() - yblock) ==0 )
-                                || (Math.abs(Target.getKey() - xblock) ==0 && Math.abs(Target.getValue() - yblock) < 2 )
-                                && BombermanGame.map.getTILE_MAP()[Target.getValue()][Target.getKey()] != 'i'){
-                            if(bomstack.size() < 1) {
+                    if (BombermanGame.map.getTILE_MAP()[Target.getValue()][Target.getKey()] == 'I') {
+                        if ((Math.abs(Target.getKey() - xblock) < 2 && Math.abs(Target.getValue() - yblock) == 0)
+                                || (Math.abs(Target.getKey() - xblock) == 0 && Math.abs(Target.getValue() - yblock) < 2)
+                                && BombermanGame.map.getTILE_MAP()[Target.getValue()][Target.getKey()] != 'i') {
+                            if (bomstack.size() < 1) {
                                 Bomb nbomb = makeBomb(B_radius);
                                 PlaceBom = true;
                                 bomstack.add(nbomb);
-                                tmpPos = new Pair<>(xblock,yblock);
+                                tmpPos = new Pair<>(xblock, yblock);
                             }
                         }
-                    }else {
-                        if((Math.abs(Target.getKey() - xblock) <= 6 && Math.abs(Target.getValue() - yblock) <= 6 )
+                    } else {
+                        if ((Math.abs(Target.getKey() - xblock) <= 6 && Math.abs(Target.getValue() - yblock) <= 6)
                                 && BombermanGame.map.getTILE_MAP()[Target.getValue()][Target.getKey()] != 'i') {
                             if (bomstack.size() < 1) {
                                 Bomb nbomb = makeBomb(B_radius);
@@ -264,48 +268,48 @@ public class Bomber extends Entity {
                             }
                         }
                     }
-                    if(!PlaceBom) {
-                        if(dis[yblock][xblock]-1  == dis[yblock-1][xblock] ){
+                    if (!PlaceBom) {
+                        if (dis[yblock][xblock] - 1 == dis[yblock - 1][xblock]) {
                             targetDir = 'U';
-                        }else if(dis[yblock][xblock]-1 == dis[yblock+1][xblock] ){
+                        } else if (dis[yblock][xblock] - 1 == dis[yblock + 1][xblock]) {
                             targetDir = 'D';
-                        }else if(dis[yblock][xblock]-1 == dis[yblock][xblock-1] ){
+                        } else if (dis[yblock][xblock] - 1 == dis[yblock][xblock - 1]) {
                             targetDir = 'L';
-                        }else if(dis[yblock][xblock]-1 == dis[yblock][xblock+1]){
+                        } else if (dis[yblock][xblock] - 1 == dis[yblock][xblock + 1]) {
                             targetDir = 'R';
                         }
-                    }else{
+                    } else {
                         if (Target.getKey() > tmpPos.getKey()) {
                             System.out.println("1");
-                            ArrayList<Character> move = new ArrayList<Character>(Arrays.asList('L','U','D'));
-                            targetDir = AvailablePath(move,'L');
+                            ArrayList<Character> move = new ArrayList<Character>(Arrays.asList('L', 'U', 'D'));
+                            targetDir = AvailablePath(move, 'L');
                         } else if (Target.getKey() < tmpPos.getKey()) {
                             System.out.println("2");
-                            ArrayList<Character> move = new ArrayList<Character>(Arrays.asList('R','U','D'));
-                            targetDir = AvailablePath(move,'R');
+                            ArrayList<Character> move = new ArrayList<Character>(Arrays.asList('R', 'U', 'D'));
+                            targetDir = AvailablePath(move, 'R');
                         } else if (Target.getValue() > tmpPos.getValue()) {
                             System.out.println("3");
-                            ArrayList<Character> move = new ArrayList<Character>(Arrays.asList('L','R','U'));
-                            targetDir = AvailablePath(move,'U');
+                            ArrayList<Character> move = new ArrayList<Character>(Arrays.asList('L', 'R', 'U'));
+                            targetDir = AvailablePath(move, 'U');
                         } else if (Target.getValue() < tmpPos.getValue()) {
                             System.out.println("4");
-                            ArrayList<Character> move = new ArrayList<Character>(Arrays.asList('L','R','D'));
-                            targetDir = AvailablePath(move,'D');
+                            ArrayList<Character> move = new ArrayList<Character>(Arrays.asList('L', 'R', 'D'));
+                            targetDir = AvailablePath(move, 'D');
                         }
                     }
-                    if(targetDir == 'L') {
-                        aimX = (xblock-1) * ConstVar.TILE_SIZE;
+                    if (targetDir == 'L') {
+                        aimX = (xblock - 1) * ConstVar.TILE_SIZE;
                     } else if (targetDir == 'R') {
-                        aimX = (xblock+1) * ConstVar.TILE_SIZE;
+                        aimX = (xblock + 1) * ConstVar.TILE_SIZE;
                     } else if (targetDir == 'U') {
-                        aimY = (yblock-1)* ConstVar.TILE_SIZE;
-                    }else if(targetDir == 'D'){
-                        aimY = (yblock+1)* ConstVar.TILE_SIZE;
+                        aimY = (yblock - 1) * ConstVar.TILE_SIZE;
+                    } else if (targetDir == 'D') {
+                        aimY = (yblock + 1) * ConstVar.TILE_SIZE;
                     }
                     System.out.println(aimX + " " + aimY);
                     System.out.println(x + " " + y);
                     System.out.println(xblock + " " + yblock);
-                    System.out.println(this.getXblock() + " " + this.getYblock()) ;
+                    System.out.println(this.getXblock() + " " + this.getYblock());
                     System.out.println(super.getXblock() + " " + super.getYblock());
                 }
                 user_input.up = 0;
@@ -316,7 +320,7 @@ public class Bomber extends Entity {
                     case 'U':
                         status = WALK_TYPE.UP;
                         user_input.up = 1;
-                        movevalY-= BOMBER_SPEED;
+                        movevalY -= BOMBER_SPEED;
                         break;
                     case 'D':
                         status = WALK_TYPE.DOWN;
@@ -335,7 +339,7 @@ public class Bomber extends Entity {
                         break;
                 }
 
-            }else{
+            } else {
                 if (user_input.right == 1) {
                     movevalX += BOMBER_SPEED;
                 } else if (user_input.left == 1) {
@@ -348,7 +352,7 @@ public class Bomber extends Entity {
                 }
             }
 
-            if(life <= 0) {
+            if (life <= 0) {
                 alive = false;
                 BombermanGame.hasDied.start();
                 Media media = Sound.soundDied;
@@ -361,7 +365,8 @@ public class Bomber extends Entity {
         }
 
     }
-    public void PathFinding(int startX,int startY) {
+
+    public void PathFinding(int startX, int startY) {
         for (int i = 0; i < ConstVar.HEIGHT; i++) {
             for (int j = 0; j < ConstVar.WIDTH; j++) {
                 if (i == startY && j == startX) {
@@ -371,86 +376,86 @@ public class Bomber extends Entity {
                 }
             }
         }
-        ArrayList<Pair<Integer,Integer>> node = new ArrayList<>();
-        node.add(new Pair<>(startX,startY));
-        while(!node.isEmpty()) {
+        ArrayList<Pair<Integer, Integer>> node = new ArrayList<>();
+        node.add(new Pair<>(startX, startY));
+        while (!node.isEmpty()) {
             int currentx = node.get(0).getKey();
             int currenty = node.get(0).getValue();
             node.remove(0);
-            if(currentx == xblock && currenty == yblock) {
+            if (currentx == xblock && currenty == yblock) {
                 break;
             }
             if (currentx + 1 < ConstVar.WIDTH && (BombermanGame.map.getTILE_MAP()[currenty][currentx + 1] != '#'
                     && BombermanGame.map.getTILE_MAP()[currenty][currentx + 1] != 'I'
                     && BombermanGame.map.getTILE_MAP()[currenty][currentx + 1] != '*') && dis[currenty][currentx + 1] == Integer.MAX_VALUE) {
                 dis[currenty][currentx + 1] = dis[currenty][currentx] + 1;
-                node.add(new Pair<>(currentx+1,currenty));
+                node.add(new Pair<>(currentx + 1, currenty));
             }
             if (currentx - 1 >= 0 && (BombermanGame.map.getTILE_MAP()[currenty][currentx - 1] != '#'
                     && BombermanGame.map.getTILE_MAP()[currenty][currentx - 1] != 'I'
                     && BombermanGame.map.getTILE_MAP()[currenty][currentx - 1] != '*') && dis[currenty][currentx - 1] == Integer.MAX_VALUE) {
                 dis[currenty][currentx - 1] = dis[currenty][currentx] + 1;
-                node.add(new Pair<>(currentx-1,currenty));
+                node.add(new Pair<>(currentx - 1, currenty));
             }
             if (currenty - 1 >= 0 && (BombermanGame.map.getTILE_MAP()[currenty - 1][currentx] != '#'
                     && BombermanGame.map.getTILE_MAP()[currenty - 1][currentx] != 'I'
                     && BombermanGame.map.getTILE_MAP()[currenty - 1][currentx] != '*') && dis[currenty - 1][currentx] == Integer.MAX_VALUE) {
                 dis[currenty - 1][currentx] = dis[currenty][currentx] + 1;
-                node.add(new Pair<>(currentx,currenty-1));
+                node.add(new Pair<>(currentx, currenty - 1));
             }
             if (currenty + 1 < ConstVar.HEIGHT && (BombermanGame.map.getTILE_MAP()[currenty + 1][currentx] != '#'
                     && BombermanGame.map.getTILE_MAP()[currenty + 1][currentx] != 'I'
                     && BombermanGame.map.getTILE_MAP()[currenty + 1][currentx] != '*'
                     && BombermanGame.map.getTILE_MAP()[currenty][currentx + 1] != 'b') && dis[currenty + 1][currentx] == Integer.MAX_VALUE) {
                 dis[currenty + 1][currentx] = dis[currenty][currentx] + 1;
-                node.add(new Pair<>(currentx,currenty+1));
+                node.add(new Pair<>(currentx, currenty + 1));
             }
         }
     }
 
-    public char AvailablePath(ArrayList<Character> move,char priority) {
+    public char AvailablePath(ArrayList<Character> move, char priority) {
         double randomDirection;
 
-        while(!move.isEmpty()) {
+        while (!move.isEmpty()) {
 
             //need amending
-            if(move.contains(priority)) {
+            if (move.contains(priority)) {
                 randomDirection = move.indexOf(priority);
-            }else{
-                randomDirection = Math.random()*move.size();
+            } else {
+                randomDirection = Math.random() * move.size();
             }
-            if(move.get((int) randomDirection) == 'L') {
-                if(BombermanGame.map.getTILE_MAP()[yblock][xblock-1] == ' '
-                        || BombermanGame.map.getTILE_MAP()[yblock][xblock-1] =='i') {
+            if (move.get((int) randomDirection) == 'L') {
+                if (BombermanGame.map.getTILE_MAP()[yblock][xblock - 1] == ' '
+                        || BombermanGame.map.getTILE_MAP()[yblock][xblock - 1] == 'i') {
                     return 'L';
-                }else{
+                } else {
                     move.remove((int) randomDirection);
                     continue;
                 }
             }
-            if(move.get((int) randomDirection) == 'R') {
-                if(BombermanGame.map.getTILE_MAP()[yblock][xblock+1] == ' '
-                        || BombermanGame.map.getTILE_MAP()[yblock][xblock+1] =='i') {
+            if (move.get((int) randomDirection) == 'R') {
+                if (BombermanGame.map.getTILE_MAP()[yblock][xblock + 1] == ' '
+                        || BombermanGame.map.getTILE_MAP()[yblock][xblock + 1] == 'i') {
                     return 'R';
-                }else{
+                } else {
                     move.remove((int) randomDirection);
                     continue;
                 }
             }
-            if(move.get((int) randomDirection) == 'U') {
-                if(BombermanGame.map.getTILE_MAP()[yblock-1][xblock] == ' '
-                        || BombermanGame.map.getTILE_MAP()[yblock-1][xblock] =='i') {
+            if (move.get((int) randomDirection) == 'U') {
+                if (BombermanGame.map.getTILE_MAP()[yblock - 1][xblock] == ' '
+                        || BombermanGame.map.getTILE_MAP()[yblock - 1][xblock] == 'i') {
                     return 'U';
-                }else{
+                } else {
                     move.remove((int) randomDirection);
                     continue;
                 }
             }
-            if(move.get((int) randomDirection) == 'D') {
-                if(BombermanGame.map.getTILE_MAP()[yblock+1][xblock] == ' '
-                        || BombermanGame.map.getTILE_MAP()[yblock+1][xblock] =='i') {
+            if (move.get((int) randomDirection) == 'D') {
+                if (BombermanGame.map.getTILE_MAP()[yblock + 1][xblock] == ' '
+                        || BombermanGame.map.getTILE_MAP()[yblock + 1][xblock] == 'i') {
                     return 'D';
-                }else{
+                } else {
                     move.remove((int) randomDirection);
                 }
             }
@@ -458,50 +463,50 @@ public class Bomber extends Entity {
         return ' ';
     }
 
-    public Pair<Integer,Integer> GetNearest() {
-        ArrayList<Pair<Integer,Integer>> node = new ArrayList<>();
-        node.add(new Pair<>(this.getXblock(),this.getYblock()));
-        while(!node.isEmpty()) {
+    public Pair<Integer, Integer> GetNearest() {
+        ArrayList<Pair<Integer, Integer>> node = new ArrayList<>();
+        node.add(new Pair<>(this.getXblock(), this.getYblock()));
+        while (!node.isEmpty()) {
             int currentx = node.get(0).getKey();
             int currenty = node.get(0).getValue();
             node.remove(0);
             if (currentx + 1 < ConstVar.WIDTH && BombermanGame.map.getTILE_MAP()[currenty][currentx + 1] != '#'
                     && BombermanGame.map.getTILE_MAP()[currenty][currentx + 1] != '*'
                     && BombermanGame.map.getTILE_MAP()[currenty][currentx + 1] != 'b') {
-                if(BombermanGame.map.getTILE_MAP()[currenty][currentx + 1] != ' ') {
-                    return new Pair<>(currentx+1,currenty);
-                }else{
-                    node.add(new Pair<>(currentx+1,currenty));
+                if (BombermanGame.map.getTILE_MAP()[currenty][currentx + 1] != ' ') {
+                    return new Pair<>(currentx + 1, currenty);
+                } else {
+                    node.add(new Pair<>(currentx + 1, currenty));
 
                 }
             }
             if (currentx - 1 >= 0 && BombermanGame.map.getTILE_MAP()[currenty][currentx - 1] != '#'
                     && BombermanGame.map.getTILE_MAP()[currenty][currentx - 1] != '*'
                     && BombermanGame.map.getTILE_MAP()[currenty][currentx - 1] != 'b') {
-                if(BombermanGame.map.getTILE_MAP()[currenty][currentx - 1] != ' ') {
-                    return new Pair<>(currentx-1,currenty);
-                }else{
-                    node.add(new Pair<>(currentx-1,currenty));
+                if (BombermanGame.map.getTILE_MAP()[currenty][currentx - 1] != ' ') {
+                    return new Pair<>(currentx - 1, currenty);
+                } else {
+                    node.add(new Pair<>(currentx - 1, currenty));
 
                 }
             }
             if (currenty - 1 >= 0 && BombermanGame.map.getTILE_MAP()[currenty - 1][currentx] != '#'
                     && BombermanGame.map.getTILE_MAP()[currenty - 1][currentx] != '*'
-                    && BombermanGame.map.getTILE_MAP()[currenty-1][currentx ] != 'b') {
-                if(BombermanGame.map.getTILE_MAP()[currenty-1][currentx] != ' ') {
-                    return new Pair<>(currentx,currenty-1);
-                }else{
-                    node.add(new Pair<>(currentx,currenty-1));
+                    && BombermanGame.map.getTILE_MAP()[currenty - 1][currentx] != 'b') {
+                if (BombermanGame.map.getTILE_MAP()[currenty - 1][currentx] != ' ') {
+                    return new Pair<>(currentx, currenty - 1);
+                } else {
+                    node.add(new Pair<>(currentx, currenty - 1));
 
                 }
             }
             if (currenty + 1 < ConstVar.HEIGHT && BombermanGame.map.getTILE_MAP()[currenty + 1][currentx] != '#'
                     && BombermanGame.map.getTILE_MAP()[currenty + 1][currentx] != '*'
-                    && BombermanGame.map.getTILE_MAP()[currenty+1][currentx] != 'b' ) {
-                if(BombermanGame.map.getTILE_MAP()[currenty+1][currentx] != ' ') {
-                    return new Pair<>(currentx,currenty+1);
-                }else{
-                    node.add(new Pair<>(currentx,currenty+1));
+                    && BombermanGame.map.getTILE_MAP()[currenty + 1][currentx] != 'b') {
+                if (BombermanGame.map.getTILE_MAP()[currenty + 1][currentx] != ' ') {
+                    return new Pair<>(currentx, currenty + 1);
+                } else {
+                    node.add(new Pair<>(currentx, currenty + 1));
 
                 }
             }
@@ -514,14 +519,14 @@ public class Bomber extends Entity {
      */
     public void Animation() {
 
-        if(alive) {
-            if(hit) {
-                if(stopWatch.getElapsedTime() >=2000) {
+        if (alive) {
+            if (hit) {
+                if (stopWatch.getElapsedTime() >= 2000) {
                     hit = false;
                     stopWatch.stop();
                 }
             }
-            if(!hit || stopWatch.getElapsedTime() %200 >=100 ) {
+            if (!hit || stopWatch.getElapsedTime() % 200 >= 100) {
                 if (user_input.right == 1) {
                     img = Sprite.movingSprite(Sprite.player_right,
                             Sprite.player_right_1, Sprite.player_right_2, time, 9).getFxImage();
@@ -538,27 +543,27 @@ public class Bomber extends Entity {
                     img = Sprite.movingSprite(Sprite.player_down,
                             Sprite.player_down_1, Sprite.player_down_2, time, 9).getFxImage();
                     time += 0.5;
-                }else{
-                    if(status == WALK_TYPE.RIGHT) {
+                } else {
+                    if (status == WALK_TYPE.RIGHT) {
                         img = Sprite.player_right.getFxImage();
-                    }else if(status == WALK_TYPE.LEFT) {
+                    } else if (status == WALK_TYPE.LEFT) {
                         img = Sprite.player_left.getFxImage();
                     } else if (status == WALK_TYPE.DOWN) {
                         img = Sprite.player_down.getFxImage();
-                    }else{
+                    } else {
                         img = Sprite.player_up.getFxImage();
                     }
 
                 }
-            }else{
+            } else {
                 img = null;
             }
-        }else{
+        } else {
             img = Sprite.movingSprite(Sprite.player_dead1,
-                    Sprite.player_dead2,Sprite.player_dead3,time,120).getFxImage();
-            if(time %120 <119) {
-                time+=1;
-            }else{
+                    Sprite.player_dead2, Sprite.player_dead3, time, 120).getFxImage();
+            if (time % 120 < 119) {
+                time += 1;
+            } else {
                 img = null;
             }
         }
@@ -567,20 +572,21 @@ public class Bomber extends Entity {
 
     /**
      * XU LY BOM NO.
+     *
      * @param gc
      */
     public void HandleBomb(GraphicsContext gc) {
-        if(bomstack.isEmpty()) {
+        if (bomstack.isEmpty()) {
             PlaceBom = false;
         }
         for (int i = 0; i < bomstack.size(); i++) {
             Bomb nbomb = bomstack.get(i);
             if (!nbomb.isActive()) {
 
-                if(!bomstack.get(i).Explode(gc)) {
+                if (!bomstack.get(i).Explode(gc)) {
                     bomstack.remove(i);
-                }else{
-                    if(!nbomb.isPlaySound()) {
+                } else {
+                    if (!nbomb.isPlaySound()) {
                         if (isRunning) {
                             Media media = Sound.soundExplode;
                             BombermanGame.bombExplode = new MediaPlayer(media);
@@ -598,11 +604,12 @@ public class Bomber extends Entity {
 
     /**
      * KHOI TAO BOM
+     *
      * @return
      */
     public Bomb makeBomb(int b_radius) {
         Bomb nBomb = new Bomb(super.getXblock(),
-                super.getYblock(),Sprite.bomb.getFxImage());
+                super.getYblock(), Sprite.bomb.getFxImage());
         nBomb.setActive(true);
         nBomb.setRadius(b_radius);
 
@@ -612,7 +619,7 @@ public class Bomber extends Entity {
 
     public void ResetTMPBOOST() {
 
-        if(stopWatch.getElapsedTime() > 10000) {
+        if (stopWatch.getElapsedTime() > 10000) {
             BOMBER_SPEED = 2;
             bom_pass = false;
             flame_pass = false;
@@ -628,7 +635,7 @@ public class Bomber extends Entity {
         HandlingInput();
         MoveMent();
         Animation();
-        if(boosted) {
+        if (boosted) {
             ResetTMPBOOST();
         }
     }
