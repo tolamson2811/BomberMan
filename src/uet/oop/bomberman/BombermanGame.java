@@ -183,6 +183,7 @@ public class BombermanGame extends Application {
                         Media media = Sound.soundPower;
                         soundPower = new MediaPlayer(media);
                         soundPower.play();
+                        soundPower.setVolume(0.4);
                     }
                     a.takeEffect(bomberman);
                     stillObjects.remove(i);

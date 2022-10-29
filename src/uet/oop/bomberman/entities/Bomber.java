@@ -173,6 +173,7 @@ public class Bomber extends Entity {
                                 Media media = Sound.soundPlaceBomb;
                                 BombermanGame.placeBomb = new MediaPlayer(media);
                                 BombermanGame.placeBomb.play();
+                                BombermanGame.placeBomb.setVolume(0.4);
                             }
                             Bomb nbomb = makeBomb(B_radius);
                             PlaceBom = true;
@@ -729,6 +730,7 @@ public class Bomber extends Entity {
                             Media media = Sound.soundExplode;
                             BombermanGame.bombExplode = new MediaPlayer(media);
                             BombermanGame.bombExplode.play();
+                            BombermanGame.bombExplode.setVolume(0.4);
                         }
                         nbomb.setPlaySound(true);
                     }

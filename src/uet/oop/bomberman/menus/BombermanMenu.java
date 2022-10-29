@@ -71,6 +71,7 @@ public class BombermanMenu {
         Media media = Sound.soundTitleScrene;
         titleScreen = new MediaPlayer(media);
         titleScreen.play();
+        titleScreen.setVolume(0.4);
 
         root.getChildren().add(titleGame);
         root.getChildren().add(startButton);
@@ -114,6 +115,7 @@ public class BombermanMenu {
             Media media = Sound.soundStageTheme;
             stageTheme = new MediaPlayer(media);
             stageTheme.play();
+            stageTheme.setVolume(0.4);
 
             scene.setFill(Color.GRAY);
 
@@ -164,6 +166,7 @@ public class BombermanMenu {
             Media media = Sound.soundStageTheme;
             stageTheme = new MediaPlayer(media);
             stageTheme.play();
+            stageTheme.setVolume(0.4);
 
             scene.setFill(Color.GRAY);
 
@@ -409,6 +412,7 @@ public class BombermanMenu {
         Media media = Sound.soundStageTheme;
         stageTheme = new MediaPlayer(media);
         stageTheme.play();
+        stageTheme.setVolume(0.4);
         scene.setFill(Color.GRAY);
 
         bomberman.getBomstack().clear();
