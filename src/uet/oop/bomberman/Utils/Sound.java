@@ -1,4 +1,4 @@
-package uet.oop.bomberman.Utils;
+package uet.oop.bomberman.utils;
 
 import javafx.scene.media.Media;
 

@@ -1,4 +1,4 @@
-package uet.oop.bomberman.Utils;
+package uet.oop.bomberman.utils;
 
 public class ConstVar {
     public static final int WIDTH = 30;

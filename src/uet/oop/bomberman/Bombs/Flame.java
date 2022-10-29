@@ -1,12 +1,8 @@
-package uet.oop.bomberman.Bombs;
+package uet.oop.bomberman.bombs;
 
-import javafx.scene.canvas.GraphicsContext;
-import uet.oop.bomberman.StillObjects.StillObject;
-import uet.oop.bomberman.Utils.ConstVar;
+import uet.oop.bomberman.utils.ConstVar;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Sprite;
-
-import java.lang.reflect.Type;
 
 public class Flame extends Entity {
 

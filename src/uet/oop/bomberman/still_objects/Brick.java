@@ -1,14 +1,23 @@
-package uet.oop.bomberman.StillObjects;
+package uet.oop.bomberman.still_objects;
 
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.graphics.Sprite;
 
-public class Wall extends StillObject {
-
-    public Wall(int x, int y, Image img) {
-        super(x, y, img);
+public class Brick extends StillObject{
+    public Brick(int xUnit, int yUnit,int level) {
+        super(xUnit, yUnit);
         time = 0;
+        if(level == 1) {
+            img = Sprite.brick.getFxImage();
+        }else if(level == 2) {
+            img = Sprite.lava_brick.getFxImage();
+
+        }else{
+            img = Sprite.ice_brick.getFxImage();
+
+        }
+
     }
 
     public void TerminateProcess() {
@@ -20,6 +29,9 @@ public class Wall extends StillObject {
             if(BombermanGame.map.getTILE_MAP()[yblock][xblock] == 'I') {
                 System.out.println("hello");
                 BombermanGame.map.setTILE_MAP(yblock,xblock,'i');
+            }else if(BombermanGame.map.getTILE_MAP()[yblock][xblock] == 'X') {
+                System.out.println("hwe");
+                BombermanGame.map.setTILE_MAP(yblock, xblock, 'x');
             }else {
                 BombermanGame.map.setTILE_MAP(yblock,xblock,' ');
             }

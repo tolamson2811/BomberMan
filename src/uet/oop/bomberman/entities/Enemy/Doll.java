@@ -1,8 +1,8 @@
 package uet.oop.bomberman.entities.Enemy;
 
 import uet.oop.bomberman.BombermanGame;
-import uet.oop.bomberman.Utils.Collision;
-import uet.oop.bomberman.Utils.ConstVar;
+import uet.oop.bomberman.utils.Collision;
+import uet.oop.bomberman.utils.ConstVar;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Doll extends Enemy {
@@ -21,6 +21,7 @@ public class Doll extends Enemy {
         w = 47;
         h = 47;
         life = 1;
+        preBlock =' ';
     }
 
     @Override
@@ -28,7 +29,14 @@ public class Doll extends Enemy {
         double randomDirection = Math.random();
         if (this.x % ConstVar.TILE_SIZE <= 1 && this.y % ConstVar.TILE_SIZE <= 1) {
             randomDirection = Math.random();
-
+            BombermanGame.map.setTILE_MAP(yblock, xblock, preBlock);
+            xblock = this.getXblock();
+            yblock = this.getYblock();
+            if(BombermanGame.map.getTILE_MAP()[yblock][xblock] == ' ' || BombermanGame.map.getTILE_MAP()[yblock][xblock] == 'i'
+                    || BombermanGame.map.getTILE_MAP()[yblock][xblock] == 'x') {
+                preBlock = BombermanGame.map.getTILE_MAP()[yblock][xblock];
+            }
+            BombermanGame.map.setTILE_MAP(yblock, xblock, 'D');
             if (timeMoveTile >= 3) {
                 randomDirection = Math.random();
                 if (randomDirection < 0.25) {
@@ -82,8 +90,6 @@ public class Doll extends Enemy {
         if(life <= 0) {
             alive = false;
             stopWatch.start();
-            BombermanGame.scoreNumber += 300;
-            BombermanGame.enemyNumber--;
         }
         boolean check = Collision.checkCollision(this, BombermanGame.bomberman);
 
@@ -115,7 +121,21 @@ public class Doll extends Enemy {
             time += speed;
         }
         if(!alive) {
-            img = Sprite.doll_dead.getFxImage();;
+            if(stopWatch.getElapsedTime() <= 600) {
+                img = Sprite.doll_dead.getFxImage();
+
+            }else{
+                if(stopWatch.getElapsedTime() <= 900) {
+                    img = Sprite.mob_dead1.getFxImage();
+                }
+                else if(stopWatch.getElapsedTime() <= 1200) {
+                    img = Sprite.mob_dead2.getFxImage();
+                }
+                else {
+                    img = Sprite.mob_dead3.getFxImage();
+                }
+            }
+            BombermanGame.map.setTILE_MAP(yblock,xblock,' ');
         }
 
     }

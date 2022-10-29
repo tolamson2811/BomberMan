@@ -11,11 +11,10 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import uet.oop.bomberman.BombermanGame;
-import uet.oop.bomberman.Bombs.Bomb;
-import uet.oop.bomberman.Utils.Sound;
-import uet.oop.bomberman.Utils.ConstVar;
+import uet.oop.bomberman.utils.Sound;
+import uet.oop.bomberman.utils.ConstVar;
 import javafx.scene.text.Font;
-import uet.oop.bomberman.Utils.StopWatch;
+import uet.oop.bomberman.utils.StopWatch;
 import uet.oop.bomberman.entities.Bomber;
 import uet.oop.bomberman.graphics.Sprite;
 
@@ -364,7 +363,11 @@ public class BombermanMenu {
         bomb.setText("Bomb: " + bomberman.getBOMB_NUMBER());
         speed.setText("Speed: " + bomberman.getBOMBER_SPEED());
         flame.setText("Flame: " + bomberman.getB_radius());
-        enemy.setText("Enemy: " + enemyNumber);
+        if(bomberman.isBoosted()) {
+            enemy.setText("Boosted: " + (10 - bomberman.getPowerTime().getElapsedTime()/1000));
+        }else{
+            enemy.setText("");
+        }
     }
 
     public void levelPass() {
@@ -485,3 +488,4 @@ public class BombermanMenu {
     }
 
 }
+

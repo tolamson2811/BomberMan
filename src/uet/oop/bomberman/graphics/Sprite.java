@@ -1,7 +1,7 @@
 package uet.oop.bomberman.graphics;
 
 import javafx.scene.image.*;
-import uet.oop.bomberman.Utils.ConstVar;
+import uet.oop.bomberman.utils.ConstVar;
 
 /**
  * Lưu trữ thông tin các pixel của 1 sprite (hình ảnh game)
@@ -43,6 +43,14 @@ public class Sprite {
 	public static Sprite wall = new Sprite(ConstVar.DEFAULT_SIZE, 5, 0, SpriteSheet.tiles, 16, 16);
 	public static Sprite portal = new Sprite(ConstVar.DEFAULT_SIZE, 4, 0, SpriteSheet.tiles, 14, 14);
 
+	public static Sprite lava_gr = new Sprite(ConstVar.DEFAULT_SIZE, 6, 4, SpriteSheet.tiles, 16, 16);
+	public static Sprite ice_gr = new Sprite(ConstVar.DEFAULT_SIZE, 8, 1, SpriteSheet.tiles, 16, 16);
+	public static Sprite sand = new Sprite(ConstVar.DEFAULT_SIZE, 8, 2, SpriteSheet.tiles, 16, 16);
+	public static Sprite jung = new Sprite(ConstVar.DEFAULT_SIZE, 8, 3, SpriteSheet.tiles, 16, 16);
+	public static Sprite lava_brick = new Sprite(ConstVar.DEFAULT_SIZE, 7, 4, SpriteSheet.tiles, 16, 16);
+	public static Sprite ice_wall = new Sprite(ConstVar.DEFAULT_SIZE, 5, 4, SpriteSheet.tiles, 16, 16);
+	public static Sprite ice_brick = new Sprite(ConstVar.DEFAULT_SIZE, 10, 4, SpriteSheet.tiles, 16, 16);
+	public static Sprite lava_wall = new Sprite(ConstVar.DEFAULT_SIZE, 8, 0, SpriteSheet.tiles, 16, 16);
 	/*
 	|--------------------------------------------------------------------------
 	| Bomber Sprites

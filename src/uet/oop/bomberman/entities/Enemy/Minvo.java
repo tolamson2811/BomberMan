@@ -1,12 +1,12 @@
 package uet.oop.bomberman.entities.Enemy;
 
 //import com.almasb.fxgl.entity.level.tiled.Tile;
+import javafx.scene.paint.Stop;
 import uet.oop.bomberman.BombermanGame;
-import uet.oop.bomberman.Bombs.Bomb;
-import uet.oop.bomberman.Utils.Collision;
-import uet.oop.bomberman.Utils.ConstVar;
-import uet.oop.bomberman.entities.Bomber;
+import uet.oop.bomberman.utils.Collision;
+import uet.oop.bomberman.utils.ConstVar;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.utils.StopWatch;
 
 public class Minvo extends Enemy {
     private int time = 0;
@@ -14,6 +14,7 @@ public class Minvo extends Enemy {
     private int timeMoveTile = 8;
     private boolean isStuck = false;
 
+    StopWatch stuckTime = new StopWatch();
 
     public Minvo(int x, int y, Sprite sprite) {
         super(x, y, sprite);
@@ -23,7 +24,8 @@ public class Minvo extends Enemy {
         speed = ConstVar.MINVO_SPEED;
         w = 47;
         h = 47;
-        life = 1;
+        life = 2;
+        preBlock = ' ';
     }
 
     @Override
@@ -31,10 +33,20 @@ public class Minvo extends Enemy {
 
         double randomDirection;
 
+        if (this.x % ConstVar.TILE_SIZE <= 1 && this.y % ConstVar.TILE_SIZE <= 1) {
+            BombermanGame.map.setTILE_MAP(yblock, xblock, preBlock);
+            xblock = this.getXblock();
+            yblock = this.getYblock();
+            if (BombermanGame.map.getTILE_MAP()[yblock][xblock] == ' ' || BombermanGame.map.getTILE_MAP()[yblock][xblock] == 'i'
+                    || BombermanGame.map.getTILE_MAP()[yblock][xblock] == 'x') {
+                preBlock = BombermanGame.map.getTILE_MAP()[yblock][xblock];
+            }
+            BombermanGame.map.setTILE_MAP(yblock, xblock, 'M');
+        }
         if (isStuck) {
-            if(stopWatch.getElapsedTime() > 1000) {
+            if(stuckTime.getElapsedTime() > 1000) {
                 isStuck = false;
-                stopWatch.stop();
+                stuckTime.stop();
             }
         }else {
             int bomberX = BombermanGame.bomberman.getXblock();
@@ -61,7 +73,7 @@ public class Minvo extends Enemy {
             }
 
             if (movevalX == 0 && movevalY == 0) {
-                stopWatch.start();
+                stuckTime.start();
                 isStuck = true;
             }
         }
@@ -92,8 +104,6 @@ public class Minvo extends Enemy {
         if(life <= 0 ) {
             alive = false;
             stopWatch.start();
-            BombermanGame.scoreNumber += 200;
-            BombermanGame.enemyNumber--;
         }
 
         boolean check = Collision.checkCollision(this, BombermanGame.bomberman);
@@ -137,6 +147,7 @@ public class Minvo extends Enemy {
         }
 
         if(!alive) {
+
             if(stopWatch.getElapsedTime() <= 600) {
                 img = Sprite.minvo_dead.getFxImage();
             }else{
@@ -150,6 +161,7 @@ public class Minvo extends Enemy {
                     img = Sprite.mob_dead3.getFxImage();
                 }
             }
+            BombermanGame.map.setTILE_MAP(yblock,xblock,' ');
         }
 
 
@@ -157,7 +169,7 @@ public class Minvo extends Enemy {
 
     @Override
     public void update() {
-        if(alive) {
+        if(alive){
             moveMent();
         }
         Animation();

@@ -2,8 +2,8 @@
 package uet.oop.bomberman.entities.Enemy;
 import javafx.util.Pair;
 import uet.oop.bomberman.BombermanGame;
-import uet.oop.bomberman.Utils.Collision;
-import uet.oop.bomberman.Utils.ConstVar;
+import uet.oop.bomberman.utils.Collision;
+import uet.oop.bomberman.utils.ConstVar;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.util.ArrayList;
@@ -17,6 +17,8 @@ public class Oneal extends Enemy {
 
     private boolean track;
     private boolean changeDir;
+    private int timeMoveTile = 0;
+    private char dir;
     public Oneal(int x, int y, Sprite sprite) {
         super(x, y, sprite);
         movevalX = 0;
@@ -30,6 +32,9 @@ public class Oneal extends Enemy {
         changeDir = true;
         bom_pass = true;
         life = 1;
+        preBlock = ' ';
+        dir = ' ';
+
 
     }
 
@@ -48,14 +53,19 @@ public class Oneal extends Enemy {
 
     public void moveMent() {
         if(alive) {
-            char dir = ' ';
-            track = Math.sqrt(Math.pow(BombermanGame.bomberman.getX() - x, 2) + Math.pow(BombermanGame.bomberman.getY() - y, 2)) < 300;
+            if (this.x % ConstVar.TILE_SIZE == 0 && this.y % ConstVar.TILE_SIZE == 0) {
+                BombermanGame.map.setTILE_MAP(yblock, xblock, preBlock);
+                xblock = this.getXblock();
+                yblock = this.getYblock();
+                if(BombermanGame.map.getTILE_MAP()[yblock][xblock] == ' ' || BombermanGame.map.getTILE_MAP()[yblock][xblock] == 'i'
+                        || BombermanGame.map.getTILE_MAP()[yblock][xblock] == 'x') {
+                    preBlock = BombermanGame.map.getTILE_MAP()[yblock][xblock];
+                }
+                BombermanGame.map.setTILE_MAP(yblock, xblock, 'O');
+            }
+            track = Math.sqrt(Math.pow(BombermanGame.bomberman.getX() - x, 2) + Math.pow(BombermanGame.bomberman.getY() - y, 2)) < 400;
             if (track) {
-                if (this.x % ConstVar.TILE_SIZE == 0 && this.y % ConstVar.TILE_SIZE == 0) {
-                    BombermanGame.map.setTILE_MAP(yblock, xblock, ' ');
-                    xblock = this.getXblock();
-                    yblock = this.getYblock();
-                    BombermanGame.map.setTILE_MAP(yblock, xblock, 'O');
+                if ((this.x % ConstVar.TILE_SIZE == 0 && this.y % ConstVar.TILE_SIZE == 0) || (movevalX == 0 && movevalY ==0) ) {
                     CalculateDisMap();
                 }
                 if (dis[yblock][xblock] - 1 == dis[yblock - 1][xblock]) {
@@ -68,8 +78,26 @@ public class Oneal extends Enemy {
                     dir = 'R';
                 }
             } else {
-                if (movevalX == 0 || Math.abs(this.getXblock() - xblock) >= 4) {
-                    changeDir = !changeDir;
+                if ((this.x % ConstVar.TILE_SIZE == 0 && this.y % ConstVar.TILE_SIZE == 0 )|| (movevalX == 0 && movevalY ==0)) {
+                    while(this.y % ConstVar.TILE_SIZE >= 24) {
+                        if(this.y % ConstVar.TILE_SIZE == 0){
+                            break;
+                        }
+                        y++;
+                    }
+
+                    while(this.y % ConstVar.TILE_SIZE < 24) {
+                        if(this.y % ConstVar.TILE_SIZE == 0){
+                            break;
+                        }
+                        y--;
+                    }
+                    if (timeMoveTile >= 5) {
+                        changeDir = !changeDir;
+                        timeMoveTile = 0;
+                    }else{
+                        timeMoveTile++;
+                    }
                 }
                 dir = (changeDir) ? 'L' : 'R';
 
@@ -91,15 +119,12 @@ public class Oneal extends Enemy {
 
             }
             BombermanGame.map.mapCollision(this);
-
             x += movevalX;
             y += movevalY;
 
             if (life <= 0) {
                 alive = false;
                 stopWatch.start();
-                BombermanGame.scoreNumber += 400;
-                BombermanGame.enemyNumber--;
             }
             boolean check = Collision.checkCollision(this, BombermanGame.bomberman);
 
@@ -122,12 +147,13 @@ public class Oneal extends Enemy {
             int currentx = node.get(0).getKey();
             int currenty = node.get(0).getValue();
             node.remove(0);
-            if(currentx == this.getXblock() && currenty == this.getYblock()) {
+            if(currentx == xblock && currenty == yblock) {
                 break;
             }
             if (currentx + 1 < ConstVar.WIDTH && (BombermanGame.map.getTILE_MAP()[currenty][currentx + 1] != '#'
                     && BombermanGame.map.getTILE_MAP()[currenty][currentx + 1] != 'I'
                     && BombermanGame.map.getTILE_MAP()[currenty][currentx + 1] != '*'
+                    && BombermanGame.map.getTILE_MAP()[currenty][currentx + 1] != 'X'
                     /*&& BombermanGame.map.getTILE_MAP()[currenty][currentx + 1] != 'b'*/) && dis[currenty][currentx + 1] == Integer.MAX_VALUE) {
                 dis[currenty][currentx + 1] = dis[currenty][currentx] + 1;
                 node.add(new Pair<>(currentx+1,currenty));
@@ -135,6 +161,7 @@ public class Oneal extends Enemy {
             if (currentx - 1 >= 0 && (BombermanGame.map.getTILE_MAP()[currenty][currentx - 1] != '#'
                     && BombermanGame.map.getTILE_MAP()[currenty][currentx - 1] != 'I'
                     && BombermanGame.map.getTILE_MAP()[currenty][currentx - 1] != '*'
+                    && BombermanGame.map.getTILE_MAP()[currenty][currentx - 1] != 'X'
                     /*&& BombermanGame.map.getTILE_MAP()[currenty][currentx + 1] != 'b'*/) && dis[currenty][currentx - 1] == Integer.MAX_VALUE) {
                 dis[currenty][currentx - 1] = dis[currenty][currentx] + 1;
                 node.add(new Pair<>(currentx-1,currenty));
@@ -142,6 +169,7 @@ public class Oneal extends Enemy {
             if (currenty - 1 >= 0 && (BombermanGame.map.getTILE_MAP()[currenty - 1][currentx] != '#'
                     && BombermanGame.map.getTILE_MAP()[currenty - 1][currentx] != 'I'
                     && BombermanGame.map.getTILE_MAP()[currenty - 1][currentx] != '*'
+                    && BombermanGame.map.getTILE_MAP()[currenty - 1][currentx] != 'X'
                     /*&& BombermanGame.map.getTILE_MAP()[currenty][currentx + 1] != 'b'*/) && dis[currenty - 1][currentx] == Integer.MAX_VALUE) {
                 dis[currenty - 1][currentx] = dis[currenty][currentx] + 1;
                 node.add(new Pair<>(currentx,currenty-1));
@@ -149,6 +177,7 @@ public class Oneal extends Enemy {
             if (currenty + 1 < ConstVar.HEIGHT && (BombermanGame.map.getTILE_MAP()[currenty + 1][currentx] != '#'
                     && BombermanGame.map.getTILE_MAP()[currenty + 1][currentx] != 'I'
                     && BombermanGame.map.getTILE_MAP()[currenty + 1][currentx] != '*'
+                    && BombermanGame.map.getTILE_MAP()[currenty + 1][currentx] != 'X'
                     /*&& BombermanGame.map.getTILE_MAP()[currenty][currentx + 1] != 'b'*/) && dis[currenty + 1][currentx] == Integer.MAX_VALUE) {
                 dis[currenty + 1][currentx] = dis[currenty][currentx] + 1;
                 node.add(new Pair<>(currentx,currenty+1));
@@ -176,8 +205,21 @@ public class Oneal extends Enemy {
         }
 
         if(!alive) {
-            img = Sprite.oneal_dead.getFxImage();
-            BombermanGame.map.setTILE_MAP(getYblock(),getXblock(),' ');
+            if(stopWatch.getElapsedTime() <= 600) {
+                img = Sprite.oneal_dead.getFxImage();
+
+            }else{
+                if(stopWatch.getElapsedTime() <= 900) {
+                    img = Sprite.mob_dead1.getFxImage();
+                }
+                else if(stopWatch.getElapsedTime() <= 1200) {
+                    img = Sprite.mob_dead2.getFxImage();
+                }
+                else {
+                    img = Sprite.mob_dead3.getFxImage();
+                }
+            }
+            BombermanGame.map.setTILE_MAP(yblock,xblock,' ');
         }
     }
 

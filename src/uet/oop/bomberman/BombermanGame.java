@@ -12,20 +12,16 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.shape.Rectangle;
-import uet.oop.bomberman.StillObjects.Items;
-import uet.oop.bomberman.StillObjects.Portal;
-import uet.oop.bomberman.StillObjects.StillObject;
-import uet.oop.bomberman.StillObjects.Wall;
-import uet.oop.bomberman.Utils.Collision;
-import uet.oop.bomberman.Utils.ConstVar;
-import uet.oop.bomberman.Utils.Sound;
-import uet.oop.bomberman.Utils.StopWatch;
+import uet.oop.bomberman.still_objects.*;
+import uet.oop.bomberman.utils.Collision;
+import uet.oop.bomberman.utils.ConstVar;
+import uet.oop.bomberman.utils.Sound;
+import uet.oop.bomberman.utils.StopWatch;
 import uet.oop.bomberman.entities.Bomber;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.menus.BombermanMenu;
 import uet.oop.bomberman.menus.TextInGame;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +31,6 @@ public class BombermanGame extends Application {
     public static Canvas getCanvas() {
         return canvas;
     }
-
     private GraphicsContext gc;
     private static Canvas canvas;
     public static Scene scene;
@@ -53,6 +48,7 @@ public class BombermanGame extends Application {
     public static StopWatch timeGameOver = new StopWatch();
     public static StopWatch timeWinGame = new StopWatch();
     public static StopWatch hasDied = new StopWatch();
+
     public static boolean win = false;
 
     public static Group root = new Group();
@@ -66,7 +62,6 @@ public class BombermanGame extends Application {
             throw new RuntimeException(e);
         }
     }
-
     public static TextInGame level, bomb, enemy, score, life, flame, speed, stage1, stage2, stage3, gameOver, winGame;
     public static MediaPlayer titleScreen = null;
     public static MediaPlayer stageTheme = null;
@@ -141,22 +136,22 @@ public class BombermanGame extends Application {
     }
 
     public void update() {
-        for (int i = 0; i < entities.size(); i++) {
-            if (!entities.get(i).isAlive() && entities.get(i).getStopWatch().getElapsedTime() > 1500) {
-
+        for(int i = 0;i < entities.size();i++) {
+            if(!entities.get(i).isAlive() && entities.get(i).getStopWatch().getElapsedTime() >1500) {
+                map.setTILE_MAP(entities.get(i).getYblock(),entities.get(i).getXblock(),' ');
                 entities.remove(i);
                 i--;
-            } else {
+            }else{
                 entities.get(i).update();
             }
         }
-        if (bomberman.isPlaceBom()) {
-            for (int i = 0; i < stillObjects.size(); i++) {
+        if(bomberman.isPlaceBom()){
+            for(int i = 0;i < stillObjects.size();i++) {
                 StillObject o = stillObjects.get(i);
-                if (o.isTerminate()) {
-                    Wall a = (Wall) o;
+                if(o.isTerminate()){
+                    Brick a = (Brick) o;
                     a.TerminateProcess();
-                    if (!o.isTerminate()) {
+                    if(!o.isTerminate()) {
                         stillObjects.remove(i);
                         i--;
                     }
@@ -167,11 +162,11 @@ public class BombermanGame extends Application {
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        for (int i = 0; i < stillObjects.size(); i++) {
+        for(int i = 0;i < stillObjects.size();i++) {
             stillObjects.get(i).render(gc);
-            if (stillObjects.get(i) instanceof Portal) {
+            if(stillObjects.get(i) instanceof Portal) {
                 Portal p = (Portal) stillObjects.get(i);
-                if (Collision.checkCollision(bomberman, p) && entities.size() == 1) {
+                if(Collision.checkCollision(bomberman,p) && entities.size() == 1  && BombermanGame.map.getTILE_MAP()[p.getYblock()][p.getXblock()] == 'x'){
                     inPortal = true;
                     countLevel++;
                     if (countLevel > 3) {
@@ -181,9 +176,9 @@ public class BombermanGame extends Application {
                     bomberman.setY(240);
                 }
             }
-            if (stillObjects.get(i) instanceof Items) {
+            if(stillObjects.get(i) instanceof Items) {
                 Items a = (Items) stillObjects.get(i);
-                if (Collision.checkCollision(bomberman, a) && map.getTILE_MAP()[a.getYblock()][a.getXblock()] == 'i') {
+                if(Collision.checkCollision(bomberman,a) && map.getTILE_MAP()[a.getYblock()][a.getXblock()] == 'i') {
                     if (BombermanMenu.isRunning) {
                         Media media = Sound.soundPower;
                         soundPower = new MediaPlayer(media);
@@ -191,7 +186,7 @@ public class BombermanGame extends Application {
                     }
                     a.takeEffect(bomberman);
                     stillObjects.remove(i);
-                    map.setTILE_MAP(a.getYblock(), a.getXblock(), ' ');
+                    map.setTILE_MAP(a.getYblock(),a.getXblock(),' ');
                     i--;
                 }
             }

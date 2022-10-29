@@ -1,9 +1,9 @@
-package uet.oop.bomberman.StillObjects;
+package uet.oop.bomberman.still_objects;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
-import uet.oop.bomberman.Utils.ConstVar;
+import uet.oop.bomberman.utils.ConstVar;
 import uet.oop.bomberman.graphics.Sprite;
 
 /**
@@ -63,7 +63,7 @@ public abstract class StillObject {
 
     public static StillObject getBrickAt(int xblock,int yblock) {
         for(StillObject a: BombermanGame.stillObjects) {
-            if(a.getYblock() ==  yblock && a.getXblock() == xblock && a instanceof Wall) {
+            if(a.getYblock() ==  yblock && a.getXblock() == xblock && a instanceof Brick) {
                 return a;
             }
         }

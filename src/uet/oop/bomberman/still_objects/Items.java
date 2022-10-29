@@ -1,7 +1,5 @@
-package uet.oop.bomberman.StillObjects;
+package uet.oop.bomberman.still_objects;
 
-import javafx.scene.image.Image;
-import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.entities.Bomber;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Sprite;
@@ -53,7 +51,7 @@ public class Items extends StillObject{
             case SPEED:
                 if (e instanceof Bomber) {
                     ((Bomber) e).plusBOMBER_SPEED();
-                    e.getStopWatch().start();
+                    ((Bomber) e).getPowerTime().start();
                     e.setBoosted(true);
                 }
                 break;
@@ -64,17 +62,17 @@ public class Items extends StillObject{
                 break;
             case BOMBPASS:
                 e.setBom_pass(true);
-                e.getStopWatch().start();
+                ((Bomber) e).getPowerTime().start();
                 e.setBoosted(true);
                 break;
             case WALLPASS:
                 e.setWall_pass(true);
-                e.getStopWatch().start();
+                ((Bomber) e).getPowerTime().start();
                 e.setBoosted(true);
                 break;
             case FLAMEPASS:
                 e.setFlame_pass(true);
-                e.getStopWatch().start();
+                ((Bomber) e).getPowerTime().start();
                 e.setBoosted(true);
                 break;
 

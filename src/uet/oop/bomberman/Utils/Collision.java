@@ -1,6 +1,6 @@
-package uet.oop.bomberman.Utils;
+package uet.oop.bomberman.utils;
 
-import uet.oop.bomberman.StillObjects.StillObject;
+import uet.oop.bomberman.still_objects.StillObject;
 import uet.oop.bomberman.entities.Entity;
 
 /**

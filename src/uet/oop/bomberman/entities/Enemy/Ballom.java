@@ -1,8 +1,8 @@
 package uet.oop.bomberman.entities.Enemy;
 
 import uet.oop.bomberman.BombermanGame;
-import uet.oop.bomberman.Utils.Collision;
-import uet.oop.bomberman.Utils.ConstVar;
+import uet.oop.bomberman.utils.Collision;
+import uet.oop.bomberman.utils.ConstVar;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Ballom extends Enemy {
@@ -21,13 +21,23 @@ public class Ballom extends Enemy {
         w = 47;
         h = 47;
         life = 1;
+        preBlock =' ';
     }
 
     @Override
     public void moveMent() {
         if(alive) {
+
             double randomDirection = Math.random();
             if (this.x % ConstVar.TILE_SIZE <= 1 && this.y % ConstVar.TILE_SIZE <= 1) {
+                BombermanGame.map.setTILE_MAP(yblock, xblock, preBlock);
+                xblock = this.getXblock();
+                yblock = this.getYblock();
+                if(BombermanGame.map.getTILE_MAP()[yblock][xblock] == ' ' || BombermanGame.map.getTILE_MAP()[yblock][xblock] == 'i'
+                        || BombermanGame.map.getTILE_MAP()[yblock][xblock] == 'x') {
+                    preBlock = BombermanGame.map.getTILE_MAP()[yblock][xblock];
+                }
+                BombermanGame.map.setTILE_MAP(yblock, xblock, 'B');
                 if (timeMoveTile >= 8) {
                     randomDirection = Math.random();
                     if (randomDirection < 0.25) {
@@ -70,8 +80,6 @@ public class Ballom extends Enemy {
             if (life <= 0) {
                 alive = false;
                 stopWatch.start();
-                BombermanGame.scoreNumber += 100;
-                BombermanGame.enemyNumber--;
             }
             boolean check = Collision.checkCollision(this, BombermanGame.bomberman);
 
@@ -117,13 +125,13 @@ public class Ballom extends Enemy {
                     img = Sprite.mob_dead3.getFxImage();
                 }
             }
+            BombermanGame.map.setTILE_MAP(yblock,xblock,' ');
         }
 
     }
 
     @Override
     public void update() {
-
         moveMent();
         Animation();
     }

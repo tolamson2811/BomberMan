@@ -1,12 +1,9 @@
 package uet.oop.bomberman.entities;
 
-import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
-import uet.oop.bomberman.Utils.ConstVar;
-import uet.oop.bomberman.Utils.StopWatch;
+import uet.oop.bomberman.utils.ConstVar;
+import uet.oop.bomberman.utils.StopWatch;
 import uet.oop.bomberman.graphics.Sprite;
 
 public abstract class Entity {

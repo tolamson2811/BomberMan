@@ -1,13 +1,9 @@
 package uet.oop.bomberman.entities.Enemy;
 
-import javafx.util.Pair;
 import uet.oop.bomberman.BombermanGame;
-import uet.oop.bomberman.Utils.Collision;
-import uet.oop.bomberman.Utils.ConstVar;
+import uet.oop.bomberman.utils.Collision;
+import uet.oop.bomberman.utils.ConstVar;
 import uet.oop.bomberman.graphics.Sprite;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 public class Ovapi extends Enemy{
     private int time = 0;
@@ -26,6 +22,7 @@ public class Ovapi extends Enemy{
         wall_pass = true;
         bom_pass = true;
         life = 1;
+        preBlock = ' ';
     }
 
     public void CalculateDisMap() {
@@ -45,9 +42,16 @@ public class Ovapi extends Enemy{
     public void moveMent() {
         char dir = ' ';
 
+
         if (this.x % ConstVar.TILE_SIZE == 0 && this.y % ConstVar.TILE_SIZE == 0){
+            BombermanGame.map.setTILE_MAP(yblock, xblock, preBlock);
             xblock = this.getXblock();
             yblock = this.getYblock();
+            if(BombermanGame.map.getTILE_MAP()[yblock][xblock] == ' ' || BombermanGame.map.getTILE_MAP()[yblock][xblock] == 'i'
+                    || BombermanGame.map.getTILE_MAP()[yblock][xblock] == 'x' || BombermanGame.map.getTILE_MAP()[yblock][xblock] == '*') {
+                preBlock = BombermanGame.map.getTILE_MAP()[yblock][xblock];
+            }
+            BombermanGame.map.setTILE_MAP(yblock, xblock, 'V');
             CalculateDisMap();
         }
         if(dis[yblock][xblock]-1  == dis[yblock-1][xblock] ){
@@ -83,8 +87,6 @@ public class Ovapi extends Enemy{
         if(life <= 0) {
             alive = false;
             stopWatch.start();
-            BombermanGame.scoreNumber += 500;
-            BombermanGame.enemyNumber--;
         }
         boolean check = Collision.checkCollision(this, BombermanGame.bomberman);
 
@@ -158,7 +160,21 @@ public class Ovapi extends Enemy{
         }
 
         if(!alive) {
-            img = Sprite.ovapi_dead.getFxImage();;
+            if(stopWatch.getElapsedTime() <= 600) {
+                img = Sprite.ovapi_dead.getFxImage();
+
+            }else{
+                if(stopWatch.getElapsedTime() <= 900) {
+                    img = Sprite.mob_dead1.getFxImage();
+                }
+                else if(stopWatch.getElapsedTime() <= 1200) {
+                    img = Sprite.mob_dead2.getFxImage();
+                }
+                else {
+                    img = Sprite.mob_dead3.getFxImage();
+                }
+            }
+            BombermanGame.map.setTILE_MAP(yblock,xblock,' ');
         }
     }
 
