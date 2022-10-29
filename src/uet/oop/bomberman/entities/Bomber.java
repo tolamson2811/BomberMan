@@ -37,6 +37,11 @@ public class Bomber extends Entity {
     private Input user_input = new Input();
     private final List<Bomb> bomstack = new ArrayList<>();
     private int B_radius;
+
+    public boolean isAutopilot() {
+        return autopilot;
+    }
+
     private boolean autopilot;
     private int[][] dis = new int[ConstVar.HEIGHT][ConstVar.WIDTH];
     private boolean isStuck;

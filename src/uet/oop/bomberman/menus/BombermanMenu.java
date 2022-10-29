@@ -119,15 +119,17 @@ public class BombermanMenu {
 
             level = new TextInGame("Level: ", 10);
 
-            bomb = new TextInGame("Bombs: ", 210);
+            auto = new TextInGame("Auto: ", 160);
 
-            enemy = new TextInGame("Enemy: ", 380);
+            bomb = new TextInGame("Bombs: ", 310);
 
-            score = new TextInGame("Score: ", 620);
+            enemy = new TextInGame("Enemy: ", 460);
 
-            life = new TextInGame("Life: ", 820);
+            score = new TextInGame("Score: ", 650);
 
-            flame = new TextInGame("Flame: ", 1020);
+            life = new TextInGame("Life: ", 860);
+
+            flame = new TextInGame("Flame: ", 1060);
 
             speed = new TextInGame("Speed: ", 1220);
 
@@ -143,6 +145,7 @@ public class BombermanMenu {
             root.getChildren().add(life);
             root.getChildren().add(flame);
             root.getChildren().add(speed);
+            root.getChildren().add(auto);
             root.getChildren().add(menuInGame);
 
             BombermanGame.running = true;
@@ -166,15 +169,17 @@ public class BombermanMenu {
 
             level = new TextInGame("Level: ", 10);
 
-            bomb = new TextInGame("Bombs: ", 210);
+            auto = new TextInGame("Auto: ", 160);
 
-            enemy = new TextInGame("Enemy: ", 380);
+            bomb = new TextInGame("Bombs: ", 310);
 
-            score = new TextInGame("Score: ", 620);
+            enemy = new TextInGame("Enemy: ", 460);
 
-            life = new TextInGame("Life: ", 820);
+            score = new TextInGame("Score: ", 650);
 
-            flame = new TextInGame("Flame: ", 1020);
+            life = new TextInGame("Life: ", 860);
+
+            flame = new TextInGame("Flame: ", 1060);
 
             speed = new TextInGame("Speed: ", 1220);
 
@@ -190,6 +195,7 @@ public class BombermanMenu {
             root.getChildren().add(life);
             root.getChildren().add(flame);
             root.getChildren().add(speed);
+            root.getChildren().add(auto);
             root.getChildren().add(menuInGame);
 
             BombermanGame.running = true;
@@ -296,6 +302,7 @@ public class BombermanMenu {
         root.getChildren().remove(flame);
         root.getChildren().remove(speed);
         root.getChildren().remove(menuInGame);
+        root.getChildren().remove(auto);
         root.getChildren().remove(blackBackground);
 
         root.getChildren().remove(soundButton);
@@ -363,6 +370,7 @@ public class BombermanMenu {
         bomb.setText("Bomb: " + bomberman.getBOMB_NUMBER());
         speed.setText("Speed: " + bomberman.getBOMBER_SPEED());
         flame.setText("Flame: " + bomberman.getB_radius());
+        auto.setText("Auto: " + bomberman.isAutopilot());
         if(bomberman.isBoosted()) {
             enemy.setText("Boosted: " + (10 - bomberman.getPowerTime().getElapsedTime()/1000));
         }else{
@@ -412,15 +420,17 @@ public class BombermanMenu {
 
         level = new TextInGame("Level: ", 10);
 
-        bomb = new TextInGame("Bombs: ", 210);
+        auto = new TextInGame("Auto: ", 160);
 
-        enemy = new TextInGame("Enemy: ", 380);
+        bomb = new TextInGame("Bombs: ", 310);
 
-        score = new TextInGame("Score: ", 620);
+        enemy = new TextInGame("Enemy: ", 460);
 
-        life = new TextInGame("Life: ", 820);
+        score = new TextInGame("Score: ", 650);
 
-        flame = new TextInGame("Flame: ", 1020);
+        life = new TextInGame("Life: ", 860);
+
+        flame = new TextInGame("Flame: ", 1060);
 
         speed = new TextInGame("Speed: ", 1220);
 
@@ -436,6 +446,7 @@ public class BombermanMenu {
         root.getChildren().add(life);
         root.getChildren().add(flame);
         root.getChildren().add(speed);
+        root.getChildren().add(auto);
         root.getChildren().add(menuInGame);
 
         BombermanGame.running = true;

@@ -62,7 +62,7 @@ public class BombermanGame extends Application {
             throw new RuntimeException(e);
         }
     }
-    public static TextInGame level, bomb, enemy, score, life, flame, speed, stage1, stage2, stage3, gameOver, winGame;
+    public static TextInGame level, bomb, enemy, score, life, flame, speed, stage1, stage2, stage3, gameOver, winGame, auto;
     public static MediaPlayer titleScreen = null;
     public static MediaPlayer stageTheme = null;
     public static MediaPlayer placeBomb = null;
